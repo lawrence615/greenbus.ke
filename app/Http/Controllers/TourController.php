@@ -27,7 +27,7 @@ class TourController extends Controller
             abort(404);
         }
 
-        $tour->load(['images', 'category']);
+        $tour->load(['images', 'category', 'itineraryItems']);
 
         return view('tours.show', [
             'city' => $city,
