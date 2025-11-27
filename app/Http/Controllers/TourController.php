@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+
 use App\Models\City;
 use App\Models\Tour;
-use Illuminate\View\View;
+use App\Interfaces\TourRepositoryInterface;
 
 class TourController extends Controller
 {
+
+    public function __construct(
+        private readonly TourRepositoryInterface $tourRepository,
+    ) {
+    }
+
     public function index(City $city): View
     {
-        $tours = $city->tours()
-            ->where('status', 'published')
-            ->with(['images', 'category'])
-            ->paginate(12);
+        $search = request('q');
+
+        $tours = $this->tourRepository->index($city, 12, $search);
 
         return view('tours.index', [
             'city' => $city,
@@ -23,11 +30,7 @@ class TourController extends Controller
 
     public function show(City $city, Tour $tour): View
     {
-        if ($tour->city_id !== $city->id) {
-            abort(404);
-        }
-
-        $tour->load(['images', 'category', 'itineraryItems']);
+        $tour = $this->tourRepository->get($city, $tour);
 
         return view('tours.show', [
             'city' => $city,
