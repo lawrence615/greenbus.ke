@@ -9,6 +9,7 @@ use App\Models\City;
 use App\Models\TourImage;
 use App\Models\Booking;
 use App\Models\TourCategory;
+use App\Models\TourItineraryItem;
 
 class Tour extends Model
 {
@@ -50,5 +51,12 @@ class Tour extends Model
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function itineraryItems(): HasMany
+    {
+        return $this->hasMany(TourItineraryItem::class)
+            ->orderBy('sort_order')
+            ->orderBy('id');
     }
 }
