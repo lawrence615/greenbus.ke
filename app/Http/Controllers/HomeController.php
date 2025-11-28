@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\City;
-use App\Models\Tour;
+use App\Interfaces\CityRepositoryInterface;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
+    public function __construct(
+        private readonly CityRepositoryInterface $cityRepository,
+    ) {}
+
     public function index(): View
     {
-        $defaultCity = City::where('slug', 'nairobi')->where('is_active', true)->first();
-
-        $featuredTours = Tour::with('city')
-            ->whereHas('city', function ($query) {
-                $query->where('slug', 'nairobi')->where('is_active', true);
-            })
-            ->where('featured', true)
-            ->where('status', 'published')
-            ->take(6)
-            ->get();
+        $defaultCity = $this->cityRepository->getDefaultCity();
+        $featuredTours = $defaultCity
+            ? $this->cityRepository->getFeaturedToursForCity($defaultCity, 6)
+            : collect();
 
         return view('home', [
             'city' => $defaultCity,
