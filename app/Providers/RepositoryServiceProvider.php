@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 use App\Interfaces\TourRepositoryInterface;
 use App\Repositories\TourRepository;
+use App\Interfaces\BookingRepositoryInterface;
+use App\Repositories\BookingRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -15,6 +17,7 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(TourRepositoryInterface::class, TourRepository::class);
+        $this->app->bind(BookingRepositoryInterface::class, BookingRepository::class);
     }
 
     /**
