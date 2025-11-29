@@ -25,22 +25,56 @@
 
         <div class="mb-6 grid gap-3 text-xs text-slate-700 sm:grid-cols-3">
             @if ($tour->duration_text)
-            <div class="bg-white rounded-xl border border-slate-100 p-3">
-                <p class="font-semibold mb-1">Duration</p>
-                <p>{{ $tour->duration_text }}</p>
-            </div>
+            <x-tour-info-card
+                label="Duration"
+                :value="$tour->duration_text"
+                subtitle="Approx."
+                iconBgClass="bg-emerald-50 text-emerald-700"
+                borderClass="border-emerald-50/70 hover:border-emerald-100"
+            >
+                <x-slot:icon>
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M12 8V12L14.5 13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </x-slot:icon>
+            </x-tour-info-card>
             @endif
+
             @if ($tour->starts_at_time)
-            <div class="bg-white rounded-xl border border-slate-100 p-3">
-                <p class="font-semibold mb-1">Departure time</p>
-                <p>{{ $tour->starts_at_time }}</p>
-            </div>
+            <x-tour-info-card
+                label="Departure time"
+                :value="$tour->starts_at_time"
+                subtitle="Local time"
+                iconBgClass="bg-sky-50 text-sky-700"
+                borderClass="border-slate-100 hover:border-sky-100"
+            >
+                <x-slot:icon>
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 4.75V6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        <path d="M16 4.75V6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        <rect x="5" y="6.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M9 12H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </x-slot:icon>
+            </x-tour-info-card>
             @endif
+
             @if ($tour->meeting_point)
-            <div class="bg-white rounded-xl border border-slate-100 p-3">
-                <p class="font-semibold mb-1">Meeting point</p>
-                <p>{{ $tour->meeting_point }}</p>
-            </div>
+            <x-tour-info-card
+                label="Meeting point"
+                :value="$tour->meeting_point"
+                subtitle="Pickup / start location"
+                iconBgClass="bg-amber-50 text-amber-700"
+                borderClass="border-slate-100 hover:border-amber-100"
+            >
+                <x-slot:icon>
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3.75C9.37665 3.75 7.25 5.87665 7.25 8.5C7.25 11.1234 9.37665 13.25 12 13.25C14.6234 13.25 16.75 11.1234 16.75 8.5C16.75 5.87665 14.6234 3.75 12 3.75Z" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M11.9998 21.0001C10.1665 21.0001 8.69484 19.8821 7.59887 18.5421C6.58506 17.3025 5.875 15.843 5.5127 14.8575C5.40989 14.5743 5.52328 14.2598 5.78666 14.1146C7.34943 13.2524 9.11532 12.75 11.9998 12.75C14.8844 12.75 16.6503 13.2524 18.213 14.1146C18.4764 14.2598 18.5898 14.5743 18.487 14.8575C18.1247 15.843 17.4146 17.3025 16.4008 18.5421C15.3049 19.8821 13.8331 21.0001 11.9998 21.0001Z" stroke="currentColor" stroke-width="1.5" />
+                    </svg>
+                </x-slot:icon>
+            </x-tour-info-card>
             @endif
         </div>
 
@@ -107,33 +141,88 @@
                 <div class="grid gap-3 sm:grid-cols-2 text-xs sm:text-sm text-slate-700">
                     @if ($tour->duration_text)
                     <div>
-                        <p class="font-semibold mb-0.5">Duration</p>
-                        <p>{{ $tour->duration_text }}</p>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.75" />
+                                    <path d="M12 8V12L14.5 13.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                            <p class="font-semibold">Duration</p>
+                        </div>
+                        <p class="mt-0.5 ml-9">{{ $tour->duration_text }}</p>
                     </div>
                     @endif
+
                     @if ($tour->starts_at_time)
                     <div>
-                        <p class="font-semibold mb-0.5">Starting time</p>
-                        <p>{{ $tour->starts_at_time }}</p>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 4.75V6.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                                    <path d="M16 4.75V6.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                                    <rect x="5" y="6.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.75" />
+                                </svg>
+                            </span>
+                            <p class="font-semibold">Starting time</p>
+                        </div>
+                        <p class="mt-0.5 ml-9">{{ $tour->starts_at_time }}</p>
                     </div>
                     @endif
+
                     @if ($tour->meeting_point)
                     <div>
-                        <p class="font-semibold mb-0.5">Meeting point</p>
-                        <p>{{ $tour->meeting_point }}</p>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 3.75C9.376 3.75 7.5 5.626 7.5 7.875C7.5 10.836 10.5 13.25 12 15.75C13.5 13.25 16.5 10.836 16.5 7.875C16.5 5.626 14.624 3.75 12 3.75Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+                                    <circle cx="12" cy="8" r="1.75" stroke="currentColor" stroke-width="1.75" />
+                                </svg>
+                            </span>
+                            <p class="font-semibold">Meeting point</p>
+                        </div>
+                        <p class="mt-0.5 ml-9">{{ $tour->meeting_point }}</p>
                     </div>
                     @endif
+
                     <div>
-                        <p class="font-semibold mb-0.5">Live tour guide</p>
-                        <p>English-speaking local guide in {{ $city->name }}.</p>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 6.75C10.7574 6.75 9.75 7.75736 9.75 9C9.75 10.2426 10.7574 11.25 12 11.25C13.2426 11.25 14.25 10.2426 14.25 9C14.25 7.75736 13.2426 6.75 12 6.75Z" stroke="currentColor" stroke-width="1.75" />
+                                    <path d="M8.75 16.25C8.75 14.8693 9.86929 13.75 11.25 13.75H12.75C14.1307 13.75 15.25 14.8693 15.25 16.25" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                                </svg>
+                            </span>
+                            <p class="font-semibold">Live tour guide</p>
+                        </div>
+                        <p class="mt-0.5 ml-9">English-speaking local guide in {{ $city->name }}.</p>
                     </div>
+
                     <div>
-                        <p class="font-semibold mb-0.5">Ticket type</p>
-                        <p>Mobile or printed ticket accepted. PDF is sent after booking.</p>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="6.5" y="7" width="11" height="10" rx="1.5" stroke="currentColor" stroke-width="1.75" />
+                                    <path d="M9 9H15" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                                </svg>
+                            </span>
+                            <p class="font-semibold">Ticket type</p>
+                        </div>
+                        <p class="mt-0.5 ml-9">Mobile or printed ticket accepted. PDF is sent after booking.</p>
                     </div>
+
                     <div>
-                        <p class="font-semibold mb-0.5">Group type</p>
-                        <p>Small-group city tour suitable for first-time visitors.</p>
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.75" />
+                                    <circle cx="15" cy="9" r="2" stroke="currentColor" stroke-width="1.75" />
+                                    <path d="M6.75 15.25C6.75 13.8693 7.86929 12.75 9.25 12.75H10.75C12.1307 12.75 13.25 13.8693 13.25 15.25" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                                </svg>
+                            </span>
+                            <p class="font-semibold">Group type</p>
+                        </div>
+                        <p class="mt-0.5 ml-9">Small-group city tour suitable for first-time visitors.</p>
                     </div>
                 </div>
             </section>
