@@ -9,6 +9,12 @@
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
+
+        <!-- Swiper CSS (for partners logo carousel) -->
+        <link rel="stylesheet" href="https://unpkg.com/swiper@9/swiper-bundle.min.css" />
+
+        <!-- Swiper JS -->
+        <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
     </head>
     <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
         <header class="border-b bg-white/80 backdrop-blur sticky top-0 z-20">
