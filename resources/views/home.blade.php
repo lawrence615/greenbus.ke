@@ -284,4 +284,70 @@
             })();
         </script>
     </section>
+
+    <section class="bg-transparent">
+        <div class="max-w-6xl mx-auto px-4 py-12">
+            <div class="text-center mb-8">
+                <p class="text-xs uppercase tracking-[0.2em] text-slate-500 mb-2">Our partners</p>
+                <div class="mx-auto h-0.5 w-8 rounded-full bg-emerald-400"></div>
+            </div>
+
+            <div class="partners-swiper swiper">
+                <div class="swiper-wrapper items-center">
+                    <div class="swiper-slide flex items-center justify-center">
+                        <a href="https://www.getyourguide.com/happy-tribe-travel-s274530/" target="_blank" rel="noopener noreferrer">
+                            <img src="{{ asset('images/getyourguide.png') }}" alt="GetYourGuide" class="h-14 sm:h-16 md:h-18 w-auto object-contain">
+                        </a>
+                    </div>
+                    <div class="swiper-slide flex items-center justify-center">
+                        <a href="https://www.tripadvisor.com/Attraction_Review-g294207-d23499279-Reviews-Happy_Tribe_Travel-Nairobi.html" target="_blank" rel="noopener noreferrer">
+                            <img src="{{ asset('images/tripadvisor.png') }}" alt="Tripadvisor" class="h-14 sm:h-16 md:h-18 w-auto object-contain">
+                        </a>
+                    </div>
+                    <div class="swiper-slide flex items-center justify-center">
+                        <a href="https://www.safaribookings.com/" target="_blank" rel="noopener noreferrer">
+                            <img src="{{ asset('images/safaribookings.jpeg') }}" alt="SafariBookings" class="h-14 sm:h-16 md:h-18 w-auto object-contain">
+                        </a>
+                    </div>
+                    <div class="swiper-slide flex items-center justify-center">
+                        <a href="https://www.google.com/search?q=happy+tribe+travel&sca_esv=467a6a31ff5f6688&rlz=1C5CHFA_enKE1132KE1132&sxsrf=AE3TifObLfkFt7EBVATPnaeLmIszSejGDg%3A1762176315934&ei=O60IaZi7OIa-i-gPtOSI2AM&ved=0ahUKEwjYxN6qitaQAxUG3wIHHTQyAjsQ4dUDCBE&uact=5&oq=happy+tribe+travel&gs_lp=Egxnd3Mtd2l6LXNlcnAiEmhhcHB5IHRyaWJlIHRyYXZlbDIFEAAYgAQyBRAAGIAEMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yAhAmMgsQABiABBiGAxiKBTILEAAYgAQYhgMYigUyBRAAGO8FSLQgUOkDWK0ecAN4AZABAJgB0AKgAcgQqgEFMi03LjG4AQPIAQD4AQGYAgugAo0RwgIHECMYsAMYJ8ICChAAGLADGNYEGEfCAg0QABiABBiwAxhDGIoFwgIEECMYJ8ICChAAGIAEGBQYhwLCAgcQABiABBgKwgIKEAAYgAQYQxiKBcICCxAuGIAEGNEDGMcBwgIIEAAYgAQYogTCAggQABiiBBiJBcICBxAAGIAEGA3CAgYQABgNGB6YAwCIBgGQBgiSBwczLjAuNi4yoAeXM7IHBTItNi4yuAf3EMIHBjItMTAuMcgHNg&sclient=gws-wiz-serp" target="_blank" rel="noopener noreferrer">
+                            <img src="{{ asset('images/google.png') }}" alt="Google" class="h-14 sm:h-16 md:h-18 w-auto object-contain">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .partners-swiper .swiper-wrapper {
+                align-items: center;
+            }
+
+            .partners-swiper .swiper-slide {
+                width: auto;
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (window.Swiper) {
+                    new Swiper('.partners-swiper', {
+                        slidesPerView: 'auto',
+                        spaceBetween: 40,
+                        loop: true,
+                        speed: 12000,
+                        autoplay: {
+                            delay: 0,
+                            disableOnInteraction: false,
+                        },
+                        freeMode: {
+                            enabled: true,
+                            momentum: false,
+                        },
+                        allowTouchMove: false,
+                    });
+                }
+            });
+        </script>
+    </section>
 @endsection
