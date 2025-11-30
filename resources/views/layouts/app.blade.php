@@ -9,12 +9,6 @@
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
-
-        <!-- Swiper CSS (for partners logo carousel) -->
-        <link rel="stylesheet" href="https://unpkg.com/swiper@9/swiper-bundle.min.css" />
-
-        <!-- Swiper JS -->
-        <script src="https://unpkg.com/swiper@9/swiper-bundle.min.js"></script>
     </head>
     <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
         <header class="border-b bg-white/80 backdrop-blur sticky top-0 z-20">
@@ -71,24 +65,91 @@
             @yield('content')
         </main>
 
-        <footer id="contact" class="border-t bg-white mt-12">
-            <div class="max-w-6xl mx-auto px-4 py-8 grid gap-6 md:grid-cols-3 text-sm">
-                <div>
-                    <h3 class="font-semibold mb-2">About Greenbus</h3>
-                    <p class="text-slate-600">City tours curated for visitors to Nairobi. Local guides, safe buses, and transparent pricing.</p>
+        <footer id="contact" class="mt-12 border-t bg-white/95">
+            <div class="max-w-6xl mx-auto px-4 py-10 lg:py-12 grid gap-8 md:grid-cols-4 text-sm">
+                <div class="space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-emerald-600 text-white font-bold">
+                            GB
+                        </span>
+                        <div>
+                            <p class="font-semibold text-slate-900">Greenbus City Tours</p>
+                            <p class="text-xs text-emerald-700">Nairobi, Kenya</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 leading-relaxed">
+                        Small-group city tours designed for visitors to Nairobi. Trusted local guides, safe modern buses, and transparent pricing.
+                    </p>
+                    <a href="{{ isset($city) ? route('tours.index', $city) : '#tours' }}" class="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-emerald-700">
+                        <span>Browse Nairobi tours</span>
+                        <span class="text-[11px]">→</span>
+                    </a>
                 </div>
-                <div>
-                    <h3 class="font-semibold mb-2">Contact</h3>
-                    <p class="text-slate-600">Email: info@greenbus.ke</p>
-                    <p class="text-slate-600">Phone / WhatsApp: +254 700 000 000</p>
+
+                <div class="space-y-3">
+                    <h3 class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Explore</h3>
+                    <ul class="space-y-2 text-slate-600">
+                        <li>
+                            <a href="{{ route('home') }}#how-it-works" class="hover:text-emerald-700">How Greenbus works</a>
+                        </li>
+                        <li>
+                            @isset($city)
+                                <a href="{{ route('tours.index', $city) }}" class="hover:text-emerald-700">All Nairobi tours</a>
+                            @else
+                                <a href="#tours" class="hover:text-emerald-700">Featured tours</a>
+                            @endisset
+                        </li>
+                        <li>
+                            <a href="#reviews" class="hover:text-emerald-700">Guest reviews</a>
+                        </li>
+                    </ul>
                 </div>
-                <div>
-                    <h3 class="font-semibold mb-2">Practical</h3>
-                    <p class="text-slate-600">All prices in Kenyan Shillings (KES). Instant confirmation for online bookings.</p>
+
+                <div class="space-y-3">
+                    <h3 class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Contact</h3>
+                    <ul class="space-y-2 text-slate-600">
+                        <li class="flex items-start gap-2">
+                            <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                                <span class="text-[11px]">@</span>
+                            </span>
+                            <span>info@greenbus.ke</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                                <span class="text-[11px]">📞</span>
+                            </span>
+                            <span>+254 700 000 000<br><span class="text-xs text-slate-500">Call or WhatsApp between 08:00 – 20:00 EAT</span></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
+                                <span class="text-[11px]">📍</span>
+                            </span>
+                            <span>Nairobi city centre pick‑up points for all tours.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Practical info</h3>
+                    <ul class="space-y-2 text-slate-600">
+                        <li>All prices in Kenyan Shillings (KES).</li>
+                        <li>Instant confirmation for online bookings.</li>
+                        <li>Free cancellation up to 24 hours before departure.</li>
+                    </ul>
+                    <div class="pt-1 text-xs text-slate-500">
+                        Powered by Happy Tribe Travel.
+                    </div>
                 </div>
             </div>
-            <div class="border-t py-4 text-center text-xs text-slate-500 bg-slate-50">
-                &copy; {{ date('Y') }} Greenbus City Tours. All rights reserved.
+            <div class="border-t bg-slate-50/80">
+                <div class="max-w-6xl mx-auto flex flex-col items-center justify-between gap-3 px-4 py-4 text-xs text-slate-500 sm:flex-row">
+                    <p>&copy; {{ date('Y') }} Greenbus City Tours. All rights reserved.</p>
+                    <div class="flex items-center gap-4">
+                        <a href="#contact" class="hover:text-emerald-700">Contact</a>
+                        <span class="h-3 w-px bg-slate-300"></span>
+                        <span>Secure payments · Licensed local operator</span>
+                    </div>
+                </div>
             </div>
         </footer>
     </body>
