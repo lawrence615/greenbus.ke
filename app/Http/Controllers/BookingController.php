@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Booking\StoreRequest;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Mail;
+
 use App\Interfaces\BookingRepositoryInterface;
 use App\Models\City;
 use App\Models\Tour;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use App\Http\Requests\Booking\StoreRequest;
+use App\Mail\BookingCreated;
 
 class BookingController extends Controller
 {
@@ -32,8 +35,11 @@ class BookingController extends Controller
 
         $booking = $this->bookingRepository->store($city, $tour, $validated);
 
+        Mail::to($booking->customer_email)
+            ->send(new BookingCreated($booking));
+
         return redirect()
             ->route('home')
-            ->with('status', 'Booking created. Reference: ' . $booking->reference);
+            ->with('success', 'Booking created. Reference: ' . $booking->reference);
     }
 }
