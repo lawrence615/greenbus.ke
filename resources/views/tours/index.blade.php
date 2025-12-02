@@ -2,15 +2,14 @@
 
 @section('title', $city->name . ' tours')
 
+@section('breadcrumb')
+    <x-breadcrumb :items="[
+        ['label' => $city->name . ' tours'],
+    ]" />
+@endsection
+
 @section('content')
-    <section class="max-w-6xl mx-auto px-4 py-10">
-        <nav class="text-xs text-slate-500 mb-3" aria-label="Breadcrumb">
-            <ol class="flex flex-wrap items-center gap-1">
-                <li><a href="{{ route('home') }}" class="hover:underline">Home</a></li>
-                <li>/</li>
-                <li><span class="text-slate-600">{{ $city->name }} tours</span></li>
-            </ol>
-        </nav>
+    <section class="max-w-6xl mx-auto px-4 pb-10">
         <header class="mb-6 flex items-center justify-between gap-4">
             <div>
                 <p class="text-xs uppercase tracking-wide text-emerald-700 mb-1">City tours</p>

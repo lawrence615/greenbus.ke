@@ -2,19 +2,15 @@
 
 @section('title', $tour->title . ' – ' . $city->name)
 
+@section('breadcrumb')
+    <x-breadcrumb :items="[
+        ['label' => $city->name . ' tours', 'url' => route('tours.index', $city)],
+        ['label' => $tour->title],
+    ]" />
+@endsection
+
 @section('content')
-<section class="max-w-6xl mx-auto px-4 py-10 grid gap-10 lg:grid-cols-3">
-    <div class="lg:col-span-3 mb-3">
-        <nav class="text-xs text-slate-500" aria-label="Breadcrumb">
-            <ol class="flex flex-wrap items-center gap-1">
-                <li><a href="{{ route('home') }}" class="hover:underline">Home</a></li>
-                <li>/</li>
-                <li><a href="{{ route('tours.index', $city) }}" class="hover:underline">{{ $city->name }} tours</a></li>
-                <li>/</li>
-                <li><span class="text-slate-600">{{ $tour->title }}</span></li>
-            </ol>
-        </nav>
-    </div>
+<section class="max-w-6xl mx-auto px-4 pb-10 grid gap-10 lg:grid-cols-3">
     <div class="lg:col-span-2">
         <p class="text-xs uppercase tracking-wide text-emerald-700 mb-1">{{ $city->name }} city tour</p>
         @if ($tour->category)
