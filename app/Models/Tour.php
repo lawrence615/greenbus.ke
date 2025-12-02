@@ -56,7 +56,6 @@ class Tour extends Model
     public function itineraryItems(): HasMany
     {
         return $this->hasMany(TourItineraryItem::class)
-            ->orderBy('sort_order')
-            ->orderBy('id');
+            ->orderBy('sort_order');
     }
 }
