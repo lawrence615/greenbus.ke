@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Mail;
 
 use App\Interfaces\BookingRepositoryInterface;
+use App\Jobs\SendBookingConfirmationEmail;
 use App\Models\City;
 use App\Models\Tour;
 use App\Http\Requests\Booking\StoreRequest;
-use App\Mail\BookingCreated;
 
 class BookingController extends Controller
 {
@@ -31,15 +30,20 @@ class BookingController extends Controller
 
     public function store(StoreRequest $request, City $city, Tour $tour): RedirectResponse
     {
-        $validated = $request->validated();
+        try {
+            $validated = $request->validated();
 
-        $booking = $this->bookingRepository->store($city, $tour, $validated);
+            $booking = $this->bookingRepository->store($city, $tour, $validated);
 
-        Mail::to($booking->customer_email)
-            ->send(new BookingCreated($booking));
+            SendBookingConfirmationEmail::dispatch($booking);
 
-        return redirect()
-            ->route('home')
-            ->with('success', 'Booking created. Reference: ' . $booking->reference);
+            return redirect()
+                ->route('home')
+                ->with('success', 'Booking created. Reference: ' . $booking->reference);
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Failed to create booking: ' . $e->getMessage());
+        }
     }
 }
