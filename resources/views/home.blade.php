@@ -100,7 +100,7 @@
     @endif
 </section>
 
-<section class="bg-slate-900 text-slate-50">
+<section id="reviews" class="bg-slate-900 text-slate-50 mt-8">
     <div class="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-3 items-start">
         <div class="space-y-4 md:space-y-5 md:col-span-1">
             <p class="text-xs uppercase tracking-[0.2em] text-emerald-300">Reviews</p>
@@ -295,16 +295,16 @@
 
         <div class="grid gap-4 grid-cols-2 sm:grid-cols-4 items-center">
             <a href="https://www.getyourguide.com/happy-tribe-travel-s274530/" target="_blank" rel="noopener noreferrer" class="flex h-32 w-32 sm:h-36 sm:w-36 md:h-40 md:w-40 mx-auto items-center justify-center rounded-2xl border border-slate-100 bg-white shadow-sm">
-                <img src="{{ asset('images/getyourguide_3.png') }}" alt="GetYourGuide" class="max-h-20 sm:max-h-24 md:max-h-28 w-auto object-contain">
+                <img src="{{ asset('images/getyourguide_logo.png') }}" alt="GetYourGuide" class="max-h-20 sm:max-h-24 md:max-h-28 w-auto object-contain">
             </a>
             <a href="https://www.tripadvisor.com/Attraction_Review-g294207-d23499279-Reviews-Happy_Tribe_Travel-Nairobi.html" target="_blank" rel="noopener noreferrer" class="flex h-32 w-32 sm:h-36 sm:w-36 md:h-40 md:w-40 mx-auto items-center justify-center rounded-2xl border border-slate-100 bg-white shadow-sm">
-                <img src="{{ asset('images/tripadvisor_2.png') }}" alt="Tripadvisor" class="max-h-20 sm:max-h-24 md:max-h-28 w-auto object-contain">
+                <img src="{{ asset('images/tripadvisor_logo.png') }}" alt="Tripadvisor" class="max-h-20 sm:max-h-24 md:max-h-28 w-auto object-contain">
             </a>
             <a href="https://www.safaribookings.com/" target="_blank" rel="noopener noreferrer" class="flex h-32 w-32 sm:h-36 sm:w-36 md:h-40 md:w-40 mx-auto items-center justify-center rounded-2xl border border-slate-100 bg-white shadow-sm">
-                <img src="{{ asset('images/safaribookings_3.png') }}" alt="SafariBookings" class="max-h-20 sm:max-h-24 md:max-h-28 w-auto object-contain">
+                <img src="{{ asset('images/safaribookings_logo.png') }}" alt="SafariBookings" class="max-h-20 sm:max-h-24 md:max-h-28 w-auto object-contain">
             </a>
             <a href="https://www.google.com/search?q=happy+tribe+travel&sca_esv=467a6a31ff5f6688&rlz=1C5CHFA_enKE1132KE1132&sxsrf=AE3TifObLfkFt7EBVATPnaeLmIszSejGDg%3A1762176315934&ei=O60IaZi7OIa-i-gPtOSI2AM&ved=0ahUKEwjYxN6qitaQAxUG3wIHHTQyAjsQ4dUDCBE&uact=5&oq=happy+tribe+travel&gs_lp=Egxnd3Mtd2l6LXNlcnAiEmhhcHB5IHRyaWJlIHRyYXZlbDIFEAAYgAQyBRAAGIAEMgYQABgWGB4yBhAAGBYYHjIGEAAYFhgeMgYQABgWGB4yAhAmMgsQABiABBiGAxiKBTILEAAYgAQYhgMYigUyBRAAGO8FSLQgUOkDW0ecAN4AZABAJgB0AKgAcgQqgEFMi03LjG4AQPIAQD4AQGYAgugAo0RwgIHECMYsAMYJ8ICChAAGLADGNYEGEfCAg0QABiABBiwAxhDGIoFwgIEECMYJ8ICChAAGIAEGBQYhwLCAgcQABiABBgKwgIKEAAYgAQYQxiKBcICCxAuGIAEGNEDGMcBwgIIEAAYgAQYogTCAggQABiiBBiJBcICBxAAGIAEGA3CAgYQABgNGB6YAwCIBgGQBgiSBwczLjAuNi4yoAeXM7IHBTItNi4yuAf3EMIHBjItMTAuMcgHNg&sclient=gws-wiz-serp" target="_blank" rel="noopener noreferrer" class="flex h-32 w-32 sm:h-36 sm:w-36 md:h-40 md:w-40 mx-auto items-center justify-center rounded-2xl border border-slate-100 bg-white shadow-sm">
-                <img src="{{ asset('images/google_3.png') }}" alt="Google" class="max-h-20 sm:max-h-24 md:max-h-28 w-auto object-contain">
+                <img src="{{ asset('images/google_logo.png') }}" alt="Google" class="max-h-20 sm:max-h-24 md:max-h-28 w-auto object-contain">
             </a>
         </div>
     </div>
