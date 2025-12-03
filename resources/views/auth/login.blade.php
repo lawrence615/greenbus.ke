@@ -64,7 +64,7 @@
 
                 <button
                     type="submit"
-                    class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition"
+                    class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition cursor-pointer"
                 >
                     Sign in
                 </button>
