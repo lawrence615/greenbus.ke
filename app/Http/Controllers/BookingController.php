@@ -39,7 +39,7 @@ class BookingController extends Controller
 
             return redirect()
                 ->route('home')
-                ->with('success', 'Booking created. Reference: ' . $booking->reference);
+                ->with('success', 'Booking created. Reference: ' . $booking->reference . ' Check your mail for more details.');
         } catch (\Exception $e) {
             return redirect()
                 ->back()
