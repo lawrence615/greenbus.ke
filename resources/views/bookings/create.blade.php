@@ -13,7 +13,7 @@
 @section('content')
 <section class="max-w-3xl mx-auto px-4 pb-10">
     <h1 class="text-2xl font-semibold mb-1">Buy tickets for {{ $tour->title }}</h1>
-    <p class="text-sm text-slate-600 mb-4">Fill in your details to buy tickets for this tour. You’ll see payment options on the next step in a later version.</p>
+    <p class="text-sm text-slate-600 mb-4">Fill in your details below. You'll be redirected to our secure payment page to complete your booking.</p>
 
     <form id="booking-form" method="POST" action="{{ route('bookings.store', [$city, $tour]) }}" class="space-y-6 bg-white rounded-2xl border border-slate-100 p-6 shadow-sm">
         @csrf
@@ -121,7 +121,7 @@
                 </a>
                 <button type="submit"
                     class="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 cursor-pointer">
-                    Confirm booking details
+                    Continue to Payment
                 </button>
             </div>
             <p>
