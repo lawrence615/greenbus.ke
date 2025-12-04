@@ -35,4 +35,22 @@ return [
         ],
     ],
 
+    'stripe' => [
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'kes_to_usd_rate' => env('KES_TO_USD_RATE', 153),
+    ],
+
+    'flutterwave' => [
+        'public_key' => env('FLUTTERWAVE_PUBLIC_KEY'),
+        'secret_key' => env('FLUTTERWAVE_SECRET_KEY'),
+        'webhook_secret' => env('FLUTTERWAVE_WEBHOOK_SECRET'),
+        'kes_to_usd_rate' => env('KES_TO_USD_RATE', 153),
+    ],
+
+    'payment' => [
+        'default' => env('PAYMENT_PROVIDER', 'flutterwave'),
+    ],
+
 ];
