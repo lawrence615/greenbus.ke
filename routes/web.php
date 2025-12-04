@@ -28,3 +28,6 @@ Route::get('/{city:slug}/tours/{tour:slug}', [TourController::class, 'show'])->n
 
 Route::get('/book/{city:slug}/{tour:slug}', [BookingController::class, 'create'])->name('bookings.create');
 Route::post('/book/{city:slug}/{tour:slug}', [BookingController::class, 'store'])->name('bookings.store');
+Route::get('/booking/{booking}/success', [BookingController::class, 'success'])->name('bookings.success');
+Route::get('/booking/{booking}/cancelled', [BookingController::class, 'cancel'])->name('bookings.cancel');
+Route::get('/booking/{booking}/retry', [BookingController::class, 'retryPayment'])->name('bookings.retry');
