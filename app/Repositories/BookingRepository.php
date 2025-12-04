@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\BookingStatus;
 use App\Interfaces\BookingRepositoryInterface;
 use App\Models\Booking;
 use App\Models\City;
@@ -58,7 +59,7 @@ class BookingRepository implements BookingRepositoryInterface
             'customer_phone' => $data['customer_phone'] ?? null,
             'pickup_location' => $data['pickup_location'] ?? null,
             'special_requests' => $data['special_requests'] ?? null,
-            'status' => 'pending',
+            'status' => BookingStatus::PENDING_PAYMENT->value,
         ]);
     }
 
