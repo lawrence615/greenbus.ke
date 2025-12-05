@@ -74,7 +74,7 @@ class TourController extends Controller
                     $tour->itineraryItems()->create([
                         'title' => $item['title'],
                         'description' => $item['description'] ?? null,
-                        'order' => $index + 1,
+                        'sort_order' => $index,
                     ]);
                 }
             }
@@ -146,7 +146,7 @@ class TourController extends Controller
                     $tour->itineraryItems()->create([
                         'title' => $item['title'],
                         'description' => $item['description'] ?? null,
-                        'order' => $index + 1,
+                        'sort_order' => $index,
                     ]);
                 }
             }
