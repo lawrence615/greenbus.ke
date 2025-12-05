@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('customer_phone')->nullable();
             $table->string('pickup_location')->nullable();
             $table->text('special_requests')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('pending_payment');
             $table->timestamps();
         });
     }
