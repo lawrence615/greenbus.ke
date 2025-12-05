@@ -86,7 +86,7 @@
             </div>
             <div class="p-4 flex-1 flex flex-col">
                 <h3 class="font-semibold mb-1 text-sm md:text-base">{{ $tour->title }}</h3>
-                <p class="text-xs text-slate-600 mb-2 line-clamp-3">{{ $tour->short_description }}</p>
+                <p class="text-xs text-slate-600 mb-2 line-clamp-3">{!! $tour->short_description !!}</p>
                 <p class="text-sm font-semibold text-emerald-700 mb-3">
                     From KES {{ number_format($tour->base_price_adult) }} per adult
                 </p>
