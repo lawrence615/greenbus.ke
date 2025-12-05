@@ -243,31 +243,60 @@
             <div class="p-6">
                 <div class="space-y-4" id="itinerary-container">
                     <template x-for="(item, index) in itinerary" :key="index">
-                        <div class="flex gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
-                            <div class="shrink-0 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-semibold" x-text="index + 1"></div>
-                            <div class="flex-1 space-y-3">
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700 mb-1">Step Title *</label>
-                                    <input type="text" :name="'itinerary[' + index + '][title]'" x-model="item.title" class="w-full rounded-lg border-slate-300 text-sm focus:border-emerald-500 focus:ring-emerald-500" placeholder="e.g. Hotel Pickup">
+                        <div class="flex gap-4 p-5 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 shadow-sm">
+                            <!-- Step Number -->
+                            <div class="shrink-0">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow-md" x-text="index + 1"></div>
+                            </div>
+                            
+                            <!-- Form Fields -->
+                            <div class="flex-1 space-y-4">
+                                <!-- Step Title -->
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                                        <span class="flex items-center justify-center w-5 h-5 rounded bg-amber-50 text-amber-600">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                            </svg>
+                                        </span>
+                                        Step Title <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" :name="'itinerary[' + index + '][title]'" x-model="item.title" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none" placeholder="e.g. Hotel Pickup">
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
-                                    <textarea :name="'itinerary[' + index + '][description]'" x-model="item.description" rows="2" class="w-full rounded-lg border-slate-300 text-sm focus:border-emerald-500 focus:ring-emerald-500" placeholder="Describe this step..."></textarea>
+                                
+                                <!-- Description -->
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                                        <span class="flex items-center justify-center w-5 h-5 rounded bg-blue-50 text-blue-600">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/>
+                                            </svg>
+                                        </span>
+                                        Description
+                                    </label>
+                                    <textarea :name="'itinerary[' + index + '][description]'" x-model="item.description" rows="2" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none resize-none" placeholder="Describe this step..."></textarea>
                                 </div>
                             </div>
-                            <button type="button" @click="removeItineraryItem(index)" class="shrink-0 text-red-500 hover:text-red-700">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </button>
+                            
+                            <!-- Delete Button -->
+                            <div class="shrink-0">
+                                <button type="button" @click="removeItineraryItem(index)" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Remove step">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </template>
                 </div>
-                <div x-show="itinerary.length === 0" class="text-center py-8 text-slate-500">
-                    <svg class="w-12 h-12 mx-auto text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                    </svg>
-                    <p>No itinerary steps yet. Click "Add Step" to create one.</p>
+                <div x-show="itinerary.length === 0" class="text-center py-12 text-slate-500">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                    </div>
+                    <p class="text-sm font-medium text-slate-600 mb-1">No itinerary steps yet</p>
+                    <p class="text-xs text-slate-400">Click "Add Step" to create your first itinerary item</p>
                 </div>
             </div>
         </div>
