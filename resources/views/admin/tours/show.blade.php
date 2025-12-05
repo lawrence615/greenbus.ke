@@ -59,7 +59,7 @@
                         </span>
                     </div>
                     @if($tour->short_description)
-                    <p class="mt-4 text-slate-600">{{ $tour->short_description }}</p>
+                    <p class="mt-4 text-slate-600">{!! $tour->short_description !!}</p>
                     @endif
                 </div>
             </div>
@@ -69,7 +69,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h2 class="font-semibold text-slate-900 mb-4">Description</h2>
                 <div class="prose prose-slate max-w-none">
-                    {!! nl2br(e($tour->description)) !!}
+                    {!! $tour->description !!}
                 </div>
             </div>
             @endif
@@ -79,7 +79,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h2 class="font-semibold text-slate-900 mb-4">What's Included</h2>
                 <div class="prose prose-slate max-w-none">
-                    {!! nl2br(e($tour->includes)) !!}
+                    {!! $tour->includes !!}
                 </div>
             </div>
             @endif
@@ -89,7 +89,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h2 class="font-semibold text-slate-900 mb-4">Important Information</h2>
                 <div class="prose prose-slate max-w-none">
-                    {!! nl2br(e($tour->important_information)) !!}
+                    {!! $tour->important_information !!}
                 </div>
             </div>
             @endif

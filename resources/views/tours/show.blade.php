@@ -89,7 +89,7 @@
             <section>
                 <h2 class="text-base font-semibold mb-2">Overview</h2>
                 <div class="prose prose-sm max-w-none">
-                    {!! nl2br(e($tour->description)) !!}
+                    {!! $tour->description !!}
                 </div>
             </section>
 
@@ -97,7 +97,7 @@
                 <h2 class="text-base font-semibold mb-2">What the package covers</h2>
                 @if ($tour->includes)
                 <div class="prose prose-sm max-w-none">
-                    {!! nl2br(e($tour->includes)) !!}
+                    {!! $tour->includes !!}
                 </div>
                 @else
                 <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
@@ -113,7 +113,7 @@
                 <h2 class="text-base font-semibold mb-2">Important information</h2>
                 @if ($tour->important_information)
                 <div class="prose prose-sm max-w-none">
-                    {!! nl2br(e($tour->important_information)) !!}
+                    {!! $tour->important_information !!}
                 </div>
                 @else
                 <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
