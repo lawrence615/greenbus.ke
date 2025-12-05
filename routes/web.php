@@ -22,6 +22,21 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Redirect old dashboard route
+Route::middleware('auth')->get('/dashboard', function () {
+    if (auth()->user()->hasRole(['super-admin', 'admin'])) {
+        return redirect()->route('console.dashboard');
+    }
+    return redirect()->route('customer.dashboard');
+})->name('dashboard');
+
+// Customer routes
+Route::middleware('auth')->prefix('account')->name('customer.')->group(function () {
+    Route::get('/', [CustomerDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/bookings', [CustomerBookingController::class, 'index'])->name('bookings.index');
+    Route::get('/bookings/{booking}', [CustomerBookingController::class, 'show'])->name('bookings.show');
+});
+
 // Admin routes
 Route::middleware(['auth', 'role:super-admin|admin'])->prefix('console')->name('console.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
@@ -33,34 +48,26 @@ Route::middleware(['auth', 'role:super-admin|admin'])->prefix('console')->name('
     Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/{payment}', [AdminPaymentController::class, 'show'])->name('payments.show');
 
-    Route::resource('tours', AdminTourController::class);
-    Route::patch('/tours/{tour}/toggle-status', [AdminTourController::class, 'toggleStatus'])->name('tours.toggle-status');
+    Route::get('/tours', [AdminTourController::class, 'index'])->name('tours.index');
+    Route::get('/tours/create', [AdminTourController::class, 'create'])->name('tours.create');
+    Route::post('/tours', [AdminTourController::class, 'store'])->name('tours.store');
+    Route::get('/tours/{tour:slug}', [AdminTourController::class, 'show'])->name('tours.show');
+    Route::get('/tours/{tour:slug}/edit', [AdminTourController::class, 'edit'])->name('tours.edit');
+    Route::put('/tours/{tour:slug}', [AdminTourController::class, 'update'])->name('tours.update');
+    Route::delete('/tours/{tour:slug}', [AdminTourController::class, 'destroy'])->name('tours.destroy');
+    Route::patch('/tours/{tour:slug}/toggle-status', [AdminTourController::class, 'toggleStatus'])->name('tours.toggle-status');
 
     Route::resource('users', AdminUserController::class);
 });
 
-// Customer routes
-Route::middleware('auth')->prefix('account')->name('customer.')->group(function () {
-    Route::get('/', [CustomerDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/bookings', [CustomerBookingController::class, 'index'])->name('bookings.index');
-    Route::get('/bookings/{booking}', [CustomerBookingController::class, 'show'])->name('bookings.show');
-});
-
-// Redirect old dashboard route
-Route::middleware('auth')->get('/dashboard', function () {
-    if (auth()->user()->hasRole(['super-admin', 'admin'])) {
-        return redirect()->route('console.dashboard');
-    }
-    return redirect()->route('customer.dashboard');
-})->name('dashboard');
-
-Route::get('/{city:slug}', [CityController::class, 'show'])->name('cities.show');
-
-Route::get('/{city:slug}/tours', [TourController::class, 'index'])->name('tours.index');
-Route::get('/{city:slug}/tours/{tour:slug}', [TourController::class, 'show'])->name('tours.show');
-
+// Booking routes
 Route::get('/book/{city:slug}/{tour:slug}', [BookingController::class, 'create'])->name('bookings.create');
 Route::post('/book/{city:slug}/{tour:slug}', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/booking/{booking}/success', [BookingController::class, 'success'])->name('bookings.success');
 Route::get('/booking/{booking}/cancelled', [BookingController::class, 'cancel'])->name('bookings.cancel');
 Route::get('/booking/{booking}/retry', [BookingController::class, 'retryPayment'])->name('bookings.retry');
+
+// City/Tour routes (must be last - catches /{slug} patterns)
+Route::get('/{city:slug}', [CityController::class, 'show'])->name('cities.show');
+Route::get('/{city:slug}/tours', [TourController::class, 'index'])->name('tours.index');
+Route::get('/{city:slug}/tours/{tour:slug}', [TourController::class, 'show'])->name('tours.show');
