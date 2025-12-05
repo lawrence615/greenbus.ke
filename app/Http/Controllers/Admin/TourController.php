@@ -8,6 +8,7 @@ use App\Models\City;
 use App\Models\Tour;
 use App\Models\TourCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TourController extends Controller
 {
@@ -39,7 +40,7 @@ class TourController extends Controller
             'city_id' => 'required|exists:cities,id',
             'tour_category_id' => 'nullable|exists:tour_categories,id',
             'title' => 'required|string|max:255',
-            'short_description' => 'nullable|string|max:300',
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'includes' => 'nullable|string',
             'important_information' => 'nullable|string',
@@ -52,12 +53,32 @@ class TourController extends Controller
             'base_price_child' => 'nullable|numeric|min:0',
             'base_price_infant' => 'nullable|numeric|min:0',
             'status' => 'required|in:draft,published',
+            'itinerary' => 'nullable|array',
+            'itinerary.*.title' => 'required_with:itinerary|string|max:255',
+            'itinerary.*.description' => 'nullable|string',
         ]);
 
         $validated['is_daily'] = $request->boolean('is_daily');
         $validated['featured'] = $request->boolean('featured');
 
-        $tour = $this->tourRepository->store($validated);
+        $tour = null;
+        DB::transaction(function () use ($validated, &$tour) {
+            $itinerary = $validated['itinerary'] ?? [];
+            unset($validated['itinerary']);
+            
+            $tour = $this->tourRepository->store($validated);
+            
+            // Save itinerary items
+            foreach ($itinerary as $index => $item) {
+                if (!empty($item['title'])) {
+                    $tour->itineraryItems()->create([
+                        'title' => $item['title'],
+                        'description' => $item['description'] ?? null,
+                        'order' => $index + 1,
+                    ]);
+                }
+            }
+        });
 
         return redirect()
             ->route('console.tours.show', $tour)
@@ -90,7 +111,7 @@ class TourController extends Controller
             'city_id' => 'required|exists:cities,id',
             'tour_category_id' => 'nullable|exists:tour_categories,id',
             'title' => 'required|string|max:255',
-            'short_description' => 'nullable|string|max:300',
+            'short_description' => 'nullable|string',
             'description' => 'nullable|string',
             'includes' => 'nullable|string',
             'important_information' => 'nullable|string',
@@ -103,15 +124,36 @@ class TourController extends Controller
             'base_price_child' => 'nullable|numeric|min:0',
             'base_price_infant' => 'nullable|numeric|min:0',
             'status' => 'required|in:draft,published',
+            'itinerary' => 'nullable|array',
+            'itinerary.*.title' => 'required_with:itinerary|string|max:255',
+            'itinerary.*.description' => 'nullable|string',
         ]);
 
         $validated['is_daily'] = $request->boolean('is_daily');
         $validated['featured'] = $request->boolean('featured');
 
-        $this->tourRepository->update($tour, $validated);
+        DB::transaction(function () use ($validated, $tour) {
+            $itinerary = $validated['itinerary'] ?? [];
+            unset($validated['itinerary']);
+            
+            $this->tourRepository->update($tour, $validated);
+            
+            // Delete existing itinerary items and recreate
+            $tour->itineraryItems()->delete();
+            
+            foreach ($itinerary as $index => $item) {
+                if (!empty($item['title'])) {
+                    $tour->itineraryItems()->create([
+                        'title' => $item['title'],
+                        'description' => $item['description'] ?? null,
+                        'order' => $index + 1,
+                    ]);
+                }
+            }
+        });
 
         return redirect()
-            ->route('console.tours.show', $tour)
+            ->route('console.tours.show', $tour->fresh())
             ->with('success', 'Tour updated successfully.');
     }
 
