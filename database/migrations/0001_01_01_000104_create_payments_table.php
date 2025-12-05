@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
-            $table->string('provider')->default('paystack');
+            $table->string('provider')->default('flutterwave');
             $table->string('provider_reference')->nullable();
             $table->unsignedInteger('amount');
             $table->string('currency', 10)->default('KES');
