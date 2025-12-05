@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('short_description', 300)->nullable();
             $table->text('description')->nullable();
+            $table->text('includes')->nullable();
+            $table->text('important_information')->nullable();
             $table->string('duration_text')->nullable();
             $table->string('meeting_point')->nullable();
             $table->string('starts_at_time')->nullable();
