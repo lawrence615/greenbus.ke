@@ -11,6 +11,7 @@
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
+    @stack('styles')
 </head>
 
 <body class="bg-slate-100 min-h-screen" x-data="{ sidebarOpen: false }">
@@ -171,6 +172,7 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
     ></div>
+    @stack('scripts')
 </body>
 
 </html>
