@@ -7,7 +7,12 @@
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
 <style>
     .ql-editor { min-height: 150px; }
-    .ql-container { font-size: 14px; }
+    .ql-container { font-size: 14px; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
+    .ql-toolbar { border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; }
+    .sortable-ghost { opacity: 0.4; }
+    .sortable-drag { opacity: 1; }
+    .drag-handle { cursor: grab; }
+    .drag-handle:active { cursor: grabbing; }
 </style>
 @endpush
 
@@ -239,12 +244,34 @@
                 </button>
             </div>
             <div class="p-6">
-                <div class="space-y-4" id="itinerary-container">
-                    <template x-for="(item, index) in itinerary" :key="index">
-                        <div class="flex gap-4 p-5 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 shadow-sm">
-                            <!-- Step Number -->
-                            <div class="shrink-0">
+                <div class="space-y-4" id="itinerary-list" x-ref="itineraryList">
+                    <template x-for="(item, index) in itinerary" :key="item.id || index">
+                        <div class="flex gap-3 p-5 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200 shadow-sm itinerary-item" :data-index="index">
+                            <!-- Drag Handle & Step Number -->
+                            <div class="shrink-0 flex flex-col items-center gap-2">
+                                <!-- Drag Handle -->
+                                <div class="drag-handle p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded cursor-grab active:cursor-grabbing" title="Drag to reorder">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+                                    </svg>
+                                </div>
+                                
+                                <!-- Step Number -->
                                 <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow-md" x-text="index + 1"></div>
+                                
+                                <!-- Move Buttons -->
+                                <div class="flex flex-col gap-0.5">
+                                    <button type="button" @click="moveItineraryItem(index, -1)" :disabled="index === 0" class="p-1 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed" title="Move up">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+                                        </svg>
+                                    </button>
+                                    <button type="button" @click="moveItineraryItem(index, 1)" :disabled="index === itinerary.length - 1" class="p-1 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded transition-colors disabled:opacity-30 disabled:cursor-not-allowed" title="Move down">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                             
                             <!-- Form Fields -->
@@ -456,16 +483,39 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <script>
 function tourForm() {
     return {
         status: '{{ old('status', 'draft') }}',
         itinerary: [],
         editors: {},
+        sortable: null,
+        nextId: 1,
         
         init() {
             this.$nextTick(() => {
                 this.initEditors();
+                this.initSortable();
+            });
+        },
+        
+        initSortable() {
+            const container = this.$refs.itineraryList;
+            if (!container) return;
+            
+            const self = this;
+            this.sortable = new Sortable(container, {
+                animation: 150,
+                handle: '.drag-handle',
+                ghostClass: 'sortable-ghost',
+                dragClass: 'sortable-drag',
+                onEnd: function(evt) {
+                    if (evt.oldIndex !== evt.newIndex) {
+                        const item = self.itinerary.splice(evt.oldIndex, 1)[0];
+                        self.itinerary.splice(evt.newIndex, 0, item);
+                    }
+                }
             });
         },
         
@@ -514,11 +564,19 @@ function tourForm() {
         },
         
         addItineraryItem() {
-            this.itinerary.push({ title: '', description: '' });
+            this.itinerary.push({ id: 'new-' + this.nextId++, title: '', description: '' });
         },
         
         removeItineraryItem(index) {
             this.itinerary.splice(index, 1);
+        },
+        
+        moveItineraryItem(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= this.itinerary.length) return;
+            
+            const item = this.itinerary.splice(index, 1)[0];
+            this.itinerary.splice(newIndex, 0, item);
         }
     }
 }
