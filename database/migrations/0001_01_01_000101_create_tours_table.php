@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('tours', function (Blueprint $table) {
             $table->id();
             $table->foreignId('city_id')->constrained()->cascadeOnDelete();
+            $table->string('code', 10)->unique()->nullable();
             $table->string('title');
             $table->string('slug')->unique();
             $table->string('short_description', 300)->nullable();
