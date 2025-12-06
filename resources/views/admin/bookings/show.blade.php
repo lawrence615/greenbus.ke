@@ -163,6 +163,99 @@
                 </div>
             </div>
 
+            <!-- Refund Section -->
+            @if($booking->isEligibleForRefund())
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+                <div class="px-6 py-4 border-b border-slate-200">
+                    <h2 class="font-semibold text-slate-900">Process Refund</h2>
+                </div>
+                <div class="p-6">
+                    <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                        <div class="flex gap-2">
+                            <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <div class="text-sm text-amber-800">
+                                <p class="font-medium">Refund Eligibility</p>
+                                <p class="mt-1">This booking is eligible for a refund. The tour is more than 24 hours away.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <form method="POST" action="{{ route('console.bookings.refund', $booking) }}" onsubmit="return confirm('Are you sure you want to process this refund? This action cannot be undone.');">
+                        @csrf
+                        <div class="space-y-4">
+                            <div>
+                                <label for="reason" class="block text-sm font-medium text-slate-700 mb-1">Refund Reason</label>
+                                <textarea 
+                                    name="reason" 
+                                    id="reason" 
+                                    rows="3" 
+                                    required
+                                    placeholder="Enter the reason for this refund..."
+                                    class="w-full rounded-lg border border-slate-300 text-sm focus:border-emerald-500 focus:ring-emerald-500 placeholder:text-slate-400"
+                                ></textarea>
+                                @error('reason')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                            <button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                                </svg>
+                                Process Refund
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            @elseif($booking->status === \App\Enums\BookingStatus::REFUNDED->value)
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+                <div class="px-6 py-4 border-b border-slate-200">
+                    <h2 class="font-semibold text-slate-900">Refund Information</h2>
+                </div>
+                <div class="p-6">
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+                        <div class="flex gap-2">
+                            <svg class="w-5 h-5 text-slate-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div class="text-sm text-slate-700">
+                                <p class="font-medium">This booking has been refunded</p>
+                                @if($booking->refunded_at)
+                                <p class="mt-1">Refunded on: {{ $booking->refunded_at->format('M d, Y \a\t H:i') }}</p>
+                                @endif
+                                @if($booking->refund_reason)
+                                <p class="mt-2"><span class="font-medium">Reason:</span> {{ $booking->refund_reason }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @else
+            @php $ineligibilityReason = $booking->getRefundIneligibilityReason() @endphp
+            @if($ineligibilityReason && $booking->status === \App\Enums\BookingStatus::CONFIRMED->value)
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+                <div class="px-6 py-4 border-b border-slate-200">
+                    <h2 class="font-semibold text-slate-900">Refund Status</h2>
+                </div>
+                <div class="p-6">
+                    <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <div class="flex gap-2">
+                            <svg class="w-5 h-5 text-red-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div class="text-sm text-red-800">
+                                <p class="font-medium">Not Eligible for Refund</p>
+                                <p class="mt-1">{{ $ineligibilityReason }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+            @endif
+
             <!-- Quick Actions -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200">
                 <div class="px-6 py-4 border-b border-slate-200">
