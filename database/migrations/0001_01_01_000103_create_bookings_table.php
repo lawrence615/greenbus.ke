@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('pickup_location')->nullable();
             $table->text('special_requests')->nullable();
             $table->string('status')->default('pending_payment');
+            $table->timestamp('refunded_at')->nullable();
+            $table->text('refund_reason')->nullable();
             $table->timestamps();
         });
     }
