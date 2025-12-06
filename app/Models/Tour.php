@@ -16,6 +16,7 @@ class Tour extends Model
     protected $fillable = [
         'city_id',
         'tour_category_id',
+        'code',
         'title',
         'slug',
         'short_description',
@@ -32,6 +33,26 @@ class Tour extends Model
         'base_price_infant',
         'status',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (Tour $tour) {
+            if (empty($tour->code)) {
+                $tour->code = static::generateCode();
+            }
+        });
+    }
+
+    /**
+     * Generate a unique tour code.
+     */
+    public static function generateCode(): string
+    {
+        $lastTour = static::orderBy('id', 'desc')->first();
+        $nextId = $lastTour ? $lastTour->id + 1 : 1;
+        
+        return 'TUR-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+    }
 
     public function city(): BelongsTo
     {
