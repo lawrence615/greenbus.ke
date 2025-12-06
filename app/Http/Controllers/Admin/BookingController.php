@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\BookingStatus;
+use App\Enums\PaymentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Tour;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -65,5 +68,63 @@ class BookingController extends Controller
         $booking->update(['status' => $request->status]);
 
         return back()->with('success', 'Booking status updated successfully.');
+    }
+
+    /**
+     * Process a refund for a booking.
+     */
+    public function refund(Request $request, Booking $booking)
+    {
+        $request->validate([
+            'reason' => 'required|string|max:500',
+        ]);
+
+        // Check if booking is eligible for refund
+        if (!$booking->isEligibleForRefund()) {
+            return back()->with('error', $booking->getRefundIneligibilityReason() ?? 'This booking is not eligible for a refund.');
+        }
+
+        try {
+            DB::transaction(function () use ($booking, $request) {
+                // Update booking status
+                $booking->update([
+                    'status' => BookingStatus::REFUNDED->value,
+                    'refunded_at' => now(),
+                    'refund_reason' => $request->reason,
+                ]);
+
+                // Update payment status
+                if ($booking->payment) {
+                    $booking->payment->update([
+                        'status' => PaymentStatus::REFUNDED->value,
+                        'raw_payload' => array_merge(
+                            $booking->payment->raw_payload ?? [],
+                            [
+                                'refund_data' => [
+                                    'refunded_at' => now()->toIso8601String(),
+                                    'reason' => $request->reason,
+                                    'refunded_by' => auth()->id(),
+                                ]
+                            ]
+                        ),
+                    ]);
+                }
+
+                Log::info('Booking refunded', [
+                    'booking_reference' => $booking->reference,
+                    'refunded_by' => auth()->id(),
+                    'reason' => $request->reason,
+                ]);
+            });
+
+            return back()->with('success', 'Booking has been refunded successfully. The customer should be notified and the refund processed through the payment provider.');
+        } catch (\Exception $e) {
+            Log::error('Refund failed', [
+                'booking_reference' => $booking->reference,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', 'Failed to process refund: ' . $e->getMessage());
+        }
     }
 }
