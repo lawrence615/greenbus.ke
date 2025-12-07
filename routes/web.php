@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
+use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
+use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
 use App\Http\Controllers\Customer\BookingController as CustomerBookingController;
 
@@ -59,6 +61,24 @@ Route::middleware(['auth', 'role:super-admin|admin'])->prefix('console')->name('
     Route::patch('/tours/{tour:slug}/toggle-status', [AdminTourController::class, 'toggleStatus'])->name('tours.toggle-status');
 
     Route::resource('users', AdminUserController::class);
+
+    // Testimonials management
+    Route::get('/testimonials', [AdminTestimonialController::class, 'index'])->name('testimonials.index');
+    Route::get('/testimonials/create', [AdminTestimonialController::class, 'create'])->name('testimonials.create');
+    Route::post('/testimonials', [AdminTestimonialController::class, 'store'])->name('testimonials.store');
+    Route::get('/testimonials/{testimonial}/edit', [AdminTestimonialController::class, 'edit'])->name('testimonials.edit');
+    Route::put('/testimonials/{testimonial}', [AdminTestimonialController::class, 'update'])->name('testimonials.update');
+    Route::delete('/testimonials/{testimonial}', [AdminTestimonialController::class, 'destroy'])->name('testimonials.destroy');
+    Route::patch('/testimonials/{testimonial}/toggle-status', [AdminTestimonialController::class, 'toggleStatus'])->name('testimonials.toggle-status');
+
+    // FAQs management
+    Route::get('/faqs', [AdminFaqController::class, 'index'])->name('faqs.index');
+    Route::get('/faqs/create', [AdminFaqController::class, 'create'])->name('faqs.create');
+    Route::post('/faqs', [AdminFaqController::class, 'store'])->name('faqs.store');
+    Route::get('/faqs/{faq}/edit', [AdminFaqController::class, 'edit'])->name('faqs.edit');
+    Route::put('/faqs/{faq}', [AdminFaqController::class, 'update'])->name('faqs.update');
+    Route::delete('/faqs/{faq}', [AdminFaqController::class, 'destroy'])->name('faqs.destroy');
+    Route::patch('/faqs/{faq}/toggle-status', [AdminFaqController::class, 'toggleStatus'])->name('faqs.toggle-status');
 });
 
 // Booking routes
