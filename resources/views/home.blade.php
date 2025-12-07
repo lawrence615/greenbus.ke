@@ -120,11 +120,11 @@
             </p>
         </div>
 
-        <div class="md:col-span-2">
+        <div class="md:col-span-2 overflow-hidden">
             <div class="relative" x-data="{}">
                 <div class="overflow-hidden" id="reviews-carousel">
-                    <div class="flex transition-transform duration-500 ease-out" data-review-track>
-                        <div class="min-w-full px-1">
+                    <div class="flex transition-transform duration-500 ease-out w-full" data-review-track>
+                        <div class="w-full shrink-0 px-1">
                             <div class="grid gap-3 md:grid-cols-2">
                                 <article class="bg-slate-800 rounded-xl p-5 border border-slate-700 h-full flex flex-col">
                                     <div class="flex items-center gap-3 mb-3">
@@ -156,7 +156,7 @@
                             </div>
                         </div>
 
-                        <div class="min-w-full px-1">
+                        <div class="w-full shrink-0 px-1">
                             <div class="grid gap-3 md:grid-cols-2">
                                 <article class="bg-slate-800 rounded-xl p-5 border border-slate-700 h-full flex flex-col">
                                     <div class="flex items-center gap-3 mb-3">
@@ -188,7 +188,7 @@
                             </div>
                         </div>
 
-                        <div class="min-w-full px-1">
+                        <div class="w-full shrink-0 px-1">
                             <div class="grid gap-3 md:grid-cols-2">
                                 <article class="bg-slate-800 rounded-xl p-5 border border-slate-700 h-full flex flex-col">
                                     <div class="flex items-center gap-3 mb-3">
