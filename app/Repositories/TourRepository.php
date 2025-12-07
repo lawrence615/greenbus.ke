@@ -28,7 +28,7 @@ class TourRepository implements TourRepositoryInterface
 
     public function get(City $city, Tour $tour)
     {
-        if ($tour->city_id !== $city->id) {
+        if ($tour->city_id !== $city->id || $tour->status !== 'published') {
             abort(404);
         }
 
