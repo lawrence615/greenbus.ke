@@ -63,9 +63,9 @@
 <section id="tours" class="max-w-6xl mx-auto px-4 pb-12 pt-10">
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-semibold">Featured Nairobi tours</h2>
-        @isset($city)
+        @if ($hasMoreTours && isset($city))
         <a href="{{ route('tours.index', $city) }}" class="text-sm text-emerald-700 hover:underline">View all Nairobi tours</a>
-        @endisset
+        @endif
     </div>
 
     @if ($featuredTours->isEmpty())
