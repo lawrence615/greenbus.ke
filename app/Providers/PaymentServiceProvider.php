@@ -3,14 +3,9 @@
 namespace App\Providers;
 
 use App\Contracts\PaymentGatewayInterface;
-use App\Events\PaymentFailed;
-use App\Events\PaymentSucceeded;
-use App\Listeners\LogPaymentFailure;
-use App\Listeners\SendBookingConfirmationOnPayment;
 use App\Services\Payment\FlutterwavePaymentGateway;
 use App\Services\Payment\PaymentService;
 use App\Services\Payment\StripePaymentGateway;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class PaymentServiceProvider extends ServiceProvider
@@ -49,18 +44,12 @@ class PaymentServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap services.
+     * 
+     * Note: Event listeners (SendBookingConfirmationOnPayment, LogPaymentFailure)
+     * are auto-discovered by Laravel via their type-hinted handle() methods.
      */
     public function boot(): void
     {
-        // Register event listeners for payment events
-        Event::listen(
-            PaymentSucceeded::class,
-            SendBookingConfirmationOnPayment::class
-        );
-
-        Event::listen(
-            PaymentFailed::class,
-            LogPaymentFailure::class
-        );
+        //
     }
 }
