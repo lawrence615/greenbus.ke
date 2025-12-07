@@ -14,13 +14,56 @@
             Back to Tours
         </a>
         <div class="flex items-center gap-2">
-            <form method="POST" action="{{ route('console.tours.toggle-status', $tour) }}" class="inline">
-                @csrf
-                @method('PATCH')
-                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 {{ $tour->status === 'published' ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }} rounded-lg text-sm font-medium">
+            <div x-data="{ showConfirm: false }" class="inline relative">
+                <button 
+                    type="button" 
+                    @click="showConfirm = true"
+                    class="inline-flex items-center gap-2 px-4 py-2 {{ $tour->status === 'published' ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }} rounded-lg text-sm font-medium cursor-pointer"
+                >
                     {{ $tour->status === 'published' ? 'Unpublish' : 'Publish' }}
                 </button>
-            </form>
+
+                <!-- Confirmation Modal -->
+                <div 
+                    x-show="showConfirm" 
+                    x-cloak
+                    class="fixed inset-0 z-50 flex items-center justify-center"
+                    @keydown.escape.window="showConfirm = false"
+                >
+                    <div class="fixed inset-0 bg-black/50" @click="showConfirm = false"></div>
+                    <div class="relative bg-white rounded-xl shadow-xl p-6 max-w-sm mx-4 z-10">
+                        <h3 class="text-lg text-center font-semibold text-slate-900 mb-2">
+                            {{ $tour->status === 'published' ? 'Unpublish Tour?' : 'Publish Tour?' }}
+                        </h3>
+                        <p class="text-sm text-slate-600 mb-4">
+                            @if($tour->status === 'published')
+                                This tour will no longer be visible to the public.
+                            @else
+                                This tour will become visible to the public.
+                            @endif
+                        </p>
+                        <div class="flex justify-end gap-3">
+                            <button 
+                                type="button" 
+                                @click="showConfirm = false"
+                                class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+                            <form method="POST" action="{{ route('console.tours.toggle-status', $tour) }}">
+                                @csrf
+                                @method('PATCH')
+                                <button 
+                                    type="submit" 
+                                    class="px-4 py-2 text-sm font-medium text-white rounded-lg cursor-pointer {{ $tour->status === 'published' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700' }} cursor-pointer"
+                                >
+                                    {{ $tour->status === 'published' ? 'Unpublish' : 'Publish' }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <a href="{{ route('console.tours.edit', $tour) }}" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
