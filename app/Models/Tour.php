@@ -10,6 +10,7 @@ use App\Models\TourImage;
 use App\Models\Booking;
 use App\Models\TourCategory;
 use App\Models\TourItineraryItem;
+use App\Models\Testimonial;
 
 class Tour extends Model
 {
@@ -78,5 +79,10 @@ class Tour extends Model
     {
         return $this->hasMany(TourItineraryItem::class)
             ->orderBy('sort_order');
+    }
+
+    public function testimonials(): HasMany
+    {
+        return $this->hasMany(Testimonial::class);
     }
 }
