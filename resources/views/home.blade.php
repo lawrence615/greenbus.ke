@@ -112,7 +112,7 @@
                     <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                 </div>
                 <p class="text-slate-200">
-                    4.9 / 5 from 120+ guests
+                    4.8 / 5 from 120+ guests
                 </p>
             </div>
             <p class="text-xs text-slate-300 max-w-xs">
@@ -132,12 +132,12 @@
                                             A
                                         </div>
                                         <div class="text-xs">
-                                            <p class="font-semibold text-slate-50">Anna</p>
-                                            <p class="text-slate-300">Germany · Nairobi highlights</p>
+                                            <p class="font-semibold text-slate-50">Татьяна</p>
+                                            <p class="text-slate-300">Kenya · Nairobi highlights</p>
                                         </div>
                                     </div>
-                                    <p class="text-sm mb-3">“Great introduction to Nairobi. We only had one full day and this tour helped us see a lot without feeling rushed.”</p>
-                                    <p class="text-[11px] text-slate-400 mt-auto">Travelled as a couple</p>
+                                    <p class="text-sm mb-3">“It was wonderful, I learned a lot of information about the center of Nairobi, visited the local market, took a walk and admired the beautiful views”</p>
+                                    <p class="text-[11px] text-slate-400 mt-auto">December 3, 2025</p>
                                 </article>
 
                                 <article class="bg-slate-800 rounded-xl p-5 border border-slate-700 h-full flex flex-col">
@@ -146,12 +146,13 @@
                                             M
                                         </div>
                                         <div class="text-xs">
-                                            <p class="font-semibold text-slate-50">Michael</p>
+                                            <p class="font-semibold text-slate-50">Riley</p>
                                             <p class="text-slate-300">UK · City & markets</p>
                                         </div>
                                     </div>
-                                    <p class="text-sm mb-3">“Very friendly guide, felt safe the whole time. Perfect for a first visit to Kenya and understanding the city layout.”</p>
-                                    <p class="text-[11px] text-slate-400 mt-auto">Solo traveller</p>
+                                    <p class="text-sm mb-3">“
+We had such a good time with Jeff! Not only did he explain the history and sites, we really felt like we got to learn about real life in Nairobi with him. Would recommend!”</p>
+                                    <p class="text-[11px] text-slate-400 mt-auto">November 14, 2025</p>
                                 </article>
                             </div>
                         </div>
@@ -164,12 +165,12 @@
                                             K
                                         </div>
                                         <div class="text-xs">
-                                            <p class="font-semibold text-slate-50">The Kim family</p>
-                                            <p class="text-slate-300">USA · Museum & markets</p>
+                                            <p class="font-semibold text-slate-50">Jimrey</p>
+                                            <p class="text-slate-300">Saudi Arabia · Museum & markets</p>
                                         </div>
                                     </div>
-                                    <p class="text-sm mb-3">“Our family enjoyed the museum and market tour. The kids loved hearing stories about Nairobi’s history and trying local snacks.”</p>
-                                    <p class="text-[11px] text-slate-400 mt-auto">Family with children</p>
+                                    <p class="text-sm mb-3">“This wasn’t just a tour, it felt like a friendly meetup with our amazing guide, Sharon. She took the time to show us around and explain the beauty of Nairobi’s central district, making the experience truly special.”</p>
+                                    <p class="text-[11px] text-slate-400 mt-auto">December 2, 2025</p>
                                 </article>
 
                                 <article class="bg-slate-800 rounded-xl p-5 border border-slate-700 h-full flex flex-col">
@@ -178,12 +179,12 @@
                                             S
                                         </div>
                                         <div class="text-xs">
-                                            <p class="font-semibold text-slate-50">Sara</p>
+                                            <p class="font-semibold text-slate-50">adrienne</p>
                                             <p class="text-slate-300">UAE · Evening city lights</p>
                                         </div>
                                     </div>
-                                    <p class="text-sm mb-3">“Loved seeing Nairobi at night from the viewpoints. The guide made us feel safe and shared great local tips for restaurants.”</p>
-                                    <p class="text-[11px] text-slate-400 mt-auto">Friends group</p>
+                                    <p class="text-sm mb-3">“Jeff was a great tour guide. a short vur informative tour of nartobi. would definitely recommend.”</p>
+                                    <p class="text-[11px] text-slate-400 mt-auto">November 10, 2025</p>
                                 </article>
                             </div>
                         </div>
@@ -196,12 +197,12 @@
                                             J
                                         </div>
                                         <div class="text-xs">
-                                            <p class="font-semibold text-slate-50">James</p>
+                                            <p class="font-semibold text-slate-50">Sam</p>
                                             <p class="text-slate-300">Kenya · City refresher</p>
                                         </div>
                                     </div>
-                                    <p class="text-sm mb-3">“Even as someone from Kenya, this tour helped me see Nairobi from a visitor’s perspective. Very well organised and on time.”</p>
-                                    <p class="text-[11px] text-slate-400 mt-auto">Local guest</p>
+                                    <p class="text-sm mb-3">“We had an amazing day. Simon was lovely and inluded everything from souvenirs to sights with plenty of cultural background and room for plenty of questions. Highly recommend.”</p>
+                                    <p class="text-[11px] text-slate-400 mt-auto">November 24, 2025 </p>
                                 </article>
 
                                 <article class="bg-slate-800 rounded-xl p-5 border border-slate-700 h-full flex flex-col">
@@ -210,12 +211,12 @@
                                             L
                                         </div>
                                         <div class="text-xs">
-                                            <p class="font-semibold text-slate-50">Lina</p>
+                                            <p class="font-semibold text-slate-50">SHAHROL</p>
                                             <p class="text-slate-300">Sweden · Short layover tour</p>
                                         </div>
                                     </div>
-                                    <p class="text-sm mb-3">“We had a long layover in Nairobi and Greenbus made it feel like a mini holiday instead of just waiting at the airport.”</p>
-                                    <p class="text-[11px] text-slate-400 mt-auto">Couple on layover</p>
+                                    <p class="text-sm mb-3">“My wife and I joined the walking tour with Jeff and it was an amazing experience. Jeff was friendly, knowledgeable and very enthusiastic throughout the tour.”</p>
+                                    <p class="text-[11px] text-slate-400 mt-auto">November 19, 2025</p>
                                 </article>
                             </div>
                         </div>
