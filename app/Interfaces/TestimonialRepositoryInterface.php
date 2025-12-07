@@ -42,4 +42,10 @@ interface TestimonialRepositoryInterface
      * Toggle testimonial active status
      */
     public function toggleStatus(Testimonial $testimonial): Testimonial;
+
+    /**
+     * Get featured testimonials for homepage
+     * Returns active testimonials with highest rating, ordered by sort_order
+     */
+    public function getFeatured(int $limit = 6): Collection;
 }

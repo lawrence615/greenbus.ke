@@ -61,4 +61,13 @@ class TestimonialRepository implements TestimonialRepositoryInterface
         $testimonial->save();
         return $testimonial;
     }
+
+    public function getFeatured(int $limit = 6): Collection
+    {
+        return Testimonial::active()
+            ->orderByDesc('rating')
+            ->orderBy('sort_order')
+            ->limit($limit)
+            ->get();
+    }
 }
