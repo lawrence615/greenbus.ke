@@ -64,17 +64,9 @@
     <footer id="contact" class="mt-12 border-t bg-white/95">
         <div class="max-w-6xl mx-auto px-4 py-10 lg:py-12 grid gap-8 md:grid-cols-4 text-sm">
             <div class="space-y-3">
-                <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-emerald-600 text-white font-bold">
-                        GB
-                    </span>
-                    <div>
-                        <p class="font-semibold text-slate-900">Greenbus City Tours</p>
-                        <p class="text-xs text-emerald-700">Nairobi, Kenya</p>
-                    </div>
-                </div>
+                <h3 class="text-xs font-semibold tracking-wide text-slate-500 uppercase">About</h3>
                 <p class="text-slate-600 leading-relaxed">
-                    Small-group city tours designed for visitors to Nairobi. Trusted local guides, safe modern buses, and transparent pricing.
+                    A licensed tours and safaris company offering memorable, sustainable, and community-supportive travel experiences across Kenya. Explore the country the HAPPY way.
                 </p>
                 <a href="{{ isset($city) ? route('tours.index', $city) : '#tours' }}" class="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-emerald-700">
                     <span>Browse Nairobi tours</span>
@@ -114,7 +106,7 @@
                         <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
                             <span class="text-[11px]">📞</span>
                         </span>
-                        <span>+254 726 455 000<br><span class="text-xs text-slate-500">Call or WhatsApp between 08:00 – 20:00 EAT</span></span>
+                        <span>+254 726 455 000</span>
                     </li>
                     <li class="flex items-start gap-2">
                         <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
@@ -160,7 +152,7 @@
         </div>
     </footer>
 </body>
-
+@stack('scripts')
 <script>
     @if(session('success'))
     window.__flashSuccess = @json(session('success'));
