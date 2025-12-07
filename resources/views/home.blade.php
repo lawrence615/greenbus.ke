@@ -230,62 +230,7 @@
             </div>
         </div>
     </div>
-
-    <script>
-        (function() {
-            const container = document.querySelector('[id="reviews-carousel"]');
-            if (!container) return;
-
-            const track = container.querySelector('[data-review-track]');
-            const dots = document.querySelectorAll('[data-review-dots] button');
-            if (!track || !dots.length) return;
-
-            let current = 0;
-            const total = track.children.length;
-
-            function goTo(index) {
-                current = (index + total) % total;
-                const offset = -current * 100;
-                track.style.transform = 'translateX(' + offset + '%)';
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('bg-emerald-500', i === current);
-                    dot.classList.toggle('bg-emerald-900', i !== current);
-                });
-            }
-
-            dots.forEach((dot, i) => {
-                dot.addEventListener('click', () => {
-                    goTo(i);
-                    resetAuto();
-                });
-            });
-
-            let auto = setInterval(() => goTo(current + 1), 7000);
-
-            function resetAuto() {
-                clearInterval(auto);
-                auto = setInterval(() => goTo(current + 1), 7000);
-            }
-
-            let startX = null;
-            container.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].clientX;
-            });
-            container.addEventListener('touchend', (e) => {
-                if (startX === null) return;
-                const diff = e.changedTouches[0].clientX - startX;
-                if (Math.abs(diff) > 50) {
-                    goTo(current + (diff < 0 ? 1 : -1));
-                    resetAuto();
-                }
-                startX = null;
-            });
-
-            goTo(0);
-        })();
-    </script>
 </section>
-
 <section class="bg-transparent">
     <div class="max-w-6xl mx-auto px-4 py-12">
         <div class="text-center mb-8">
@@ -310,3 +255,59 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    (function() {
+        const container = document.querySelector('[id="reviews-carousel"]');
+        if (!container) return;
+
+        const track = container.querySelector('[data-review-track]');
+        const dots = document.querySelectorAll('[data-review-dots] button');
+        if (!track || !dots.length) return;
+
+        let current = 0;
+        const total = track.children.length;
+
+        function goTo(index) {
+            current = (index + total) % total;
+            const offset = -current * 100;
+            track.style.transform = 'translateX(' + offset + '%)';
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('bg-emerald-500', i === current);
+                dot.classList.toggle('bg-emerald-900', i !== current);
+            });
+        }
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                goTo(i);
+                resetAuto();
+            });
+        });
+
+        let auto = setInterval(() => goTo(current + 1), 7000);
+
+        function resetAuto() {
+            clearInterval(auto);
+            auto = setInterval(() => goTo(current + 1), 7000);
+        }
+
+        let startX = null;
+        container.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+        container.addEventListener('touchend', (e) => {
+            if (startX === null) return;
+            const diff = e.changedTouches[0].clientX - startX;
+            if (Math.abs(diff) > 50) {
+                goTo(current + (diff < 0 ? 1 : -1));
+                resetAuto();
+            }
+            startX = null;
+        });
+
+        goTo(0);
+    })();
+</script>
+@endpush
