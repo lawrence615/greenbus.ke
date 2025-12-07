@@ -14,13 +14,19 @@ class HomeController extends Controller
     public function index(): View
     {
         $defaultCity = $this->cityRepository->getDefaultCity();
+        $limit = 6;
         $featuredTours = $defaultCity
-            ? $this->cityRepository->getFeaturedToursForCity($defaultCity, 6)
+            ? $this->cityRepository->getFeaturedToursForCity($defaultCity, $limit)
             : collect();
+
+        $totalFeaturedTours = $defaultCity
+            ? $this->cityRepository->countFeaturedToursForCity($defaultCity)
+            : 0;
 
         return view('home', [
             'city' => $defaultCity,
             'featuredTours' => $featuredTours,
+            'hasMoreTours' => $totalFeaturedTours > $limit,
         ]);
     }
 }
