@@ -241,10 +241,13 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                     </svg>
                                 </a>
-                                <form method="POST" action="{{ route('console.tours.toggle-status', $tour) }}" class="inline">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button type="submit" class="p-1.5 rounded-lg transition-colors duration-150 cursor-pointer {{ $tour->status === 'published' ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50' : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50' }}" title="{{ $tour->status === 'published' ? 'Unpublish' : 'Publish' }}">
+                                <div x-data="{ showConfirm: false }" class="inline relative">
+                                    <button 
+                                        type="button" 
+                                        @click="showConfirm = true"
+                                        class="p-1.5 rounded-lg transition-colors duration-150 cursor-pointer {{ $tour->status === 'published' ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50' : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50' }}" 
+                                        title="{{ $tour->status === 'published' ? 'Unpublish' : 'Publish' }}"
+                                    >
                                         @if($tour->status === 'published')
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
@@ -256,7 +259,48 @@
                                         </svg>
                                         @endif
                                     </button>
-                                </form>
+
+                                    <!-- Confirmation Modal -->
+                                    <div 
+                                        x-show="showConfirm" 
+                                        x-cloak
+                                        class="fixed inset-0 z-50 flex items-center justify-center"
+                                        @keydown.escape.window="showConfirm = false"
+                                    >
+                                        <div class="fixed inset-0 bg-black/50" @click="showConfirm = false"></div>
+                                        <div class="relative bg-white rounded-xl shadow-xl p-6 max-w-sm mx-4 z-10">
+                                            <h3 class="text-lg text-center font-semibold text-slate-900 mb-2">
+                                                {{ $tour->status === 'published' ? 'Unpublish Tour?' : 'Publish Tour?' }}
+                                            </h3>
+                                            <p class="text-sm text-slate-600 mb-4">
+                                                @if($tour->status === 'published')
+                                                    This tour will no longer be visible to the public.
+                                                @else
+                                                    This tour will become visible to the public.
+                                                @endif
+                                            </p>
+                                            <div class="flex justify-end gap-3">
+                                                <button 
+                                                    type="button" 
+                                                    @click="showConfirm = false"
+                                                    class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer"
+                                                >
+                                                    Cancel
+                                                </button>
+                                                <form method="POST" action="{{ route('console.tours.toggle-status', $tour) }}">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button 
+                                                        type="submit" 
+                                                        class="px-4 py-2 text-sm font-medium text-white rounded-lg {{ $tour->status === 'published' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700' }} cursor-pointer"
+                                                    >
+                                                        {{ $tour->status === 'published' ? 'Unpublish' : 'Publish' }}
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </td>
                     </tr>
