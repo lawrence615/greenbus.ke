@@ -13,4 +13,6 @@ interface CityRepositoryInterface
     public function getDefaultCity(): ?City;
 
     public function getFeaturedToursForCity(City $city, int $limit = 6);
+
+    public function countFeaturedToursForCity(City $city): int;
 }

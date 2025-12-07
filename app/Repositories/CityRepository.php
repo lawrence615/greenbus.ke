@@ -43,4 +43,12 @@ class CityRepository implements CityRepositoryInterface
             ->take($limit)
             ->get();
     }
+
+    public function countFeaturedToursForCity(City $city): int
+    {
+        return $city->tours()
+            ->where('featured', true)
+            ->where('status', 'published')
+            ->count();
+    }
 }
