@@ -33,6 +33,9 @@ class FlutterwaveWebhookController extends Controller
         Log::info('Flutterwave webhook received', [
             'event' => $event,
             'tx_ref' => $data['tx_ref'] ?? null,
+            'transaction_id' => $data['id'] ?? null,
+            'trace_id' => uniqid('webhook_recv_'),
+            'timestamp' => now()->toIso8601String(),
         ]);
 
         return match ($event) {
@@ -124,7 +127,17 @@ class FlutterwaveWebhookController extends Controller
                 'status' => BookingStatus::CONFIRMED->value,
             ]);
 
-            Log::info('Flutterwave payment succeeded', ['tx_ref' => $txRef]);
+            Log::info('Flutterwave payment succeeded', [
+                'tx_ref' => $txRef,
+                'trace_id' => uniqid('webhook_'),
+                'timestamp' => now()->toIso8601String(),
+            ]);
+
+            Log::info('Dispatching PaymentSucceeded event', [
+                'tx_ref' => $txRef,
+                'booking_id' => $booking->id,
+                'trace_id' => uniqid('event_'),
+            ]);
 
             event(new PaymentSucceeded($booking, $payment));
         });
