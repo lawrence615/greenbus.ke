@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             TourCategorySeeder::class,
             TourSeeder::class,
+            TestimonialSeeder::class,
         ]);
     }
 }
