@@ -3,6 +3,15 @@
 @section('title', 'Add FAQ')
 @section('page-title', 'Add FAQ')
 
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+<style>
+    .ql-editor { min-height: 120px; }
+    .ql-container { font-size: 14px; border-bottom-left-radius: 0.5rem; border-bottom-right-radius: 0.5rem; }
+    .ql-toolbar { border-top-left-radius: 0.5rem; border-top-right-radius: 0.5rem; }
+</style>
+@endpush
+
 @section('content')
 <div class="max-w-3xl">
     <!-- Back Link -->
@@ -15,7 +24,7 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ route('console.faqs.store') }}" class="space-y-6">
+    <form method="POST" action="{{ route('console.faqs.store') }}" class="space-y-6" x-data="faqForm()" @submit="syncEditor">
         @csrf
 
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
@@ -57,14 +66,8 @@
                         <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 text-xs text-white bg-slate-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10">A clear, helpful response to the question</span>
                     </span>
                 </label>
-                <textarea 
-                    name="answer" 
-                    id="answer"
-                    rows="5"
-                    placeholder="Provide a clear and helpful answer..."
-                    class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none @error('answer') border-red-500 @enderror"
-                    required
-                >{{ old('answer') }}</textarea>
+                <input type="hidden" name="answer" id="answer" value="{{ old('answer') }}">
+                <div id="answer-editor" class="bg-white rounded-lg border border-slate-300 @error('answer') border-red-500 @enderror"></div>
                 @error('answer')
                 <p class="text-xs text-red-500">{{ $message }}</p>
                 @enderror
@@ -74,16 +77,16 @@
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
             <h2 class="text-lg font-semibold text-slate-900 mb-4">Settings</h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <!-- Category -->
-                <div class="space-y-1.5">
+                <div class="space-y-1.5 md:col-span-2">
                     <label for="category" class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
-                        Category
+                        General Category
                         <span class="relative group">
                             <svg class="w-4 h-4 text-slate-400 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
-                            <span class="absolute left-1/2 -translate-x-1/2 bottom-full ml-8 mb-2 px-2 py-1 text-xs text-white bg-slate-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10">Group related FAQs together for easier navigation</span>
+                            <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 text-xs text-white bg-slate-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10">Group related FAQs (e.g., Booking, Payment)</span>
                         </span>
                     </label>
                     <input 
@@ -109,6 +112,37 @@
                     @enderror
                 </div>
 
+                <!-- Tour Category -->
+                <div class="space-y-1.5">
+                    <label for="tour_category_id" class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
+                        Tour Category
+                        <span class="relative group">
+                            <svg class="w-4 h-4 text-slate-400 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 text-xs text-white bg-slate-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10">Link FAQ to a specific tour type</span>
+                        </span>
+                    </label>
+                    <select 
+                        name="tour_category_id" 
+                        id="tour_category_id"
+                        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none @error('tour_category_id') border-red-500 @enderror"
+                    >
+                        <option value="">— None (General FAQ) —</option>
+                        @foreach($tourCategories as $tourCategory)
+                        <option value="{{ $tourCategory->id }}" {{ old('tour_category_id') == $tourCategory->id ? 'selected' : '' }}>
+                            {{ $tourCategory->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                    <p class="text-xs text-slate-500">Optional: Link to a tour category</p>
+                    @error('tour_category_id')
+                    <p class="text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Sort Order -->
                 <div class="space-y-1.5">
                     <label for="sort_order" class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
@@ -145,7 +179,7 @@
                             <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 text-xs text-white bg-slate-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10">Only active FAQs are shown on the public website</span>
                         </span>
                     </label>
-                    <label class="flex items-center gap-3 cursor-pointer">
+                    <label class="flex items-center gap-3 cursor-pointer h-[38px]">
                         <input 
                             type="checkbox" 
                             name="is_active" 
@@ -155,6 +189,7 @@
                         >
                         <span class="text-sm text-slate-700">Active (visible on website)</span>
                     </label>
+                    <p class="text-xs text-slate-500">Only active FAQs are visible</p>
                 </div>
             </div>
         </div>
@@ -171,3 +206,45 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+<script>
+function faqForm() {
+    return {
+        editor: null,
+        
+        init() {
+            this.initEditor();
+        },
+        
+        initEditor() {
+            const toolbarOptions = [
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['link'],
+                ['clean']
+            ];
+            
+            this.editor = new Quill('#answer-editor', {
+                theme: 'snow',
+                modules: { toolbar: toolbarOptions },
+                placeholder: 'Provide a clear and helpful answer...'
+            });
+            
+            // Set initial content
+            const initialContent = document.getElementById('answer').value;
+            if (initialContent) {
+                this.editor.root.innerHTML = initialContent;
+            }
+        },
+        
+        syncEditor() {
+            if (this.editor) {
+                document.getElementById('answer').value = this.editor.root.innerHTML;
+            }
+        }
+    };
+}
+</script>
+@endpush
