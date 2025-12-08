@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('tour_itinerary_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('tour_id')->constrained()->cascadeOnDelete();
+            $table->string('type', 20)->default('activity');
             $table->string('time_label', 50)->nullable();
             $table->string('title');
             $table->text('description')->nullable();

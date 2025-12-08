@@ -56,6 +56,7 @@ class TourController extends Controller
             foreach ($itinerary as $index => $item) {
                 if (!empty($item['title'])) {
                     $tour->itineraryItems()->create([
+                        'type' => $item['type'] ?? 'activity',
                         'title' => $item['title'],
                         'description' => $item['description'] ?? null,
                         'sort_order' => $index,
@@ -112,6 +113,7 @@ class TourController extends Controller
             foreach ($itinerary as $index => $item) {
                 if (!empty($item['title'])) {
                     $tour->itineraryItems()->create([
+                        'type' => $item['type'] ?? 'activity',
                         'title' => $item['title'],
                         'description' => $item['description'] ?? null,
                         'sort_order' => $index,
