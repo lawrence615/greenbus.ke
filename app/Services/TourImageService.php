@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class TourImageService
 {
     protected string $disk = 'do';
-    protected string $directory = 'tours';
+    protected string $basePath = 'greenbus/images';
 
     /**
      * Upload images for a tour.
@@ -47,7 +47,7 @@ class TourImageService
     protected function storeImage(UploadedFile $image, Tour $tour): string
     {
         $filename = Str::slug($tour->title) . '-' . Str::random(8) . '.' . $image->getClientOriginalExtension();
-        $path = "{$this->directory}/{$tour->id}/{$filename}";
+        $path = "{$this->basePath}/{$tour->code}/{$filename}";
 
         Storage::disk($this->disk)->put($path, file_get_contents($image), 'public');
 
@@ -88,6 +88,6 @@ class TourImageService
         $tour->images()->delete();
 
         // Also delete the tour's directory
-        Storage::disk($this->disk)->deleteDirectory("{$this->directory}/{$tour->id}");
+        Storage::disk($this->disk)->deleteDirectory("{$this->basePath}/{$tour->code}");
     }
 }
