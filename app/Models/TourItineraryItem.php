@@ -9,6 +9,7 @@ class TourItineraryItem extends Model
 {
     protected $fillable = [
         'tour_id',
+        'type',
         'time_label',
         'title',
         'description',
