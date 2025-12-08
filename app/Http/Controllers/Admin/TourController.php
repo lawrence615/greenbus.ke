@@ -3,72 +3,56 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Tour\StoreRequest;
+use App\Http\Requests\Tour\UpdateRequest;
+use App\Interfaces\CityRepositoryInterface;
+use App\Interfaces\TourCategoryRepositoryInterface;
 use App\Interfaces\TourRepositoryInterface;
-use App\Models\City;
 use App\Models\Tour;
-use App\Models\TourCategory;
+use App\Services\TourImageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TourController extends Controller
 {
     public function __construct(
-        protected TourRepositoryInterface $tourRepository
+        protected TourRepositoryInterface $tourRepository,
+        protected CityRepositoryInterface $cityRepository,
+        protected TourCategoryRepositoryInterface $categoryRepository,
+        protected TourImageService $imageService
     ) {}
 
     public function index(Request $request)
     {
         $filters = $request->only(['search', 'city_id', 'status', 'category_id']);
         $tours = $this->tourRepository->adminIndex($filters);
-        $cities = City::orderBy('name')->get();
-        $categories = TourCategory::orderBy('name')->get();
+        $cities = $this->cityRepository->getAll();
+        $categories = $this->categoryRepository->getAll();
 
         return view('admin.tours.index', compact('tours', 'cities', 'categories'));
     }
 
     public function create()
     {
-        $cities = City::orderBy('name')->get();
-        $categories = TourCategory::orderBy('name')->get();
+        $cities = $this->cityRepository->getAll();
+        $categories = $this->categoryRepository->getAll();
 
         return view('admin.tours.create', compact('cities', 'categories'));
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $validated = $request->validate([
-            'city_id' => 'required|exists:cities,id',
-            'tour_category_id' => 'nullable|exists:tour_categories,id',
-            'title' => 'required|string|max:255',
-            'short_description' => 'nullable|string',
-            'description' => 'nullable|string',
-            'includes' => 'nullable|string',
-            'important_information' => 'nullable|string',
-            'duration_text' => 'nullable|string|max:100',
-            'meeting_point' => 'nullable|string|max:255',
-            'starts_at_time' => 'nullable|string|max:10',
-            'is_daily' => 'boolean',
-            'featured' => 'boolean',
-            'base_price_adult' => 'required|numeric|min:0',
-            'base_price_child' => 'nullable|numeric|min:0',
-            'base_price_infant' => 'nullable|numeric|min:0',
-            'status' => 'required|in:draft,published',
-            'itinerary' => 'nullable|array',
-            'itinerary.*.title' => 'required_with:itinerary|string|max:255',
-            'itinerary.*.description' => 'nullable|string',
-        ]);
-
-        $validated['is_daily'] = $request->boolean('is_daily');
-        $validated['featured'] = $request->boolean('featured');
+        $validated = $request->validated();
 
         $tour = null;
-        DB::transaction(function () use ($validated, &$tour) {
+        DB::transaction(function () use ($validated, $request, &$tour) {
             $itinerary = $validated['itinerary'] ?? [];
-            unset($validated['itinerary']);
-            
+            $images = $validated['images'] ?? [];
+            $coverIndex = $validated['cover_image_index'] ?? 0;
+            unset($validated['itinerary'], $validated['images'], $validated['cover_image_index']);
+
             $tour = $this->tourRepository->store($validated);
-            
-            // Save itinerary items
+
             foreach ($itinerary as $index => $item) {
                 if (!empty($item['title'])) {
                     $tour->itineraryItems()->create([
@@ -77,6 +61,11 @@ class TourController extends Controller
                         'sort_order' => $index,
                     ]);
                 }
+            }
+
+            // Upload images
+            if (!empty($images)) {
+                $this->imageService->uploadImages($tour, $images, $coverIndex);
             }
         });
 
@@ -99,48 +88,27 @@ class TourController extends Controller
     public function edit(Tour $tour)
     {
         $tour = $this->tourRepository->find($tour->id);
-        $cities = City::orderBy('name')->get();
-        $categories = TourCategory::orderBy('name')->get();
+        $cities = $this->cityRepository->getAll();
+        $categories = $this->categoryRepository->getAll();
 
         return view('admin.tours.edit', compact('tour', 'cities', 'categories'));
     }
 
-    public function update(Request $request, Tour $tour)
+    public function update(UpdateRequest $request, Tour $tour)
     {
-        $validated = $request->validate([
-            'city_id' => 'required|exists:cities,id',
-            'tour_category_id' => 'nullable|exists:tour_categories,id',
-            'title' => 'required|string|max:255',
-            'short_description' => 'nullable|string',
-            'description' => 'nullable|string',
-            'includes' => 'nullable|string',
-            'important_information' => 'nullable|string',
-            'duration_text' => 'nullable|string|max:100',
-            'meeting_point' => 'nullable|string|max:255',
-            'starts_at_time' => 'nullable|string|max:10',
-            'is_daily' => 'boolean',
-            'featured' => 'boolean',
-            'base_price_adult' => 'required|numeric|min:0',
-            'base_price_child' => 'nullable|numeric|min:0',
-            'base_price_infant' => 'nullable|numeric|min:0',
-            'status' => 'required|in:draft,published',
-            'itinerary' => 'nullable|array',
-            'itinerary.*.title' => 'required_with:itinerary|string|max:255',
-            'itinerary.*.description' => 'nullable|string',
-        ]);
-
-        $validated['is_daily'] = $request->boolean('is_daily');
-        $validated['featured'] = $request->boolean('featured');
+        $validated = $request->validated();
 
         DB::transaction(function () use ($validated, $tour) {
             $itinerary = $validated['itinerary'] ?? [];
-            unset($validated['itinerary']);
-            
+            $images = $validated['images'] ?? [];
+            $coverImageId = $validated['cover_image_id'] ?? null;
+            $deleteImages = $validated['delete_images'] ?? [];
+            unset($validated['itinerary'], $validated['images'], $validated['cover_image_id'], $validated['delete_images']);
+
             $this->tourRepository->update($tour, $validated);
-            
-            // Delete existing itinerary items and recreate
+
             $tour->itineraryItems()->delete();
-            
+
             foreach ($itinerary as $index => $item) {
                 if (!empty($item['title'])) {
                     $tour->itineraryItems()->create([
@@ -149,6 +117,21 @@ class TourController extends Controller
                         'sort_order' => $index,
                     ]);
                 }
+            }
+
+            // Delete selected images
+            if (!empty($deleteImages)) {
+                $this->imageService->deleteImages($tour, $deleteImages);
+            }
+
+            // Upload new images
+            if (!empty($images)) {
+                $this->imageService->uploadImages($tour, $images);
+            }
+
+            // Set cover image
+            if ($coverImageId) {
+                $this->imageService->setCoverImage($tour, $coverImageId);
             }
         });
 
@@ -159,6 +142,9 @@ class TourController extends Controller
 
     public function destroy(Tour $tour)
     {
+        // Delete all images from storage
+        $this->imageService->deleteAllImages($tour);
+
         $this->tourRepository->delete($tour);
 
         return redirect()
