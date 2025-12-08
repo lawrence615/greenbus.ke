@@ -28,7 +28,7 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ route('console.tours.store') }}" class="space-y-6" @submit="syncEditors">
+    <form method="POST" action="{{ route('console.tours.store') }}" class="space-y-6" @submit="syncEditors" enctype="multipart/form-data">
         @csrf
 
         <!-- Basic Information -->
@@ -403,6 +403,89 @@
             </div>
         </div>
 
+        <!-- Tour Images -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+            <div class="px-6 py-4 border-b border-slate-200">
+                <h2 class="font-semibold text-slate-900">Tour Images</h2>
+                <p class="text-sm text-slate-500 mt-1">Upload up to 10 images. First image will be the cover by default.</p>
+            </div>
+            <div class="p-6">
+                <div x-data="imageUploader()" class="space-y-4">
+                    <!-- Drop Zone -->
+                    <div
+                        @dragover.prevent="isDragging = true"
+                        @dragleave.prevent="isDragging = false"
+                        @drop.prevent="handleDrop($event)"
+                        :class="isDragging ? 'border-emerald-500 bg-emerald-50' : 'border-slate-300 hover:border-slate-400'"
+                        class="border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer"
+                        @click="$refs.fileInput.click()"
+                    >
+                        <input
+                            type="file"
+                            name="images[]"
+                            multiple
+                            accept="image/jpeg,image/png,image/jpg,image/webp"
+                            class="hidden"
+                            x-ref="fileInput"
+                            @change="handleFiles($event.target.files)"
+                        >
+                        <div class="flex flex-col items-center gap-3">
+                            <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-slate-700">Drop images here or click to upload</p>
+                                <p class="text-xs text-slate-500 mt-1">JPEG, PNG, WebP up to 5MB each (max 10 images)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Image Previews -->
+                    <div x-show="previews.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                        <template x-for="(preview, index) in previews" :key="index">
+                            <div class="relative group aspect-square rounded-lg overflow-hidden border-2 transition-colors"
+                                :class="coverIndex === index ? 'border-emerald-500 ring-2 ring-emerald-500/20' : 'border-slate-200'">
+                                <img :src="preview.url" class="w-full h-full object-cover">
+
+                                <!-- Cover Badge -->
+                                <div x-show="coverIndex === index" class="absolute top-2 left-2 px-2 py-1 bg-emerald-500 text-white text-xs font-medium rounded">
+                                    Cover
+                                </div>
+
+                                <!-- Overlay Actions -->
+                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                    <button type="button" @click="setCover(index)" x-show="coverIndex !== index"
+                                        class="p-2 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-600" title="Set as cover">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </button>
+                                    <button type="button" @click="removeImage(index)"
+                                        class="p-2 bg-white rounded-full text-slate-700 hover:bg-red-50 hover:text-red-600" title="Remove">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+
+                    <!-- Hidden input for cover index -->
+                    <input type="hidden" name="cover_image_index" :value="coverIndex">
+                </div>
+
+                @error('images')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+                @error('images.*')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+
         <!-- Publication Status -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200">
             <div class="px-6 py-4 border-b border-slate-200">
@@ -577,6 +660,81 @@ function tourForm() {
             
             const item = this.itinerary.splice(index, 1)[0];
             this.itinerary.splice(newIndex, 0, item);
+        }
+    }
+}
+
+function imageUploader() {
+    return {
+        isDragging: false,
+        previews: [],
+        files: [],
+        coverIndex: 0,
+        maxFiles: 10,
+        maxSize: 5 * 1024 * 1024, // 5MB
+
+        handleDrop(event) {
+            this.isDragging = false;
+            const files = event.dataTransfer.files;
+            this.handleFiles(files);
+        },
+
+        handleFiles(fileList) {
+            const newFiles = Array.from(fileList).filter(file => {
+                if (!file.type.match(/^image\/(jpeg|png|jpg|webp)$/)) {
+                    alert(`${file.name} is not a supported image format`);
+                    return false;
+                }
+                if (file.size > this.maxSize) {
+                    alert(`${file.name} is too large (max 5MB)`);
+                    return false;
+                }
+                return true;
+            });
+
+            if (this.files.length + newFiles.length > this.maxFiles) {
+                alert(`You can only upload up to ${this.maxFiles} images`);
+                return;
+            }
+
+            newFiles.forEach(file => {
+                this.files.push(file);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.previews.push({
+                        url: e.target.result,
+                        name: file.name
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Update the file input
+            this.updateFileInput();
+        },
+
+        removeImage(index) {
+            this.files.splice(index, 1);
+            this.previews.splice(index, 1);
+            
+            // Adjust cover index if needed
+            if (this.coverIndex >= this.files.length) {
+                this.coverIndex = Math.max(0, this.files.length - 1);
+            } else if (index < this.coverIndex) {
+                this.coverIndex--;
+            }
+
+            this.updateFileInput();
+        },
+
+        setCover(index) {
+            this.coverIndex = index;
+        },
+
+        updateFileInput() {
+            const dt = new DataTransfer();
+            this.files.forEach(file => dt.items.add(file));
+            this.$refs.fileInput.files = dt.files;
         }
     }
 }
