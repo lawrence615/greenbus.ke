@@ -29,7 +29,7 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="text-sm text-slate-500">Confirmed</p>
+                    <p class="text-sm text-slate-500">Confirmed Bookings</p>
                     <p class="text-2xl font-bold text-slate-900">{{ number_format($stats['confirmed_bookings']) }}</p>
                 </div>
             </div>
