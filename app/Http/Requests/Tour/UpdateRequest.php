@@ -31,6 +31,7 @@ class UpdateRequest extends FormRequest
             'base_price_infant' => ['nullable', 'numeric', 'min:0'],
             'status' => ['required', 'in:draft,published'],
             'itinerary' => ['nullable', 'array'],
+            'itinerary.*.type' => ['nullable', 'string', 'in:start,transit,stopover,activity,end'],
             'itinerary.*.title' => ['required_with:itinerary', 'string', 'max:255'],
             'itinerary.*.description' => ['nullable', 'string'],
             'images' => ['nullable', 'array', 'max:10'],
