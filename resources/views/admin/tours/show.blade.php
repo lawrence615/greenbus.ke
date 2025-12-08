@@ -82,9 +82,11 @@
                     $cover = $tour->images->firstWhere('is_cover', true) ?? $tour->images->first();
                 @endphp
                 @if($cover)
-                <img src="{{ $cover->path }}" alt="{{ $tour->title }}" class="w-full h-64 object-cover">
+                <div class="aspect-video w-full overflow-hidden">
+                    <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover">
+                </div>
                 @else
-                <div class="w-full h-64 bg-slate-200 flex items-center justify-center">
+                <div class="aspect-video w-full bg-slate-200 flex items-center justify-center">
                     <svg class="w-16 h-16 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                     </svg>
@@ -165,7 +167,7 @@
                 <h2 class="font-semibold text-slate-900 mb-4">Gallery ({{ $tour->images->count() }} images)</h2>
                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                     @foreach($tour->images as $image)
-                    <img src="{{ $image->path }}" alt="{{ $tour->title }}" class="w-full h-32 object-cover rounded-lg">
+                    <img src="{{ $image->url }}" alt="{{ $tour->title }}" class="w-full h-32 object-cover rounded-lg">
                     @endforeach
                 </div>
             </div>
@@ -254,16 +256,53 @@
             </div>
 
             <!-- Danger Zone -->
-            <div class="bg-red-50 rounded-xl border border-red-200 p-6">
+            <div class="bg-red-50 rounded-xl border border-red-200 p-6" x-data="{ showDeleteConfirm: false }">
                 <h2 class="font-semibold text-red-900 mb-2">Danger Zone</h2>
                 <p class="text-sm text-red-700 mb-4">Deleting this tour will remove all associated data.</p>
-                <form method="POST" action="{{ route('console.tours.destroy', $tour) }}" onsubmit="return confirm('Are you sure you want to delete this tour? This action cannot be undone.')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700">
-                        Delete Tour
-                    </button>
-                </form>
+                <button 
+                    type="button" 
+                    @click="showDeleteConfirm = true"
+                    class="w-full px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 cursor-pointer"
+                >
+                    Delete Tour
+                </button>
+
+                <!-- Delete Confirmation Modal -->
+                <div 
+                    x-show="showDeleteConfirm" 
+                    x-cloak
+                    class="fixed inset-0 z-50 flex items-center justify-center"
+                    @keydown.escape.window="showDeleteConfirm = false"
+                >
+                    <div class="fixed inset-0 bg-black/50" @click="showDeleteConfirm = false"></div>
+                    <div class="relative bg-white rounded-xl shadow-xl p-6 max-w-sm mx-4 z-10">
+                        <h3 class="text-lg text-center font-semibold text-slate-900 mb-2">
+                            Delete Tour?
+                        </h3>
+                        <p class="text-sm text-slate-600 mb-4">
+                            Are you sure you want to delete <strong>{{ $tour->title }}</strong>? This action cannot be undone and will remove all associated images and data.
+                        </p>
+                        <div class="flex justify-end gap-3">
+                            <button 
+                                type="button" 
+                                @click="showDeleteConfirm = false"
+                                class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+                            <form method="POST" action="{{ route('console.tours.destroy', $tour) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button 
+                                    type="submit" 
+                                    class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 cursor-pointer"
+                                >
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
