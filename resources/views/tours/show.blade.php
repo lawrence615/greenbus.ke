@@ -17,9 +17,9 @@
         <p class="text-[11px] text-slate-600 mb-1">{{ $tour->category->name }}</p>
         @endif
         <h1 class="text-2xl md:text-3xl font-semibold mb-2">{{ $tour->title }}</h1>
-        <p class="text-sm text-slate-600 mb-4">{{ $tour->short_description }}</p>
+        <p class="text-sm text-slate-600 mb-4">{!! $tour->short_description !!}</p>
 
-        <div class="mb-6 grid gap-3 text-xs text-slate-700 sm:grid-cols-3">
+        <div class="mb-6 mt-6 grid gap-3 text-xs text-slate-700 sm:grid-cols-3">
             @if ($tour->duration_text)
             <x-tour-info-card
                 label="Duration"
