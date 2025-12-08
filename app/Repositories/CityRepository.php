@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\CityRepositoryInterface;
 use App\Models\City;
+use Illuminate\Support\Collection;
 
 class CityRepository implements CityRepositoryInterface
 {
@@ -16,6 +17,11 @@ class CityRepository implements CityRepositoryInterface
         }
 
         return $query->orderBy('name')->paginate($perPage);
+    }
+
+    public function getAll(): Collection
+    {
+        return City::orderBy('name')->get();
     }
 
     public function getBySlug(string $slug, bool $onlyActive = true): ?City
