@@ -134,7 +134,7 @@
                         <td class="px-4 py-3">
                             <div class="min-w-0">
                                 <p class="font-semibold text-slate-900 mb-1">{{ Str::limit($faq->question, 80) }}</p>
-                                <p class="text-xs text-slate-500 line-clamp-2">{{ Str::limit($faq->answer, 120) }}</p>
+                                <p class="text-xs text-slate-500 line-clamp-2">{!! $faq->answer !!}</p>
                                 @if($faq->category)
                                 <span class="lg:hidden inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 mt-1">
                                     {{ $faq->category }}
