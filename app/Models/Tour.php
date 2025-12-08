@@ -39,20 +39,33 @@ class Tour extends Model
     {
         static::creating(function (Tour $tour) {
             if (empty($tour->code)) {
-                $tour->code = static::generateCode();
+                $tour->code = static::generateCode($tour->city_id);
             }
         });
     }
 
     /**
-     * Generate a unique tour code.
+     * Generate a unique tour code based on city.
+     * Format: {CITY_CODE}-{NUMBER} e.g. NRB-001, MBS-002
      */
-    public static function generateCode(): string
+    public static function generateCode(int $cityId): string
     {
-        $lastTour = static::orderBy('id', 'desc')->first();
-        $nextId = $lastTour ? $lastTour->id + 1 : 1;
+        $city = City::find($cityId);
+        $cityCode = $city?->code ?? 'TUR';
         
-        return 'TUR-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+        // Get the last tour number for this city
+        $lastTour = static::where('city_id', $cityId)
+            ->whereNotNull('code')
+            ->orderByRaw("CAST(SUBSTRING_INDEX(code, '-', -1) AS UNSIGNED) DESC")
+            ->first();
+        
+        if ($lastTour && preg_match('/-(\d+)$/', $lastTour->code, $matches)) {
+            $nextNumber = (int) $matches[1] + 1;
+        } else {
+            $nextNumber = 1;
+        }
+        
+        return $cityCode . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
     }
 
     public function city(): BelongsTo
