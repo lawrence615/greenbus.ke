@@ -85,4 +85,15 @@ class Tour extends Model
     {
         return $this->hasMany(Testimonial::class);
     }
+
+    public function coverImage(): ?TourImage
+    {
+        return $this->images()->where('is_cover', true)->first()
+            ?? $this->images()->orderBy('sort_order')->first();
+    }
+
+    public function getCoverImageUrlAttribute(): ?string
+    {
+        return $this->coverImage()?->url;
+    }
 }
