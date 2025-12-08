@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('faqs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('tour_category_id')->nullable()->constrained('tour_categories')->nullOnDelete();
             $table->string('question');
             $table->text('answer');
             $table->string('category')->nullable(); // e.g., "Booking", "Tours", "Payment"
