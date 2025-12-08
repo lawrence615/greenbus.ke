@@ -79,7 +79,7 @@
                 $cover = $tour->images->firstWhere('is_cover', true) ?? $tour->images->first();
                 @endphp
                 @if ($cover)
-                <img src="{{ $cover->path }}" alt="{{ $tour->title }}" class="w-full h-full object-cover">
+                <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover">
                 @else
                 <div class="w-full h-full flex items-center justify-center text-xs text-slate-500">Tour photo coming soon</div>
                 @endif

@@ -166,7 +166,7 @@
                                 @endphp
                                 <div class="shrink-0 hidden sm:block">
                                     @if($cover)
-                                    <img src="{{ $cover->path }}" alt="{{ $tour->title }}" class="w-12 h-12 rounded-lg object-cover shadow-sm ring-1 ring-slate-200">
+                                    <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-12 h-12 rounded-lg object-cover shadow-sm ring-1 ring-slate-200">
                                     @else
                                     <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center ring-1 ring-slate-200">
                                         <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
