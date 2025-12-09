@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialControll
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
 use App\Http\Controllers\Customer\BookingController as CustomerBookingController;
+use App\Http\Controllers\Auth\InviteController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -23,6 +24,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Invite acceptance routes
+Route::get('/invite/{token}', [InviteController::class, 'show'])->name('invite.accept');
+Route::post('/invite/{token}', [InviteController::class, 'accept'])->name('invite.accept.store');
 
 // Redirect old dashboard route
 Route::middleware('auth')->get('/dashboard', function () {
@@ -85,6 +90,7 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
 // User management routes (admin only)
 Route::middleware(['auth', 'role:admin'])->prefix('console')->name('console.')->group(function () {
     Route::resource('users', AdminUserController::class);
+    Route::post('users/{user}/resend-invite', [AdminUserController::class, 'resendInvite'])->name('users.resend-invite');
 });
 
 // Booking routes
