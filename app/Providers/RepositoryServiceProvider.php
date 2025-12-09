@@ -16,6 +16,8 @@ use App\Interfaces\FaqRepositoryInterface;
 use App\Repositories\FaqRepository;
 use App\Interfaces\TourCategoryRepositoryInterface;
 use App\Repositories\TourCategoryRepository;
+use App\Interfaces\UserRepositoryInterface;
+use App\Repositories\UserRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -30,6 +32,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TestimonialRepositoryInterface::class, TestimonialRepository::class);
         $this->app->bind(FaqRepositoryInterface::class, FaqRepository::class);
         $this->app->bind(TourCategoryRepositoryInterface::class, TourCategoryRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
     /**
