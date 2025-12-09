@@ -24,7 +24,7 @@ class TourSeeder extends Seeder
             $cityHighlights = Tour::create([
                 'city_id' => $nairobi->id,
                 'tour_category_id' => $singleDay->id,
-                'code' => Tour::generateCode(),
+                'code' => Tour::generateCode(1),
                 'title' => 'Nairobi: Historic and Modern Highlights City Walking Tour',
                 'slug' => 'nairobi-historic-and-modern-highlights-city-walking-tour',
                 'short_description' => 'See the key sights of Nairobi in a comfortable coach with a local guide.',
@@ -52,7 +52,7 @@ class TourSeeder extends Seeder
             $museumMarket = Tour::create([
                 'city_id' => $nairobi->id,
                 'tour_category_id' => $singleDay->id,
-                'code' => Tour::generateCode(),
+                'code' => Tour::generateCode(1),
                 'title' => 'Nairobi: National Museum & City Markets Tour',
                 'slug' => 'nairobi-national-museum-and-city-markets-tour',
                 'short_description' => 'Combine culture and local life with a visit to the National Museum and bustling city markets.',
