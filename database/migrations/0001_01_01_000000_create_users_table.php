@@ -18,6 +18,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('invite_token', 64)->nullable()->unique();
+            $table->timestamp('invite_sent_at')->nullable();
+            $table->timestamp('invite_accepted_at')->nullable();
+            $table->boolean('must_change_password')->default(false);
             $table->timestamps();
         });
 
