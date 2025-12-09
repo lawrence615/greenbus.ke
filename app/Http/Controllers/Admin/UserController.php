@@ -3,33 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
+use App\Interfaces\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function __construct(
+        protected UserRepositoryInterface $userRepository
+    ) {}
+
     public function index(Request $request)
     {
-        $query = User::with('roles')->latest();
-
-        // Filter by role
-        if ($request->filled('role')) {
-            $query->role($request->role);
-        }
-
-        // Search by name or email
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            });
-        }
-
-        $users = $query->paginate(15)->withQueryString();
+        $users = $this->userRepository->index([
+            'role' => $request->role,
+            'search' => $request->search,
+        ]);
+        
         $roles = Role::all();
 
         return view('admin.users.index', compact('users', 'roles'));
@@ -42,24 +35,19 @@ class UserController extends Controller
         return view('admin.users.create', compact('roles'));
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => 'required|exists:roles,name',
-        ]);
+        $user = $this->userRepository->create($request->validated());
 
-        $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-        ]);
+        // Send invite email if requested
+        if ($request->boolean('send_invite')) {
+            $this->userRepository->sendInvite($user);
+            return redirect()->route('console.users.index')
+                ->with('success', 'User created and invitation sent successfully.');
+        }
 
-        $user->assignRole($validated['role']);
-
-        return redirect()->route('console.users.index')->with('success', 'User created successfully.');
+        return redirect()->route('console.users.index')
+            ->with('success', 'User created successfully.');
     }
 
     public function edit(User $user)
@@ -69,27 +57,12 @@ class UserController extends Controller
         return view('admin.users.edit', compact('user', 'roles'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => ['nullable', 'confirmed', Password::defaults()],
-            'role' => 'required|exists:roles,name',
-        ]);
+        $this->userRepository->update($user, $request->validated());
 
-        $user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-        ]);
-
-        if ($request->filled('password')) {
-            $user->update(['password' => Hash::make($validated['password'])]);
-        }
-
-        $user->syncRoles([$validated['role']]);
-
-        return redirect()->route('console.users.index')->with('success', 'User updated successfully.');
+        return redirect()->route('console.users.index')
+            ->with('success', 'User updated successfully.');
     }
 
     public function destroy(User $user)
@@ -99,8 +72,23 @@ class UserController extends Controller
             return back()->with('error', 'You cannot delete your own account.');
         }
 
-        $user->delete();
+        $this->userRepository->delete($user);
 
-        return redirect()->route('console.users.index')->with('success', 'User deleted successfully.');
+        return redirect()->route('console.users.index')
+            ->with('success', 'User deleted successfully.');
+    }
+
+    /**
+     * Resend invitation to user.
+     */
+    public function resendInvite(User $user)
+    {
+        if ($user->hasAcceptedInvite()) {
+            return back()->with('error', 'This user has already accepted their invitation.');
+        }
+
+        $this->userRepository->resendInvite($user);
+
+        return back()->with('success', 'Invitation resent successfully.');
     }
 }
