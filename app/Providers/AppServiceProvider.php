@@ -2,7 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\BookingCreated;
+use App\Events\PaymentSucceeded;
+use App\Listeners\NotifyAdminsOfBookingPayment;
+use App\Listeners\NotifyAdminsOfNewBooking;
+use App\Listeners\SendBookingConfirmationOnPayment;
 use App\Models\City;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -31,5 +37,10 @@ class AppServiceProvider extends ServiceProvider
         View::composer('layouts.app', function ($view) {
             $view->with('activeCities', City::where('is_active', true)->orderBy('name')->get());
         });
+
+        // Register event listeners
+        Event::listen(BookingCreated::class, NotifyAdminsOfNewBooking::class);
+        Event::listen(PaymentSucceeded::class, SendBookingConfirmationOnPayment::class);
+        Event::listen(PaymentSucceeded::class, NotifyAdminsOfBookingPayment::class);
     }
 }
