@@ -13,6 +13,7 @@ class CitySeeder extends Seeder
             ['slug' => 'nairobi'],
             [
                 'name' => 'Nairobi',
+                'code' => 'NRB',
                 'country' => 'Kenya',
                 'is_active' => true,
             ],
