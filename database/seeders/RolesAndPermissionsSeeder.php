@@ -51,28 +51,36 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Create roles and assign permissions
         
-        // Customer role - basic permissions
+        // Customer role - dashboard and view bookings only
         $customerRole = Role::firstOrCreate(['name' => 'customer']);
         $customerRole->syncPermissions([
-            'view bookings',
-            'create bookings',
             'view dashboard',
+            'view bookings',
         ]);
 
-        // Admin role - can manage bookings and view reports
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $adminRole->syncPermissions([
+        // Manager role - all permissions except user management
+        $managerRole = Role::firstOrCreate(['name' => 'manager']);
+        $managerRole->syncPermissions([
+            // Booking permissions
             'view bookings',
             'create bookings',
             'edit bookings',
+            'delete bookings',
+            // Payment permissions
             'view payments',
+            'refund payments',
+            // Tour management permissions
             'view tours',
+            'create tours',
+            'edit tours',
+            'delete tours',
+            // Dashboard permissions
             'view dashboard',
             'view admin dashboard',
         ]);
 
-        // Super Admin role - full access
-        $superAdminRole = Role::firstOrCreate(['name' => 'super-admin']);
-        // Super admin gets all permissions via Gate::before in AuthServiceProvider
+        // Admin role - all permissions
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $adminRole->syncPermissions($permissions);
     }
 }
