@@ -62,10 +62,14 @@
                     <div class="w-1.5 flex-1 {{ $lineColor }} min-h-[40px]"></div>
                     @endunless
                 </div>
-                <div class="pb-6">
+                <div class="pb-6 flex-1" x-data="{ expanded: false }">
                     <p class="font-semibold text-slate-800">{{ $item->title }}</p>
                     @if ($item->description)
-                    <p class="text-slate-500">{{ $item->description }}</p>
+                    @php $descLength = Str::length($item->description); @endphp
+                    <p class="text-slate-500">
+                        <span x-show="!expanded">{{ $descLength > 180 ? Str::limit($item->description, 180, '') : $item->description }}@if ($descLength > 180)... <button type="button" @click="expanded = true" class="text-emerald-600 hover:text-emerald-700 font-medium cursor-pointer">Show more</button>@endif</span>
+                        <span x-show="expanded" x-cloak>{{ $item->description }} @if ($descLength > 180)<button type="button" @click="expanded = false" class="text-emerald-600 hover:text-emerald-700 font-medium cursor-pointer">Show less</button>@endif</span>
+                    </p>
                     @endif
                 </div>
             </li>
