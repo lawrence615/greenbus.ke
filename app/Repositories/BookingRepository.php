@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\BookingStatus;
+use App\Events\BookingCreated;
 use App\Interfaces\BookingRepositoryInterface;
 use App\Models\Booking;
 use App\Models\City;
@@ -43,7 +44,7 @@ class BookingRepository implements BookingRepositoryInterface
         $total = $adults * $tour->base_price_adult
             + $children * (int) ($tour->base_price_child ?? 0);
 
-        return Booking::create([
+        $booking = Booking::create([
             'tour_id' => $tour->id,
             'city_id' => $city->id,
             'reference' => strtoupper(uniqid('GB')),
@@ -61,6 +62,11 @@ class BookingRepository implements BookingRepositoryInterface
             'special_requests' => $data['special_requests'] ?? null,
             'status' => BookingStatus::PENDING_PAYMENT->value,
         ]);
+
+        // Dispatch event to notify admins/managers
+        BookingCreated::dispatch($booking);
+
+        return $booking;
     }
 
     public function update(Booking $booking, array $data): Booking
