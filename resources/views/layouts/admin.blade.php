@@ -46,6 +46,7 @@
                     Dashboard
                 </a>
 
+                @can('view tours')
                 <a
                     href="{{ route('console.tours.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('console.tours.*') ? 'bg-emerald-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -55,7 +56,9 @@
                     </svg>
                     Tours
                 </a>
+                @endcan
 
+                @can('view bookings')
                 <a
                     href="{{ route('console.bookings.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('console.bookings.*') ? 'bg-emerald-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -64,7 +67,9 @@
                     </svg>
                     Bookings
                 </a>
+                @endcan
 
+                @can('view payments')
                 <a
                     href="{{ route('console.payments.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('console.payments.*') ? 'bg-emerald-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -73,7 +78,9 @@
                     </svg>
                     Payments
                 </a>
+                @endcan
 
+                @can('view users')
                 <a
                     href="{{ route('console.users.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors {{ request()->routeIs('console.users.*') ? 'bg-emerald-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -82,6 +89,7 @@
                     </svg>
                     User Management
                 </a>
+                @endcan
 
                 <!-- Content Menu with Submenus -->
                 <div x-data="{ open: {{ request()->routeIs('console.testimonials.*') || request()->routeIs('console.faqs.*') ? 'true' : 'false' }} }" class="space-y-1">
