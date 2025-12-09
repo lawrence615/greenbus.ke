@@ -26,7 +26,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Redirect old dashboard route
 Route::middleware('auth')->get('/dashboard', function () {
-    if (auth()->user()->hasRole(['super-admin', 'admin'])) {
+    $user = auth()->user();
+    $hasRole = $user->hasRole(['admin', 'manager']);
+    
+    if ($hasRole) {
         return redirect()->route('console.dashboard');
     }
     return redirect()->route('customer.dashboard');
@@ -39,8 +42,8 @@ Route::middleware('auth')->prefix('account')->name('customer.')->group(function 
     Route::get('/bookings/{booking}', [CustomerBookingController::class, 'show'])->name('bookings.show');
 });
 
-// Admin routes
-Route::middleware(['auth', 'role:super-admin|admin'])->prefix('console')->name('console.')->group(function () {
+// Admin routes (admin and manager)
+Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('console.')->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
@@ -60,8 +63,6 @@ Route::middleware(['auth', 'role:super-admin|admin'])->prefix('console')->name('
     Route::delete('/tours/{tour:slug}', [AdminTourController::class, 'destroy'])->name('tours.destroy');
     Route::patch('/tours/{tour:slug}/toggle-status', [AdminTourController::class, 'toggleStatus'])->name('tours.toggle-status');
 
-    Route::resource('users', AdminUserController::class);
-
     // Testimonials management
     Route::get('/testimonials', [AdminTestimonialController::class, 'index'])->name('testimonials.index');
     Route::get('/testimonials/create', [AdminTestimonialController::class, 'create'])->name('testimonials.create');
@@ -79,6 +80,11 @@ Route::middleware(['auth', 'role:super-admin|admin'])->prefix('console')->name('
     Route::put('/faqs/{faq}', [AdminFaqController::class, 'update'])->name('faqs.update');
     Route::delete('/faqs/{faq}', [AdminFaqController::class, 'destroy'])->name('faqs.destroy');
     Route::patch('/faqs/{faq}/toggle-status', [AdminFaqController::class, 'toggleStatus'])->name('faqs.toggle-status');
+});
+
+// User management routes (admin only)
+Route::middleware(['auth', 'role:admin'])->prefix('console')->name('console.')->group(function () {
+    Route::resource('users', AdminUserController::class);
 });
 
 // Booking routes
