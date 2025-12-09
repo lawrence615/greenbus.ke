@@ -2,12 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\UserRepositoryInterface;
-use App\Models\User;
-use App\Notifications\UserInviteNotification;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Collection;
+
+use App\Interfaces\UserRepositoryInterface;
+use App\Models\User;
+use App\Notifications\UserInviteNotification;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -57,7 +59,7 @@ class UserRepository implements UserRepositoryInterface
     {
         // Determine password and must_change_password based on password_option
         $passwordOption = $data['password_option'] ?? 'auto';
-        
+
         if ($passwordOption === 'auto') {
             // Auto-generate a strong password - user won't need to change it
             $password = Str::random(32);
@@ -124,5 +126,10 @@ class UserRepository implements UserRepositoryInterface
         }
 
         $this->sendInvite($user);
+    }
+
+    public function getAdminAndManagers(): Collection
+    {
+        return User::role(['admin', 'manager'])->get();
     }
 }

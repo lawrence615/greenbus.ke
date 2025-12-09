@@ -4,6 +4,7 @@ namespace App\Interfaces;
 
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 interface UserRepositoryInterface
 {
@@ -51,4 +52,11 @@ interface UserRepositoryInterface
      * Resend invite to user.
      */
     public function resendInvite(User $user): void;
+
+    /**
+     * Get all users with admin or manager roles.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, User>
+     */
+    public function getAdminAndManagers(): Collection;
 }
