@@ -128,8 +128,8 @@
                             <div class="flex items-center gap-3">
                                 @php
                                     $avatarColors = [
-                                        'super-admin' => 'from-purple-500 to-purple-600',
-                                        'admin' => 'from-blue-500 to-blue-600',
+                                        'admin' => 'from-purple-500 to-purple-600',
+                                        'manager' => 'from-blue-500 to-blue-600',
                                         'customer' => 'from-emerald-500 to-emerald-600',
                                     ];
                                     $userRole = $user->roles->first()?->name ?? 'customer';
@@ -157,14 +157,14 @@
                         <td class="px-6 py-4">
                             @foreach($user->roles as $role)
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold shadow-sm
-                                @if($role->name === 'super-admin') bg-purple-100 text-purple-700 ring-1 ring-purple-600/20
-                                @elseif($role->name === 'admin') bg-blue-100 text-blue-700 ring-1 ring-blue-600/20
-                                @else bg-slate-100 text-slate-700 ring-1 ring-slate-600/20
+                                @if($role->name === 'admin') bg-purple-100 text-purple-700 ring-1 ring-purple-600/20
+                                @elseif($role->name === 'manager') bg-blue-100 text-blue-700 ring-1 ring-blue-600/20
+                                @else bg-emerald-100 text-emerald-700 ring-1 ring-emerald-600/20
                                 @endif">
                                 <span class="w-1.5 h-1.5 rounded-full 
-                                    @if($role->name === 'super-admin') bg-purple-500
-                                    @elseif($role->name === 'admin') bg-blue-500
-                                    @else bg-slate-500
+                                    @if($role->name === 'admin') bg-purple-500
+                                    @elseif($role->name === 'manager') bg-blue-500
+                                    @else bg-emerald-500
                                     @endif"></span>
                                 {{ ucfirst(str_replace('-', ' ', $role->name)) }}
                             </span>
