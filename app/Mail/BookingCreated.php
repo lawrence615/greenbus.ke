@@ -4,11 +4,12 @@ namespace App\Mail;
 
 use App\Models\Booking;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class BookingCreated extends Mailable
+class BookingCreated extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
