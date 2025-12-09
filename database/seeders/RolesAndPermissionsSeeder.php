@@ -33,6 +33,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'create users',
             'edit users',
             'delete users',
+            'manage users',
             
             // Tour management permissions
             'view tours',
