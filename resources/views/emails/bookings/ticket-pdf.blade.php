@@ -29,7 +29,7 @@
     <div class="card">
         <div class="row">
             <div class="col">
-                <div style="display:flex;align-items:center;gap:8px;">
+                <div style="display:flex;align-items:flex-start;gap:8px;">
                     <img src="{{ public_path('images/logo.png') }}" alt="Greenbus City Tours" style="height:28px;width:auto;display:block;">
                     <div>
                         <div style="font-size:13px;font-weight:600;">Greenbus City Tours</div>
