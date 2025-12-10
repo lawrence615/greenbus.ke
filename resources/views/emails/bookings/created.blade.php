@@ -17,7 +17,7 @@
                             <tr>
                                 <td style="vertical-align:middle;">
                                     <div style="display:inline-flex;align-items:center;gap:8px;">
-                                        <span style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:999px;background-color:#059669;color:#ffffff;font-weight:700;font-size:14px;">GB</span>
+                                        <img src="{{ asset('images/logo.png') }}" alt="Greenbus City Tours" style="height:32px;width:auto;display:block;">
                                         <div>
                                             <div style="font-weight:600;font-size:15px;">Greenbus City Tours</div>
                                             @if($city)
