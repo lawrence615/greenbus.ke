@@ -39,7 +39,7 @@
                 <div class="p-6 grid grid-cols-2 gap-6">
                     <div>
                         <p class="text-sm text-slate-500">Tour</p>
-                        <p class="font-medium text-slate-900">{{ $booking->tour->name ?? 'N/A' }}</p>
+                        <p class="font-medium text-slate-900">{{ Str::limit($booking->tour->title, 120) }}</p>
                     </div>
                     <div>
                         <p class="text-sm text-slate-500">City</p>
