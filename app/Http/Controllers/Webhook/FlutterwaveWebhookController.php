@@ -109,10 +109,15 @@ class FlutterwaveWebhookController extends Controller
                 return;
             }
 
-            // Update payment
+            // Update payment with detailed transaction info
             $payment->update([
                 'status' => PaymentStatus::SUCCEEDED->value,
                 'provider_reference' => $verificationData['flw_ref'] ?? $webhookData['flw_ref'] ?? null,
+                'provider_transaction_id' => $verificationData['id'] ?? null,
+                'amount_charged' => $verificationData['charged_amount'] ?? $verificationData['amount'] ?? null,
+                'amount_settled' => $verificationData['amount_settled'] ?? null,
+                'provider_fee' => $verificationData['app_fee'] ?? null,
+                'payment_method' => $verificationData['payment_type'] ?? 'card',
                 'raw_payload' => array_merge(
                     $payment->raw_payload ?? [],
                     [
