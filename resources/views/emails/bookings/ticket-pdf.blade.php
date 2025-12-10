@@ -30,7 +30,7 @@
         <div class="row">
             <div class="col">
                 <div style="display:flex;align-items:center;gap:8px;">
-                    <span class="badge">GB</span>
+                    <img src="{{ asset('images/logo.png') }}" alt="Greenbus City Tours" style="height:28px;width:auto;display:block;">
                     <div>
                         <div style="font-size:13px;font-weight:600;">Greenbus City Tours</div>
                         @if($city)
