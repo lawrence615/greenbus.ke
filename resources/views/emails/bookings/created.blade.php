@@ -17,7 +17,7 @@
                             <tr>
                                 <td style="vertical-align:middle;">
                                     <div style="display:inline-flex;align-items:center;gap:8px;">
-                                        <img src="{{ asset('images/logo.png') }}" alt="Greenbus City Tours" style="height:32px;width:auto;display:block;">
+                                        <img src="{{ asset('images/logo.png') }}" alt="Greenbus City Tours" style="width:140px;height:auto;display:block;">
                                         <div>
                                             <div style="font-weight:600;font-size:15px;">Greenbus City Tours</div>
                                             @if($city)
