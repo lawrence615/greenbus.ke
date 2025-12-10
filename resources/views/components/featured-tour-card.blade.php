@@ -6,11 +6,34 @@
 @endphp
 
 <article class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
-    <div class="h-40 bg-slate-200">
+    <div class="h-40 bg-slate-200 relative">
         @if ($cover)
-            <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover">
+            <img
+                src="{{ $cover->url }}"
+                alt="{{ $tour->title }}"
+                class="w-full h-full object-cover"
+                onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');"
+            >
+            <div data-fallback class="hidden absolute inset-0 flex flex-col items-center justify-center gap-1 text-xs text-slate-500 bg-slate-100 animate-pulse">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-slate-500">
+                    <!-- simple camera icon -->
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 4.5L7.5 6H5A2 2 0 003 8v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-2.5L13.5 4.5H9z" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="3.25" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </span>
+                <span>Tour photo coming soon</span>
+            </div>
         @else
-            <div class="w-full h-full flex items-center justify-center text-xs text-slate-500">Tour photo coming soon</div>
+            <div class="absolute inset-0 flex flex-col items-center justify-center gap-1 text-xs text-slate-500 bg-slate-100">
+                <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-slate-500">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 4.5L7.5 6H5A2 2 0 003 8v8a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2h-2.5L13.5 4.5H9z" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="3.25" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </span>
+                <span>Tour photo coming soon</span>
+            </div>
         @endif
     </div>
     <div class="p-4 flex-1 flex flex-col">
