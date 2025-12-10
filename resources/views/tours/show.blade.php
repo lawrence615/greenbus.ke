@@ -74,16 +74,122 @@
             @endif
         </div>
 
-        <div class="aspect-video rounded-2xl overflow-hidden bg-slate-200 mb-6">
-            @php
-            $cover = $tour->images->firstWhere('is_cover', true) ?? $tour->images->first();
-            @endphp
-            @if ($cover)
-            <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover">
-            @else
-            <div class="w-full h-full flex items-center justify-center text-xs text-slate-500">Tour photos coming soon</div>
-            @endif
+        @php
+        $cover = $tour->images->firstWhere('is_cover', true) ?? $tour->images->first();
+        $otherImages = $tour->images->reject(fn($img) => $img->id === $cover?->id)->take(3);
+        $totalImages = $tour->images->count();
+        @endphp
+        
+        @if ($tour->images->count() > 0)
+        <div class="mb-6 grid grid-cols-3 gap-2 h-[400px]">
+            <!-- Cover Image (Left Side - Takes 2 columns, full height) -->
+            <div class="col-span-2 rounded-2xl overflow-hidden bg-slate-200 cursor-pointer group relative" onclick="openGallery(0)">
+                <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+            </div>
+            
+            <!-- Thumbnail Images (Right Side - 3 rows stacked vertically) -->
+            <div class="flex flex-col gap-2">
+                @foreach ($otherImages as $index => $image)
+                <div class="flex-1 rounded-xl overflow-hidden bg-slate-200 cursor-pointer group relative" onclick="openGallery({{ $index + 1 }})">
+                    <img src="{{ $image->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                    
+                    @if ($index === 2 && $totalImages > 4)
+                    <!-- Show count overlay on last thumbnail if there are more images -->
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <span class="text-white font-semibold text-lg">+{{ $totalImages - 4 }}</span>
+                    </div>
+                    @endif
+                </div>
+                @endforeach
+                
+                <!-- Fill empty slots if less than 3 other images -->
+                @for ($i = $otherImages->count(); $i < 3; $i++)
+                <div class="flex-1 rounded-xl overflow-hidden bg-slate-100"></div>
+                @endfor
+            </div>
         </div>
+        
+        <!-- Lightbox Modal -->
+        <div id="galleryModal" class="fixed inset-0 bg-black/95 z-50 hidden items-center justify-center">
+            <button onclick="closeGallery()" class="absolute top-4 right-4 text-white hover:text-slate-300 z-10">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <!-- Previous Button -->
+            <button onclick="previousImage()" class="absolute left-4 text-white hover:text-slate-300 z-10 bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            
+            <!-- Image Container -->
+            <div class="max-w-6xl max-h-[90vh] w-full mx-4">
+                <img id="galleryImage" src="" alt="{{ $tour->title }}" class="w-full h-full object-contain">
+                <div class="text-center mt-4">
+                    <span id="imageCounter" class="text-white text-sm"></span>
+                </div>
+            </div>
+            
+            <!-- Next Button -->
+            <button onclick="nextImage()" class="absolute right-4 text-white hover:text-slate-300 z-10 bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <script>
+            const galleryImages = @json($tour->images->map(fn($img) => $img->url)->values());
+            let currentImageIndex = 0;
+            
+            function openGallery(index) {
+                currentImageIndex = index;
+                updateGalleryImage();
+                document.getElementById('galleryModal').classList.remove('hidden');
+                document.getElementById('galleryModal').classList.add('flex');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeGallery() {
+                document.getElementById('galleryModal').classList.add('hidden');
+                document.getElementById('galleryModal').classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            }
+            
+            function updateGalleryImage() {
+                document.getElementById('galleryImage').src = galleryImages[currentImageIndex];
+                document.getElementById('imageCounter').textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+            }
+            
+            function nextImage() {
+                currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+                updateGalleryImage();
+            }
+            
+            function previousImage() {
+                currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+                updateGalleryImage();
+            }
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                const modal = document.getElementById('galleryModal');
+                if (!modal.classList.contains('hidden')) {
+                    if (e.key === 'ArrowRight') nextImage();
+                    if (e.key === 'ArrowLeft') previousImage();
+                    if (e.key === 'Escape') closeGallery();
+                }
+            });
+        </script>
+        @else
+        <div class="aspect-video rounded-2xl overflow-hidden bg-slate-200 mb-6">
+            <div class="w-full h-full flex items-center justify-center text-xs text-slate-500">Tour photos coming soon</div>
+        </div>
+        @endif
 
         <div class="space-y-6 text-sm text-slate-700">
             <section>
