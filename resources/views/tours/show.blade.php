@@ -3,7 +3,7 @@
 @section('title', $tour->title . ' – ' . $city->name)
 
 @section('breadcrumb')
-    <x-breadcrumb :items="[
+<x-breadcrumb :items="[
         ['label' => $city->name . ' tours', 'url' => route('tours.index', $city)],
         ['label' => $tour->title],
     ]" />
@@ -26,8 +26,7 @@
                 :value="$tour->duration_text"
                 subtitle="Approx."
                 iconBgClass="bg-emerald-50 text-emerald-700"
-                borderClass="border-emerald-50/70 hover:border-emerald-100"
-            >
+                borderClass="border-emerald-50/70 hover:border-emerald-100">
                 <x-slot:icon>
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.5" />
@@ -43,8 +42,7 @@
                 :value="$tour->starts_at_time"
                 subtitle="Local time"
                 iconBgClass="bg-sky-50 text-sky-700"
-                borderClass="border-slate-100 hover:border-sky-100"
-            >
+                borderClass="border-slate-100 hover:border-sky-100">
                 <x-slot:icon>
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M8 4.75V6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
@@ -62,8 +60,7 @@
                 :value="$tour->meeting_point"
                 subtitle="Pickup / start location"
                 iconBgClass="bg-amber-50 text-amber-700"
-                borderClass="border-slate-100 hover:border-amber-100"
-            >
+                borderClass="border-slate-100 hover:border-amber-100">
                 <x-slot:icon>
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 3.75C9.37665 3.75 7.25 5.87665 7.25 8.5C7.25 11.1234 9.37665 13.25 12 13.25C14.6234 13.25 16.75 11.1234 16.75 8.5C16.75 5.87665 14.6234 3.75 12 3.75Z" stroke="currentColor" stroke-width="1.5" />
@@ -79,23 +76,47 @@
         $otherImages = $tour->images->reject(fn($img) => $img->id === $cover?->id)->take(3);
         $totalImages = $tour->images->count();
         @endphp
-        
+
         @if ($tour->images->count() > 0)
-        <div class="mb-6 grid grid-cols-3 gap-2 h-[400px]">
-            <!-- Cover Image (Left Side - Takes 2 columns, full height) -->
-            <div class="col-span-2 rounded-2xl overflow-hidden bg-slate-200 cursor-pointer group relative" onclick="openGallery(0)">
-                <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+        {{-- Mobile layout: full-width cover, horizontal scrolling thumbnails below --}}
+        <div class="mb-6 space-y-3 md:hidden">
+            <div class="rounded-2xl overflow-hidden bg-slate-200">
+                <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-[220px] object-cover sm:h-[260px]">
             </div>
-            
-            <!-- Thumbnail Images (Right Side - 3 rows stacked vertically) -->
-            <div class="flex flex-col gap-2">
+
+            @if ($otherImages->count() > 0)
+            <div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4">
                 @foreach ($otherImages as $index => $image)
-                <div class="flex-1 rounded-xl overflow-hidden bg-slate-200 cursor-pointer group relative" onclick="openGallery({{ $index + 1 }})">
+                <div class="flex-none w-28 h-24 rounded-xl overflow-hidden bg-slate-200 cursor-pointer group relative" onclick="openGallery({{ $loop->iteration }})">
                     <img src="{{ $image->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
-                    
-                    @if ($index === 2 && $totalImages > 4)
+
+                    @if ($loop->last && $totalImages > 4)
+                    <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <span class="text-white font-semibold text-sm">+{{ $totalImages - 4 }}</span>
+                    </div>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+            @endif
+        </div>
+
+        {{-- Desktop / tablet layout: large cover on left, stacked thumbnails on right --}}
+        <div class="mb-8 hidden md:grid gap-2 grid-cols-3 md:grid-cols-4">
+            <!-- Cover Image (Left Side - Takes majority width on md+ screens) -->
+            <div class="col-span-2 md:col-span-3 rounded-2xl overflow-hidden bg-slate-200">
+                <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover">
+            </div>
+
+            <!-- Thumbnail Images (Right Side - 3 rows stacked vertically) -->
+            <div class="flex flex-col gap-3 col-span-1">
+                @foreach ($otherImages as $index => $image)
+                <div class="rounded-xl overflow-hidden bg-slate-200 cursor-pointer group relative h-24 md:h-28" onclick="openGallery({{ $loop->iteration }})">
+                    <img src="{{ $image->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+
+                    @if ($loop->last && $totalImages > 4)
                     <!-- Show count overlay on last thumbnail if there are more images -->
                     <div class="absolute inset-0 bg-black/60 flex items-center justify-center">
                         <span class="text-white font-semibold text-lg">+{{ $totalImages - 4 }}</span>
@@ -103,95 +124,20 @@
                     @endif
                 </div>
                 @endforeach
-                
+
                 <!-- Fill empty slots if less than 3 other images -->
                 @for ($i = $otherImages->count(); $i < 3; $i++)
                 <div class="flex-1 rounded-xl overflow-hidden bg-slate-100"></div>
                 @endfor
             </div>
         </div>
-        
-        <!-- Lightbox Modal -->
-        <div id="galleryModal" class="fixed inset-0 bg-black/95 z-50 hidden items-center justify-center">
-            <button onclick="closeGallery()" class="absolute top-4 right-4 text-white hover:text-slate-300 z-10">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-            
-            <!-- Previous Button -->
-            <button onclick="previousImage()" class="absolute left-4 text-white hover:text-slate-300 z-10 bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </button>
-            
-            <!-- Image Container -->
-            <div class="max-w-6xl max-h-[90vh] w-full mx-4">
-                <img id="galleryImage" src="" alt="{{ $tour->title }}" class="w-full h-full object-contain">
-                <div class="text-center mt-4">
-                    <span id="imageCounter" class="text-white text-sm"></span>
-                </div>
-            </div>
-            
-            <!-- Next Button -->
-            <button onclick="nextImage()" class="absolute right-4 text-white hover:text-slate-300 z-10 bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </button>
-        </div>
-        
-        <script>
-            const galleryImages = @json($tour->images->map(fn($img) => $img->url)->values());
-            let currentImageIndex = 0;
-            
-            function openGallery(index) {
-                currentImageIndex = index;
-                updateGalleryImage();
-                document.getElementById('galleryModal').classList.remove('hidden');
-                document.getElementById('galleryModal').classList.add('flex');
-                document.body.style.overflow = 'hidden';
-            }
-            
-            function closeGallery() {
-                document.getElementById('galleryModal').classList.add('hidden');
-                document.getElementById('galleryModal').classList.remove('flex');
-                document.body.style.overflow = 'auto';
-            }
-            
-            function updateGalleryImage() {
-                document.getElementById('galleryImage').src = galleryImages[currentImageIndex];
-                document.getElementById('imageCounter').textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
-            }
-            
-            function nextImage() {
-                currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
-                updateGalleryImage();
-            }
-            
-            function previousImage() {
-                currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
-                updateGalleryImage();
-            }
-            
-            // Keyboard navigation
-            document.addEventListener('keydown', function(e) {
-                const modal = document.getElementById('galleryModal');
-                if (!modal.classList.contains('hidden')) {
-                    if (e.key === 'ArrowRight') nextImage();
-                    if (e.key === 'ArrowLeft') previousImage();
-                    if (e.key === 'Escape') closeGallery();
-                }
-            });
-        </script>
         @else
         <div class="aspect-video rounded-2xl overflow-hidden bg-slate-200 mb-6">
             <div class="w-full h-full flex items-center justify-center text-xs text-slate-500">Tour photos coming soon</div>
         </div>
         @endif
 
-        <div class="space-y-6 text-sm text-slate-700">
+        <div class="space-y-6 text-sm text-slate-700 mt-10">
             <section>
                 <h2 class="text-base font-semibold mb-2">Overview</h2>
                 <div class="prose prose-sm max-w-none">
@@ -205,13 +151,6 @@
                 <div class="prose prose-sm max-w-none">
                     {!! $tour->includes !!}
                 </div>
-                @else
-                <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
-                    <li>Guided city tour with a local expert.</li>
-                    <li>Transport as described in the tour information.</li>
-                    <li>Entrance fees where specifically mentioned in your ticket or confirmation email.</li>
-                    <li>Small-group experience suitable for visitors to Nairobi.</li>
-                </ul>
                 @endif
             </section>
 
@@ -221,112 +160,98 @@
                 <div class="prose prose-sm max-w-none">
                     {!! $tour->important_information !!}
                 </div>
-                @else
-                <ul class="list-disc pl-5 space-y-1 text-xs sm:text-sm">
-                    @if ($tour->meeting_point)
-                    <li><span class="font-semibold">Meeting point:</span> {{ $tour->meeting_point }}</li>
-                    @endif
-                    @if ($tour->starts_at_time)
-                    <li><span class="font-semibold">Departure time:</span> {{ $tour->starts_at_time }} (please arrive 10–15 minutes early).</li>
-                    @endif
-                    @if ($tour->duration_text)
-                    <li><span class="font-semibold">Duration:</span> {{ $tour->duration_text }} (times may vary slightly with traffic).</li>
-                    @endif
-                    <li>Please bring a Passport/valid ID and your digital ticket (PDF on your phone is fine).</li>
-                    <li>Wear comfortable shoes and weather-appropriate clothing.</li>
-                </ul>
                 @endif
             </section>
 
             <section class="border border-slate-100 rounded-xl bg-white/60 p-4">
-                <h2 class="text-base font-semibold mb-3">About this activity</h2>
-                <div class="grid gap-3 sm:grid-cols-2 text-xs sm:text-sm text-slate-700">
-                    @if ($tour->duration_text)
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.75" />
-                                    <path d="M12 8V12L14.5 13.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </span>
-                            <p class="font-semibold">Duration</p>
-                        </div>
-                        <p class="mt-0.5 ml-9">{{ $tour->duration_text }}</p>
+            <h2 class="text-base font-semibold mb-3">About this activity</h2>
+            <div class="grid gap-3 sm:grid-cols-2 text-xs sm:text-sm text-slate-700">
+                @if ($tour->duration_text)
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.75" />
+                                <path d="M12 8V12L14.5 13.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <p class="font-semibold">Duration</p>
                     </div>
-                    @endif
-
-                    @if ($tour->starts_at_time)
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M8 4.75V6.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
-                                    <path d="M16 4.75V6.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
-                                    <rect x="5" y="6.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.75" />
-                                </svg>
-                            </span>
-                            <p class="font-semibold">Starting time</p>
-                        </div>
-                        <p class="mt-0.5 ml-9">{{ $tour->starts_at_time }}</p>
-                    </div>
-                    @endif
-
-                    @if ($tour->meeting_point)
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 3.75C9.376 3.75 7.5 5.626 7.5 7.875C7.5 10.836 10.5 13.25 12 15.75C13.5 13.25 16.5 10.836 16.5 7.875C16.5 5.626 14.624 3.75 12 3.75Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
-                                    <circle cx="12" cy="8" r="1.75" stroke="currentColor" stroke-width="1.75" />
-                                </svg>
-                            </span>
-                            <p class="font-semibold">Meeting point</p>
-                        </div>
-                        <p class="mt-0.5 ml-9">{{ $tour->meeting_point }}</p>
-                    </div>
-                    @endif
-
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 6.75C10.7574 6.75 9.75 7.75736 9.75 9C9.75 10.2426 10.7574 11.25 12 11.25C13.2426 11.25 14.25 10.2426 14.25 9C14.25 7.75736 13.2426 6.75 12 6.75Z" stroke="currentColor" stroke-width="1.75" />
-                                    <path d="M8.75 16.25C8.75 14.8693 9.86929 13.75 11.25 13.75H12.75C14.1307 13.75 15.25 14.8693 15.25 16.25" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
-                                </svg>
-                            </span>
-                            <p class="font-semibold">Live tour guide</p>
-                        </div>
-                        <p class="mt-0.5 ml-9">English-speaking local guide in {{ $city->name }}.</p>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="6.5" y="7" width="11" height="10" rx="1.5" stroke="currentColor" stroke-width="1.75" />
-                                    <path d="M9 9H15" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
-                                </svg>
-                            </span>
-                            <p class="font-semibold">Ticket type</p>
-                        </div>
-                        <p class="mt-0.5 ml-9">Mobile or printed ticket accepted. PDF is sent after booking.</p>
-                    </div>
-
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.75" />
-                                    <circle cx="15" cy="9" r="2" stroke="currentColor" stroke-width="1.75" />
-                                    <path d="M6.75 15.25C6.75 13.8693 7.86929 12.75 9.25 12.75H10.75C12.1307 12.75 13.25 13.8693 13.25 15.25" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
-                                </svg>
-                            </span>
-                            <p class="font-semibold">Group type</p>
-                        </div>
-                        <p class="mt-0.5 ml-9">Small-group city tour suitable for first-time visitors.</p>
-                    </div>
+                    <p class="mt-0.5 ml-9">{{ $tour->duration_text }}</p>
                 </div>
+                @endif
+
+                @if ($tour->starts_at_time)
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 4.75V6.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                                <path d="M16 4.75V6.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                                <rect x="5" y="6.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.75" />
+                            </svg>
+                        </span>
+                        <p class="font-semibold">Starting time</p>
+                    </div>
+                    <p class="mt-0.5 ml-9">{{ $tour->starts_at_time }}</p>
+                </div>
+                @endif
+
+                @if ($tour->meeting_point)
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 3.75C9.376 3.75 7.5 5.626 7.5 7.875C7.5 10.836 10.5 13.25 12 15.75C13.5 13.25 16.5 10.836 16.5 7.875C16.5 5.626 14.624 3.75 12 3.75Z" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+                                <circle cx="12" cy="8" r="1.75" stroke="currentColor" stroke-width="1.75" />
+                            </svg>
+                        </span>
+                        <p class="font-semibold">Meeting point</p>
+                    </div>
+                    <p class="mt-0.5 ml-9">{{ $tour->meeting_point }}</p>
+                </div>
+                @endif
+
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 6.75C10.7574 6.75 9.75 7.75736 9.75 9C9.75 10.2426 10.7574 11.25 12 11.25C13.2426 11.25 14.25 10.2426 14.25 9C14.25 7.75736 13.2426 6.75 12 6.75Z" stroke="currentColor" stroke-width="1.75" />
+                                <path d="M8.75 16.25C8.75 14.8693 9.86929 13.75 11.25 13.75H12.75C14.1307 13.75 15.25 14.8693 15.25 16.25" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                            </svg>
+                        </span>
+                        <p class="font-semibold">Live tour guide</p>
+                    </div>
+                    <p class="mt-0.5 ml-9">English-speaking local guide in {{ $city->name }}.</p>
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="6.5" y="7" width="11" height="10" rx="1.5" stroke="currentColor" stroke-width="1.75" />
+                                <path d="M9 9H15" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                            </svg>
+                        </span>
+                        <p class="font-semibold">Ticket type</p>
+                    </div>
+                    <p class="mt-0.5 ml-9">Mobile or printed ticket accepted. PDF is sent after booking.</p>
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100 text-slate-900">
+                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.75" />
+                                <circle cx="15" cy="9" r="2" stroke="currentColor" stroke-width="1.75" />
+                                <path d="M6.75 15.25C6.75 13.8693 7.86929 12.75 9.25 12.75H10.75C12.1307 12.75 13.25 13.8693 13.25 15.25" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+                            </svg>
+                        </span>
+                        <p class="font-semibold">Group type</p>
+                    </div>
+                    <p class="mt-0.5 ml-9">Small-group city tour suitable for first-time visitors.</p>
+                </div>
+            </div>
             </section>
 
             <x-itinerary :items="$tour->itineraryItems" :city="$city" />
@@ -354,4 +279,85 @@
         </div>
     </aside>
 </section>
+
+<!-- Lightbox Modal -->
+@if ($tour->images->count() > 0)
+<div id="galleryModal" class="fixed inset-0 bg-black/95 z-50 hidden items-center justify-center pointer-events-none">
+    <button onclick="closeGallery()" class="absolute top-4 right-4 text-white hover:text-slate-300 z-10">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+    </button>
+
+    <!-- Previous Button -->
+    <button onclick="previousImage()" class="absolute left-4 text-white hover:text-slate-300 z-10 bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors cursor-pointer">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+    </button>
+
+    <!-- Image Container -->
+    <div class="max-w-6xl max-h-[90vh] w-full mx-4">
+        <img id="galleryImage" src="" alt="{{ $tour->title }}" class="w-full h-full object-contain">
+        <div class="text-center mt-4">
+            <span id="imageCounter" class="text-white text-sm"></span>
+        </div>
+    </div>
+
+    <!-- Next Button -->
+    <button onclick="nextImage()" class="absolute right-4 text-white hover:text-slate-300 z-10 bg-black/50 rounded-full p-3 hover:bg-black/70 transition-colors cursor-pointer">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+    </button>
+</div>
+@endif
+
+@push('scripts')
+<script>
+    const galleryImages = @json($tour->images->map(fn($img) => $img->url)->values());
+    let currentImageIndex = 0;
+
+    function openGallery(index) {
+        currentImageIndex = index;
+        updateGalleryImage();
+        const modal = document.getElementById('galleryModal');
+        modal.classList.remove('hidden', 'pointer-events-none');
+        modal.classList.add('flex', 'pointer-events-auto');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeGallery() {
+        const modal = document.getElementById('galleryModal');
+        modal.classList.add('hidden', 'pointer-events-none');
+        modal.classList.remove('flex', 'pointer-events-auto');
+        document.body.style.overflow = 'auto';
+    }
+
+    function updateGalleryImage() {
+        document.getElementById('galleryImage').src = galleryImages[currentImageIndex];
+        document.getElementById('imageCounter').textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+    }
+
+    function nextImage() {
+        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+        updateGalleryImage();
+    }
+
+    function previousImage() {
+        currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+        updateGalleryImage();
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        const modal = document.getElementById('galleryModal');
+        if (!modal.classList.contains('hidden')) {
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') previousImage();
+            if (e.key === 'Escape') closeGallery();
+        }
+    });
+</script>
+@endpush
 @endsection
