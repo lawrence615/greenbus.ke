@@ -3,39 +3,69 @@
 @section('title', 'Discover Nairobi with Greenbus City Tours')
 
 @section('content')
-<section class="bg-gradient-to-b from-emerald-50 to-slate-50">
-    <div class="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-2 items-center">
+<section class="bg-gradient-to-br from-emerald-50 via-emerald-100 to-slate-50">
+    <div class="max-w-6xl mx-auto px-4 py-16 lg:py-24 grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] items-center">
+        <!-- Left: Headline & copy -->
         <div>
-            <p class="text-sm font-semibold text-emerald-700 mb-2">Nairobi City Tours</p>
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-                Discover Nairobi with local guides and a comfortable Greenbus.
+            <span class="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                Nairobi city tours made simple
+            </span>
+
+            <h1 class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900">
+                Your ticket to
+                <span class="block bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 bg-clip-text text-transparent">
+                    unforgettable Nairobi tours
+                </span>
             </h1>
-            <p class="text-slate-700 mb-6">
-                Perfect for first-time visitors. See the highlights, learn the stories behind the city, and travel safely
-                with experienced local guides.
+
+            <p class="mt-4 text-sm sm:text-base text-slate-700 max-w-xl">
+                Join small-group or private city tours that blend must-see sights with local stories. Ride in a
+                comfortable Greenbus, meet expert guides, and explore Nairobi at an easy, relaxed pace.
             </p>
-            <div class="flex flex-wrap gap-3">
-                <a href="{{ isset($city) ? route('tours.index', $city) : '#tours' }}" class="inline-flex items-center px-5 py-3 rounded-full bg-emerald-600 text-white font-semibold shadow hover:bg-emerald-700">
-                    View Nairobi tours & buy tickets
+
+            <div class="mt-6 flex flex-wrap items-center gap-3 justify-center sm:justify-start text-center sm:text-left">
+                <a href="{{ isset($city) ? route('tours.index', $city) : '#tours' }}" class="inline-flex items-center px-6 py-3 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow-md shadow-emerald-500/30 hover:bg-emerald-700">
+                    Browse Nairobi tours
                 </a>
-                <a href="#how-it-works" class="inline-flex items-center px-5 py-3 rounded-full border border-emerald-200 text-emerald-800 font-semibold hover:bg-emerald-50">
-                    How the tours work
+                <a href="#how-it-works" class="inline-flex items-center px-5 py-3 rounded-full bg-white/80 text-sm font-semibold text-slate-900 border border-slate-200 hover:bg-slate-50">
+                    How it works
                 </a>
+            </div>
+
+            <div class="mt-5 flex flex-wrap gap-4 text-xs sm:text-[13px] text-slate-600">
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-[11px] font-semibold">4.9</span>
+                    <span>Rated highly by recent Greenbus guests</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <!-- <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 text-slate-800 text-[11px] font-semibold">✔</span> -->
+                    <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-white text-[11px] font-semibold">✔</span>
+                    <span>Instant confirmation & mobile tickets</span>
+                </div>
             </div>
         </div>
+
+        <!-- Right: Gradient panel with layered tour images -->
         <div class="relative">
-            <div class="aspect-video rounded-3xl bg-slate-200 overflow-hidden shadow-lg">
-                <img src="{{ asset('images/greenbus_ke_1.jpg') }}" alt="Nairobi city tour" class="w-full h-full object-cover">
-            </div>
-            <div class="absolute -bottom-4 -left-4 bg-white shadow-lg rounded-xl px-4 py-3 text-xs md:text-sm">
-                <p class="font-semibold">Small or large group city tours</p>
-                <p class="text-slate-600">Buy your ticket and enjoy the comfort of a Greenbus.</p>
+            <div class="rounded-[2rem] bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 p-1.5 shadow-xl shadow-emerald-600/40">
+                <div class="relative h-[340px] sm:h-[420px] rounded-[1.7rem] bg-slate-950/10 overflow-hidden flex items-center justify-center">
+                    <!-- Back image card -->
+                    <div class="absolute right-2 sm:right-6 top-4 sm:top-8 w-40 sm:w-48 h-52 sm:h-60 rounded-3xl overflow-hidden shadow-[0_18px_45px_rgba(15,23,42,0.6)] bg-slate-800/20 rotate-1 origin-bottom-left">
+                        <img src="{{ asset('images/greenbus_ke_2.jpg') }}" alt="Guests enjoying a Nairobi tour" class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Front image card -->
+                    <div class="absolute left-2 sm:left-6 bottom-2 sm:bottom-8 w-48 sm:w-60 h-60 sm:h-72 rounded-3xl overflow-hidden shadow-[0_22px_55px_rgba(15,23,42,0.75)] bg-slate-800/20 -rotate-1 origin-top-right">
+                        <img src="{{ asset('images/greenbus_ke_1.jpg') }}" alt="Greenbus city tour" class="w-full h-full object-cover">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="how-it-works" class="bg-white/80 border-y border-slate-100 mt-8">
+<section id="how-it-works" class="bg-white/80 border-y border-slate-100 mt-0">
     <div class="max-w-6xl mx-auto px-4 py-10">
         <p class="text-xs uppercase tracking-[0.15em] text-emerald-700 mb-2">Simple steps</p>
         <h2 class="text-2xl md:text-3xl font-semibold mb-6">How Greenbus tours work</h2>
