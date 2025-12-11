@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\FaqRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class FaqController extends Controller
@@ -12,16 +13,18 @@ class FaqController extends Controller
     }
 
     /**
-     * Show public FAQs page.
+     * Show public FAQs page, optionally filtered by category.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $faqs = $this->faqs->getPublicFaqs();
+        $selectedCategory = $request->query('category');
+        $faqs = $this->faqs->getActive($selectedCategory);
         $categories = $this->faqs->getCategories();
 
         return view('faqs.index', [
             'faqs' => $faqs,
             'categories' => $categories,
+            'selectedCategory' => $selectedCategory,
         ]);
     }
 }

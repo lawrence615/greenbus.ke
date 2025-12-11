@@ -12,13 +12,18 @@
         </p>
     </div>
 
-    @if($categories)
+    @if(!empty($categories))
     <div class="flex flex-wrap gap-2 mb-6 text-xs">
         @foreach($categories as $category)
-            <span class="inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1 text-slate-600">
+            <a
+                href="{{ route('faqs.index', ['category' => $category]) }}"
+                class="inline-flex items-center rounded-full px-3 py-1 border {{ (isset($selectedCategory) && $selectedCategory === $category) ? 'border-emerald-600 bg-emerald-50 text-emerald-800' : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-100 hover:text-emerald-700' }}">
                 {{ $category }}
-            </span>
+            </a>
         @endforeach
+        @if(isset($selectedCategory) && $selectedCategory && !in_array($selectedCategory, $categories, true))
+            <span class="text-[11px] text-slate-400">Filtered by: {{ $selectedCategory }}</span>
+        @endif
     </div>
     @endif
 
