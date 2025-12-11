@@ -33,32 +33,72 @@
 
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center gap-4 text-sm">
-                <a
-                    href="{{ route('home') }}"
-                    class="hover:text-emerald-700 {{ request()->routeIs('home') ? 'text-emerald-700 font-semibold' : 'text-slate-700' }}">
-                    Home
-                </a>
-                @isset($city)
+                <!-- Home Dropdown -->
+                <div class="relative" x-data="{ open: false }">
+                    <button 
+                        @click="open = !open" 
+                        @click.away="open = false"
+                        class="flex items-center gap-1 hover:text-emerald-700 {{ request()->routeIs('home') ? 'text-emerald-700 font-semibold' : 'text-slate-700' }}">
+                        Home
+                        <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div 
+                        x-show="open" 
+                        x-cloak 
+                        x-transition 
+                        class="absolute left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 py-1 z-50">
+                        <a 
+                            href="#contact" 
+                            class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">
+                            Contact
+                        </a>
+                        <a 
+                            href="{{ route('home') }}#how-it-works" 
+                            class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">
+                            How it works
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Tours - Always show if there are active cities -->
+                @if(isset($city))
                 <a
                     href="{{ route('tours.index', $city) }}"
                     class="hover:text-emerald-700 {{ request()->routeIs('tours.*') || request()->routeIs('bookings.*') ? 'text-emerald-700 font-semibold' : 'text-slate-700' }}">
                     Tours
                 </a>
-                @endisset
+                @elseif(isset($activeCities) && $activeCities->count() > 0)
+                <div class="relative" x-data="{ open: false }">
+                    <button 
+                        @click="open = !open" 
+                        @click.away="open = false"
+                        class="flex items-center gap-1 hover:text-emerald-700 {{ request()->routeIs('tours.*') || request()->routeIs('bookings.*') ? 'text-emerald-700 font-semibold' : 'text-slate-700' }}">
+                        Tours
+                        <svg class="w-3 h-3 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div 
+                        x-show="open" 
+                        x-cloak 
+                        x-transition 
+                        class="absolute left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 py-1 z-50">
+                        @foreach($activeCities as $activeCity)
+                        <a 
+                            href="{{ route('tours.index', $activeCity) }}" 
+                            class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">
+                            {{ $activeCity->name }} Tours
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
                 <a
                     href="{{ route('faqs.index') }}"
                     class="hover:text-emerald-700 {{ request()->routeIs('faqs.*') ? 'text-emerald-700 font-semibold' : 'text-slate-700' }}">
                     FAQ
-                </a>
-                <a
-                    href="#contact"
-                    class="hover:text-emerald-700 text-slate-700">
-                    Contact
-                </a>
-                <a
-                    href="{{ route('home') }}#how-it-works"
-                    class="hover:text-emerald-700 text-slate-700">
-                    How it works
                 </a>
             </nav>
 
@@ -129,37 +169,67 @@
             x-transition:leave-end="opacity-0 -translate-y-1"
             class="md:hidden border-t bg-white">
             <nav class="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-1">
-                <a
-                    href="{{ route('home') }}"
-                    @click="mobileMenuOpen = false"
-                    class="px-3 py-2 rounded-lg {{ request()->routeIs('home') ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-slate-700 hover:bg-slate-50' }}">
-                    Home
-                </a>
-                @isset($city)
+                <!-- Home with sub-items -->
+                <div x-data="{ open: false }">
+                    <button
+                        @click="open = !open"
+                        class="w-full flex items-center justify-between px-3 py-2 rounded-lg {{ request()->routeIs('home') ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-slate-700 hover:bg-slate-50' }}">
+                        Home
+                        <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="open" x-collapse class="pl-6 space-y-1">
+                        <a
+                            href="#contact"
+                            @click="mobileMenuOpen = false"
+                            class="block px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-50">
+                            Contact
+                        </a>
+                        <a
+                            href="{{ route('home') }}#how-it-works"
+                            @click="mobileMenuOpen = false"
+                            class="block px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-50">
+                            How it works
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Tours - Always show if there are active cities -->
+                @if(isset($city))
                 <a
                     href="{{ route('tours.index', $city) }}"
                     @click="mobileMenuOpen = false"
                     class="px-3 py-2 rounded-lg {{ request()->routeIs('tours.*') || request()->routeIs('bookings.*') ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-slate-700 hover:bg-slate-50' }}">
                     Tours
                 </a>
-                @endisset
+                @elseif(isset($activeCities) && $activeCities->count() > 0)
+                <div x-data="{ open: false }">
+                    <button
+                        @click="open = !open"
+                        class="w-full flex items-center justify-between px-3 py-2 rounded-lg {{ request()->routeIs('tours.*') || request()->routeIs('bookings.*') ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-slate-700 hover:bg-slate-50' }}">
+                        Tours
+                        <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div x-show="open" x-collapse class="pl-6 space-y-1">
+                        @foreach($activeCities as $activeCity)
+                        <a 
+                            href="{{ route('tours.index', $activeCity) }}" 
+                            @click="mobileMenuOpen = false" 
+                            class="block px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-50">
+                            {{ $activeCity->name }} Tours
+                        </a>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
                 <a
                     href="{{ route('faqs.index') }}"
                     @click="mobileMenuOpen = false"
                     class="px-3 py-2 rounded-lg {{ request()->routeIs('faqs.*') ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-slate-700 hover:bg-slate-50' }}">
                     FAQ
-                </a>
-                <a
-                    href="#contact"
-                    @click="mobileMenuOpen = false"
-                    class="px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-50">
-                    Contact
-                </a>
-                <a
-                    href="{{ route('home') }}#how-it-works"
-                    @click="mobileMenuOpen = false"
-                    class="px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-50">
-                    How it works
                 </a>
                 @auth
                 <a href="{{ route('dashboard') }}" @click="mobileMenuOpen = false" class="mt-2 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow hover:bg-emerald-700">
