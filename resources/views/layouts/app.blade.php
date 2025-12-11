@@ -46,6 +46,11 @@
                 </a>
                 @endisset
                 <a
+                    href="{{ route('faqs.index') }}"
+                    class="hover:text-emerald-700 {{ request()->routeIs('faqs.*') ? 'text-emerald-700 font-semibold' : 'text-slate-700' }}">
+                    FAQ
+                </a>
+                <a
                     href="#contact"
                     class="hover:text-emerald-700 text-slate-700">
                     Contact
@@ -138,6 +143,12 @@
                     Tours
                 </a>
                 @endisset
+                <a
+                    href="{{ route('faqs.index') }}"
+                    @click="mobileMenuOpen = false"
+                    class="px-3 py-2 rounded-lg {{ request()->routeIs('faqs.*') ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-slate-700 hover:bg-slate-50' }}">
+                    FAQ
+                </a>
                 <a
                     href="#contact"
                     @click="mobileMenuOpen = false"
