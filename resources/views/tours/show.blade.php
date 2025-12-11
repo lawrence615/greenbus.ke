@@ -80,15 +80,25 @@
         @if ($tour->images->count() > 0)
         {{-- Mobile layout: full-width cover, horizontal scrolling thumbnails below --}}
         <div class="mb-6 space-y-3 md:hidden">
-            <div class="rounded-2xl overflow-hidden bg-slate-200">
-                <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-[220px] object-cover sm:h-[260px]">
+            <div class="rounded-2xl overflow-hidden bg-slate-200 relative">
+                <img
+                    src="{{ $cover->url }}"
+                    alt="{{ $tour->title }}"
+                    class="w-full h-[220px] object-cover sm:h-[260px]"
+                    onerror="this.parentElement.style.display='none';"
+                >
             </div>
 
             @if ($otherImages->count() > 0)
             <div class="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4">
                 @foreach ($otherImages as $index => $image)
                 <div class="flex-none w-28 h-24 rounded-xl overflow-hidden bg-slate-200 cursor-pointer group relative" onclick="openGallery({{ $loop->iteration }})">
-                    <img src="{{ $image->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <img
+                        src="{{ $image->url }}"
+                        alt="{{ $tour->title }}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onerror="this.parentElement.style.display='none';"
+                    >
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
 
                     @if ($loop->last && $totalImages > 4)
@@ -105,15 +115,25 @@
         {{-- Desktop / tablet layout: large cover on left, stacked thumbnails on right --}}
         <div class="mb-8 hidden md:grid gap-2 grid-cols-3 md:grid-cols-4">
             <!-- Cover Image (Left Side - Takes majority width on md+ screens) -->
-            <div class="col-span-2 md:col-span-3 rounded-2xl overflow-hidden bg-slate-200">
-                <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover">
+            <div class="col-span-2 md:col-span-3 rounded-2xl overflow-hidden bg-slate-200 relative">
+                <img
+                    src="{{ $cover->url }}"
+                    alt="{{ $tour->title }}"
+                    class="w-full h-full object-cover"
+                    onerror="this.parentElement.style.display='none';"
+                >
             </div>
 
             <!-- Thumbnail Images (Right Side - 3 rows stacked vertically) -->
             <div class="flex flex-col gap-3 col-span-1">
                 @foreach ($otherImages as $index => $image)
                 <div class="rounded-xl overflow-hidden bg-slate-200 cursor-pointer group relative h-24 md:h-28" onclick="openGallery({{ $loop->iteration }})">
-                    <img src="{{ $image->url }}" alt="{{ $tour->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                    <img
+                        src="{{ $image->url }}"
+                        alt="{{ $tour->title }}"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onerror="this.parentElement.style.display='none';"
+                    >
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
 
                     @if ($loop->last && $totalImages > 4)
@@ -132,8 +152,8 @@
             </div>
         </div>
         @else
-        <div class="aspect-video rounded-2xl overflow-hidden bg-slate-200 mb-6">
-            <div class="w-full h-full flex items-center justify-center text-xs text-slate-500">Tour photos coming soon</div>
+        <div class="rounded-2xl border border-dashed border-slate-200 bg-white mb-6 px-4 py-10 flex items-center justify-center text-center">
+            <p class="text-xs text-slate-500">Tour photos coming soon</p>
         </div>
         @endif
 
@@ -298,7 +318,7 @@
 
     <!-- Image Container -->
     <div class="max-w-6xl max-h-[90vh] w-full mx-4">
-        <img id="galleryImage" src="" alt="{{ $tour->title }}" class="w-full h-full object-contain">
+        <img id="galleryImage" src="" alt="{{ $tour->title }}" class="w-full h-full object-contain" onerror="this.style.display='none'; document.getElementById('imageCounter').textContent='Image not available';">
         <div class="text-center mt-4">
             <span id="imageCounter" class="text-white text-sm"></span>
         </div>
