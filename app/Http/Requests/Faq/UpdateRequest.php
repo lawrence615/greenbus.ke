@@ -13,12 +13,10 @@ class UpdateRequest extends FormRequest
 
     public function rules(): array
     {
-        $faqId = $this->route('faq')?->id;
-
         return [
             'question' => ['required', 'string', 'max:500'],
             'answer' => ['required', 'string'],
-            'category' => ['nullable', 'string', 'max:40', 'unique:faqs,category,' . $faqId],
+            'category' => ['nullable', 'string', 'max:40'],
             'tour_category_id' => ['nullable', 'exists:tour_categories,id'],
             'is_active' => ['boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],

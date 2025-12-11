@@ -16,7 +16,7 @@ class StoreRequest extends FormRequest
         return [
             'question' => ['required', 'string', 'max:500'],
             'answer' => ['required', 'string'],
-            'category' => ['nullable', 'string', 'max:40', 'unique:faqs,category'],
+            'category' => ['nullable', 'string', 'max:40'],
             'tour_category_id' => ['nullable', 'exists:tour_categories,id'],
             'is_active' => ['boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
