@@ -134,7 +134,25 @@
                         <td class="px-4 py-3">
                             <div class="min-w-0">
                                 <p class="font-semibold text-slate-900 mb-1">{{ Str::limit($faq->question, 80) }}</p>
-                                <p class="text-xs text-slate-500 line-clamp-2">{!! $faq->answer !!}</p>
+                                <div x-data="{ showAnswer: false }" class="space-y-1">
+                                    <button 
+                                        @click="showAnswer = !showAnswer"
+                                        class="inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 font-medium transition-colors cursor-pointer"
+                                    >
+                                        <svg x-show="!showAnswer" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                        <svg x-show="showAnswer" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                        <span x-show="!showAnswer">Show</span>
+                                        <span x-show="showAnswer">Hide</span>
+                                        Answer
+                                    </button>
+                                    <div x-show="showAnswer" x-collapse class="text-xs text-slate-500 line-clamp-2">
+                                        {!! $faq->answer !!}
+                                    </div>
+                                </div>
                                 @if($faq->category)
                                 <span class="lg:hidden inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 mt-1">
                                     {{ $faq->category }}
