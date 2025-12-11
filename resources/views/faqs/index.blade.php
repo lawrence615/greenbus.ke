@@ -14,6 +14,13 @@
 
     @if(!empty($categories))
     <div class="flex flex-wrap gap-2 mb-6 text-xs">
+        {{-- All chip to clear filters --}}
+        <a
+            href="{{ route('faqs.index') }}"
+            class="inline-flex items-center rounded-full px-3 py-1 border {{ empty($selectedCategory) ? 'border-emerald-600 bg-emerald-50 text-emerald-800' : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-100 hover:text-emerald-700' }}">
+            All
+        </a>
+
         @foreach($categories as $category)
             <a
                 href="{{ route('faqs.index', ['category' => $category]) }}"
