@@ -100,13 +100,13 @@
                         class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none @error('category') border-red-500 @enderror"
                     >
                     <datalist id="category-suggestions">
-                        @foreach($categories as $cat)
+                        @php
+                            $allCategories = array_unique(array_merge($categories, ['Booking', 'Tours', 'Payment', 'General']));
+                            sort($allCategories);
+                        @endphp
+                        @foreach($allCategories as $cat)
                         <option value="{{ $cat }}">
                         @endforeach
-                        <option value="Booking">
-                        <option value="Tours">
-                        <option value="Payment">
-                        <option value="General">
                     </datalist>
                     @error('category')
                     <p class="text-xs text-red-500">{{ $message }}</p>
