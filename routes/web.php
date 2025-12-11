@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
 use App\Http\Controllers\Customer\BookingController as CustomerBookingController;
 use App\Http\Controllers\Auth\InviteController;
+use App\Http\Controllers\FaqController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -99,6 +100,9 @@ Route::post('/book/{city:slug}/{tour:slug}', [BookingController::class, 'store']
 Route::get('/booking/{booking}/success', [BookingController::class, 'success'])->name('bookings.success');
 Route::get('/booking/{booking}/cancelled', [BookingController::class, 'cancel'])->name('bookings.cancel');
 Route::get('/booking/{booking}/retry', [BookingController::class, 'retryPayment'])->name('bookings.retry');
+
+// Public FAQs
+Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
 
 // City/Tour routes (must be last - catches /{slug} patterns)
 Route::get('/{city:slug}', [CityController::class, 'show'])->name('cities.show');
