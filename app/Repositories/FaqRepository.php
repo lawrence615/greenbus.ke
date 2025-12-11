@@ -37,6 +37,11 @@ class FaqRepository implements FaqRepositoryInterface
         return Faq::active()->byCategory($category)->ordered()->get();
     }
 
+    public function getPublicFaqs(): Collection
+    {
+        return Faq::active()->ordered()->get();
+    }
+
     public function getCategories(): array
     {
         return Faq::whereNotNull('category')

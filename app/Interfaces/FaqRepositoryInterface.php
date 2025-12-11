@@ -19,6 +19,11 @@ interface FaqRepositoryInterface
     public function getActive(?string $category = null): Collection;
 
     /**
+     * Get all active FAQs for the public FAQ page
+     */
+    public function getPublicFaqs(): Collection;
+
+    /**
      * Get all unique categories
      */
     public function getCategories(): array;
