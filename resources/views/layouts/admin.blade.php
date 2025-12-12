@@ -210,6 +210,9 @@
         x-transition:leave="transition-opacity ease-linear duration-200"
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"></div>
+
+    <!-- Global Loading Overlay -->
+    @include('components.global-loading')
 </body>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 @stack('scripts')
