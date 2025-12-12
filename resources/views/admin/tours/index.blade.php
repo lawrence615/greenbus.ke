@@ -3,8 +3,30 @@
 @section('title', 'Tours')
 @section('page-title', 'Tours')
 
+@push('styles')
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
+@endpush
+
 @section('content')
-<div class="space-y-6">
+<div x-data="{ 
+    showConfirmModal: false,
+    selectedTour: null,
+    selectedAction: '',
+    openModal: function(tour, action) {
+        this.selectedTour = tour;
+        this.selectedAction = action;
+        this.showConfirmModal = true;
+    },
+    closeModal: function() {
+        this.showConfirmModal = false;
+        this.selectedTour = null;
+        this.selectedAction = '';
+    }
+}" class="space-y-6">
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
@@ -12,7 +34,7 @@
         </div>
         <a href="{{ route('console.tours.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
             Add Tour
         </a>
@@ -26,25 +48,24 @@
                 <div class="space-y-1.5">
                     <label class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                         Search
                     </label>
-                    <input 
-                        type="text" 
-                        name="search" 
-                        value="{{ request('search') }}" 
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ request('search') }}"
                         placeholder="Tour title..."
-                        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                    >
+                        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none">
                 </div>
-                
+
                 <!-- City -->
                 <div class="space-y-1.5">
                     <label class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                         City
                     </label>
@@ -57,12 +78,12 @@
                         @endforeach
                     </select>
                 </div>
-                
+
                 <!-- Category -->
                 <div class="space-y-1.5">
                     <label class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                         </svg>
                         Category
                     </label>
@@ -75,12 +96,12 @@
                         @endforeach
                     </select>
                 </div>
-                
+
                 <!-- Status -->
                 <div class="space-y-1.5">
                     <label class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         Status
                     </label>
@@ -91,19 +112,19 @@
                     </select>
                 </div>
             </div>
-            
+
             <!-- Action Buttons -->
             <div class="flex items-center gap-2 shrink-0">
                 <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 shadow-sm cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                     </svg>
                     Filter
                 </button>
                 @if(request()->hasAny(['search', 'city_id', 'category_id', 'status']))
                 <a href="{{ route('console.tours.index') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 border border-slate-300 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                     Clear
                 </a>
@@ -121,7 +142,7 @@
                         <th class="px-4 py-3 text-left">
                             <div class="flex items-center gap-2 font-semibold text-slate-700 uppercase text-xs tracking-wider">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 Tour
                             </div>
@@ -129,8 +150,8 @@
                         <th class="px-4 py-3 text-left hidden lg:table-cell">
                             <div class="flex items-center gap-2 font-semibold text-slate-700 uppercase text-xs tracking-wider">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
                                 Location
                             </div>
@@ -138,7 +159,7 @@
                         <th class="px-4 py-3 text-left hidden xl:table-cell">
                             <div class="flex items-center gap-2 font-semibold text-slate-700 uppercase text-xs tracking-wider">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 Price
                             </div>
@@ -146,7 +167,7 @@
                         <th class="px-4 py-3 text-left">
                             <div class="flex items-center gap-2 font-semibold text-slate-700 uppercase text-xs tracking-wider">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 Status
                             </div>
@@ -162,7 +183,7 @@
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
                                 @php
-                                    $cover = $tour->images->firstWhere('is_cover', true) ?? $tour->images->first();
+                                $cover = $tour->images->firstWhere('is_cover', true) ?? $tour->images->first();
                                 @endphp
                                 <div class="shrink-0 hidden sm:block">
                                     @if($cover)
@@ -170,7 +191,7 @@
                                     @else
                                     <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center ring-1 ring-slate-200">
                                         <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
                                     </div>
                                     @endif
@@ -189,14 +210,14 @@
                                         @if($tour->duration_text)
                                         <span class="flex items-center gap-1">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                             {{ $tour->duration_text }}
                                         </span>
                                         @endif
                                         <span class="lg:hidden flex items-center gap-1">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                             </svg>
                                             {{ $tour->city->name ?? 'N/A' }}
                                         </span>
@@ -232,75 +253,31 @@
                             <div class="flex items-center justify-end gap-0.5">
                                 <a href="{{ route('console.tours.show', $tour) }}" class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors duration-150" title="View">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                     </svg>
                                 </a>
                                 <a href="{{ route('console.tours.edit', $tour) }}" class="p-1.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors duration-150" title="Edit">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>
                                 </a>
-                                <div x-data="{ showConfirm: false }" class="inline relative">
-                                    <button 
-                                        type="button" 
-                                        @click="showConfirm = true"
-                                        class="p-1.5 rounded-lg transition-colors duration-150 cursor-pointer {{ $tour->status === 'published' ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50' : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50' }}" 
-                                        title="{{ $tour->status === 'published' ? 'Unpublish' : 'Publish' }}"
-                                    >
-                                        @if($tour->status === 'published')
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
-                                        </svg>
-                                        @else
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                        </svg>
-                                        @endif
-                                    </button>
-
-                                    <!-- Confirmation Modal -->
-                                    <div 
-                                        x-show="showConfirm" 
-                                        x-cloak
-                                        class="fixed inset-0 z-50 flex items-center justify-center"
-                                        @keydown.escape.window="showConfirm = false"
-                                    >
-                                        <div class="fixed inset-0 bg-black/50" @click="showConfirm = false"></div>
-                                        <div class="relative bg-white rounded-xl shadow-xl p-6 max-w-sm mx-4 z-10">
-                                            <h3 class="text-lg text-center font-semibold text-slate-900 mb-2">
-                                                {{ $tour->status === 'published' ? 'Unpublish Tour?' : 'Publish Tour?' }}
-                                            </h3>
-                                            <p class="text-sm text-slate-600 mb-4">
-                                                @if($tour->status === 'published')
-                                                    This tour will no longer be visible to the public.
-                                                @else
-                                                    This tour will become visible to the public.
-                                                @endif
-                                            </p>
-                                            <div class="flex justify-end gap-3">
-                                                <button 
-                                                    type="button" 
-                                                    @click="showConfirm = false"
-                                                    class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer"
-                                                >
-                                                    Cancel
-                                                </button>
-                                                <form method="POST" action="{{ route('console.tours.toggle-status', $tour) }}">
-                                                    @csrf
-                                                    @method('PATCH')
-                                                    <button 
-                                                        type="submit" 
-                                                        class="px-4 py-2 text-sm font-medium text-white rounded-lg {{ $tour->status === 'published' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700' }} cursor-pointer"
-                                                    >
-                                                        {{ $tour->status === 'published' ? 'Unpublish' : 'Publish' }}
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <button
+                                    type="button"
+                                    @click="openModal({{ $tour->toJson() }}, '{{ $tour->status === 'published' ? 'draft' : 'publish' }}')"
+                                    class="p-1.5 rounded-lg transition-colors duration-150 cursor-pointer {{ $tour->status === 'published' ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50' : 'text-blue-600 hover:text-blue-700 hover:bg-blue-50' }}"
+                                    title="{{ $tour->status === 'published' ? 'draft' : 'Publish' }}">
+                                    @if($tour->status === 'published')
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                    </svg>
+                                    @else
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    @endif
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -310,7 +287,7 @@
                             <div class="flex flex-col items-center">
                                 <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
                                     <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
                                 </div>
                                 <p class="text-slate-500 font-medium">No tours found</p>
@@ -328,6 +305,43 @@
             {{ $tours->links() }}
         </div>
         @endif
+    </div>
+
+    <!-- Single Shared Confirmation Modal -->
+    <div
+        x-show="showConfirmModal"
+        x-cloak
+        class="fixed inset-0 z-50 flex items-center justify-center"
+        @keydown.escape.window="closeModal()">
+        <div class="fixed inset-0 bg-black/50" @click="closeModal()"></div>
+        <div class="relative bg-white rounded-xl shadow-xl p-6 max-w-sm mx-4 z-10">
+            <h3 class="text-lg text-center font-semibold text-slate-900 mb-2">
+                <span x-text="selectedAction === 'draft' ? 'Unpublish Tour?' : 'Publish Tour?'"></span>
+            </h3>
+            <p class="text-sm text-slate-600 mb-4">
+                <span x-show="selectedAction === 'draft'">This tour will no longer be visible to the public.</span>
+                <span x-show="selectedAction === 'publish'">This tour will become visible to the public.</span>
+            </p>
+            <div class="flex justify-end gap-3">
+                <button
+                    type="button"
+                    @click="closeModal()"
+                    class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer">
+                    Cancel
+                </button>
+                <form method="POST" :action="`/console/tours/${selectedTour.slug}/toggle-status`">
+                    @csrf
+                    @method('PATCH')
+                    <button 
+                        type="submit" 
+                        :class="selectedAction === 'draft' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700'"
+                        class="px-4 py-2 text-sm font-medium text-white rounded-lg cursor-pointer"
+                    >
+                        <span x-text="selectedAction === 'draft' ? 'Unpublish' : 'Publish'"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
