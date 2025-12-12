@@ -329,7 +329,8 @@
                     class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer">
                     Cancel
                 </button>
-                <form method="POST" :action="`/console/tours/${selectedTour.slug}/toggle-status`">
+                <form method="POST" :action="`/console/tours/${selectedTour.slug}/toggle-status`" 
+      @submit="$event.preventDefault(); window.showLoading('Toggling tour status...', 'Updating Tour'); $el.submit();">
                     @csrf
                     @method('PATCH')
                     <button 
