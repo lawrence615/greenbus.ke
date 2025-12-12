@@ -3,6 +3,14 @@
 @section('title', 'FAQs')
 @section('page-title', 'FAQs')
 
+@push('styles')
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="space-y-6">
     <!-- Header -->
