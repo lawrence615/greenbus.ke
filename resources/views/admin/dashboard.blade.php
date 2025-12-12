@@ -3,6 +3,14 @@
 @section('title', 'Dashboard')
 @section('page-title', 'Dashboard')
 
+@push('styles')
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="space-y-6">
     <!-- Stats Grid -->

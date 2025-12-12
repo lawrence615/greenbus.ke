@@ -16,6 +16,14 @@
 </style>
 @endpush
 
+@push('styles')
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="max-w-4xl" x-data="tourEditForm()">
     <!-- Back Link -->

@@ -3,6 +3,14 @@
 @section('title', 'Payments')
 @section('page-title', 'Payments')
 
+@push('styles')
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="space-y-6">
     <!-- Summary Cards -->
