@@ -217,8 +217,8 @@
                 <h2 class="font-semibold text-slate-900 mb-4">Metadata</h2>
                 <dl class="space-y-3 text-sm">
                     <div class="flex justify-between">
-                        <dt class="text-slate-500">ID</dt>
-                        <dd class="font-mono text-slate-900">{{ $tour->id }}</dd>
+                        <dt class="text-slate-500">Code</dt>
+                        <dd class="font-mono text-slate-900">{{ $tour->code }}</dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-slate-500">Slug</dt>
