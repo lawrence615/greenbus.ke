@@ -335,11 +335,17 @@
 
 @push('scripts')
 <script>
-    const galleryImages = @json($tour->images->map(fn($img) => $img->url)->values());
+    // Gallery images data
+    const galleryImages = @json($tour->images->pluck('url')->values());
+    const otherImagesOnly = @json($otherImages->pluck('url')->values());
     let currentImageIndex = 0;
 
     function openGallery(index) {
-        currentImageIndex = index;
+        // Find the correct index in the full gallery array
+        // Thumbnails are otherImages (excluding cover), so we need to map to the full array
+        const clickedImageUrl = otherImagesOnly[index - 1];
+        currentImageIndex = galleryImages.indexOf(clickedImageUrl);
+        
         updateGalleryImage();
         const modal = document.getElementById('galleryModal');
         modal.classList.remove('hidden', 'pointer-events-none');
@@ -355,8 +361,18 @@
     }
 
     function updateGalleryImage() {
-        document.getElementById('galleryImage').src = galleryImages[currentImageIndex];
-        document.getElementById('imageCounter').textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+        // Use the correct image URL based on current index
+        const imageUrl = galleryImages[currentImageIndex];
+        const img = document.getElementById('galleryImage');
+        
+        if (imageUrl) {
+            img.src = imageUrl;
+            img.style.display = 'block';
+            document.getElementById('imageCounter').textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+        } else {
+            img.style.display = 'none';
+            document.getElementById('imageCounter').textContent = 'Image not available';
+        }
     }
 
     function nextImage() {
