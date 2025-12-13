@@ -14,15 +14,15 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'city_id' => ['required', 'exists:cities,id'],
-            'tour_category_id' => ['nullable', 'exists:tour_categories,id'],
-            'title' => ['required', 'string', 'max:255'],
-            'short_description' => ['required', 'string'],
+            'city_id' => ['required', 'max:100', 'exists:cities,id'],
+            'tour_category_id' => ['required', 'exists:tour_categories,id'],
+            'title' => ['required', 'string', 'max:80'],
+            'short_description' => ['required', 'string', 'max:200'],
             'description' => ['nullable', 'string'],
             'included' => ['nullable', 'string'],
             'excluded' => ['nullable', 'string'],
             'important_information' => ['nullable', 'string'],
-            'duration_text' => ['nullable', 'string', 'max:100'],
+            'duration_text' => ['required', 'string', 'max:100'],
             'duration_days' => ['nullable', 'integer', 'min:2', 'max:30'],
             'meeting_point' => ['nullable', 'string', 'max:255'],
             'starts_at_time' => ['nullable', 'string', 'max:10'],
