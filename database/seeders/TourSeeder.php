@@ -14,7 +14,7 @@ class TourSeeder extends Seeder
     public function run(): void
     {
         $nairobi = City::where('slug', 'nairobi')->first();
-        $singleDay = TourCategory::where('slug', 'single-day-trip')->first();
+        $singleDay = TourCategory::where('slug', 'hourly-tours')->first();
 
         if (! $nairobi || ! $singleDay) {
             return;
@@ -29,7 +29,7 @@ class TourSeeder extends Seeder
                 'slug' => 'nairobi-historic-and-modern-highlights-city-walking-tour',
                 'short_description' => '<p>See the key sights of Nairobi in a comfortable coach with a local guide.</p>',
                 'description' => "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(56, 68, 58);\">Ideal as an introduction for first-time visitors to Nairobi (or anyone looking to enhance their understanding of the Kenyan capital), this tour ditches the dry historical information and gives travelers an insider’s view of the city. Highlights include Jamia Mosque, souvenir shopping at City Market, and a city-wide panorama from KICC. Bottled water and door-to-door, air-conditioned vehicle transfers are provided.</span></p>",
-                'includes' => "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Guided city tour with an English-speaking local guide.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Transport in a comfortable coach or minibus.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Short photo stops at key viewpoints. </li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Learn some popular Swahili words used by locals. </li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Buy souvenirs without negotiating at the cheapest fixed prices stores.</li></ol>",
+                'included' => "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Guided city tour with an English-speaking local guide.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Transport in a comfortable coach or minibus.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Short photo stops at key viewpoints. </li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Learn some popular Swahili words used by locals. </li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Buy souvenirs without negotiating at the cheapest fixed prices stores.</li></ol>",
                 'important_information' => "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Hotel pickup is available from central Nairobi on request.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Please bring a passport/valid ID and your digital ticket.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Wear comfortable shoes and be prepared for changing weather.</li></ol>",
                 'duration_text' => '4 hours',
                 'meeting_point' => 'Pick up from central Nairobi hotels or Kenyatta Avenue meeting point',
@@ -57,7 +57,7 @@ class TourSeeder extends Seeder
                 'slug' => 'nairobi-national-museum-and-city-markets-tour',
                 'short_description' => 'Combine culture and local life with a visit to the National Museum and bustling city markets.',
                 'description' => 'Discover Kenya’s history at the National Museum, then walk through colorful city markets with your guide.',
-                'includes' => "Guided visit of the National Museum of Kenya.\nGuided walk through selected central markets.\nTransport between museum and markets.",
+                'included' => "Guided visit of the National Museum of Kenya.\nGuided walk through selected central markets.\nTransport between museum and markets.",
                 'important_information' => "Entrance fees to the National Museum are not included unless specified on your ticket.\nMarkets can be busy – keep valuables secure and follow your guide’s instructions.\nSuitable for most fitness levels, with some walking involved.",
                 'duration_text' => '5 hours',
                 'meeting_point' => 'National Museum entrance or central hotel pickup',
