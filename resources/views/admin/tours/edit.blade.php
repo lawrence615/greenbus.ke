@@ -223,9 +223,9 @@
 
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1">What's Included</label>
-                    <div id="includes_editor" class="bg-white rounded-lg border border-slate-300"></div>
-                    <input type="hidden" name="includes" id="includes" value="{{ old('includes', $tour->includes) }}">
-                    @error('includes')
+                    <div id="included_editor" class="bg-white rounded-lg border border-slate-300"></div>
+                    <input type="hidden" name="included" id="included" value="{{ old('included', $tour->included) }}">
+                    @error('included')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
