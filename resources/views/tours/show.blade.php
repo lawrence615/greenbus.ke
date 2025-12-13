@@ -167,9 +167,9 @@
 
             <section>
                 <h2 class="text-base font-semibold mb-2">What the package covers</h2>
-                @if ($tour->includes)
+                @if ($tour->included)
                 <div class="prose prose-sm max-w-none">
-                    {!! $tour->includes !!}
+                    {!! $tour->included !!}
                 </div>
                 @endif
             </section>

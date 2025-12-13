@@ -100,11 +100,11 @@
             @endif
 
             <!-- What's Included -->
-            @if($tour->includes)
+            @if($tour->included)
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h2 class="font-semibold text-slate-900 mb-4">What's Included</h2>
                 <div class="prose prose-slate max-w-none">
-                    {!! $tour->includes !!}
+                    {!! $tour->included !!}
                 </div>
             </div>
             @endif
