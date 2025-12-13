@@ -13,6 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('description')->nullable();
+            $table->string('duration_type'); // hourly, half_day, full_day, multiple_days
             $table->timestamps();
         });
 
