@@ -11,6 +11,7 @@ class TourCategory extends Model
         'name',
         'slug',
         'description',
+        'duration_type',
     ];
 
     public function tours(): HasMany
