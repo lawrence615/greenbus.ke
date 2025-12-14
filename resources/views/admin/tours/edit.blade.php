@@ -47,23 +47,23 @@
             </div>
             <div class="p-6 space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- City Select -->
+                    <!-- Location Select -->
                     <div class="space-y-2">
-                        <label for="city_id" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                        <label for="location_id" class="flex items-center gap-2 text-sm font-medium text-slate-700">
                             <span class="flex items-center justify-center w-6 h-6 rounded-md bg-emerald-50 text-emerald-600">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
                             </span>
-                            City <span class="text-red-500">*</span>
+                            Location <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
-                            <select name="city_id" id="city_id" class="w-full appearance-none rounded-lg border border-slate-300 bg-white px-4 py-2.5 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none" required>
-                                <option value="">Select a city</option>
-                                @foreach($cities as $city)
-                                <option value="{{ $city->id }}" {{ old('city_id', $tour->city_id) == $city->id ? 'selected' : '' }}>
-                                    {{ $city->name }}
+                            <select name="location_id" id="location_id" class="w-full appearance-none rounded-lg border border-slate-300 bg-white px-4 py-2.5 pr-10 text-sm text-slate-900 shadow-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none" required>
+                                <option value="">Select a location</option>
+                                @foreach($locations as $location)
+                                <option value="{{ $location->id }}" {{ old('location_id', $tour->location_id) == $location->id ? 'selected' : '' }}>
+                                    {{ $location->name }}
                                 </option>
                                 @endforeach
                             </select>
@@ -73,7 +73,7 @@
                                 </svg>
                             </div>
                         </div>
-                        @error('city_id')
+                        @error('location_id')
                         <p class="text-sm text-red-600 flex items-center gap-1">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                             {{ $message }}

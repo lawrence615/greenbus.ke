@@ -20,7 +20,7 @@ return new class extends Migration
         Schema::table('tours', function (Blueprint $table) {
             $table->foreignId('tour_category_id')
                 ->nullable()
-                ->after('city_id')
+                ->after('location_id')
                 ->constrained('tour_categories')
                 ->nullOnDelete();
         });

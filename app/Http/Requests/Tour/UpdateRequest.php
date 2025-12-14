@@ -14,7 +14,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'city_id' => ['required', 'max:100', 'exists:cities,id'],
+            'location_id' => ['required', 'exists:locations,id'],
             'tour_category_id' => ['required', 'exists:tour_categories,id'],
             'title' => ['required', 'string', 'max:80'],
             'short_description' => ['required', 'string', 'max:200'],

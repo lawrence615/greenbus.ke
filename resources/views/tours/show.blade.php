@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', $tour->title . ' – ' . $city->name)
+@section('title', $tour->title . ' – ' . $location->name)
 
 @section('breadcrumb')
 <x-breadcrumb :items="[
-        ['label' => $city->name . ' tours', 'url' => route('tours.index', $city)],
+        ['label' => $location->name . ' tours', 'url' => route('tours.index', $location)],
         ['label' => $tour->title],
     ]" />
 @endsection
@@ -12,7 +12,7 @@
 @section('content')
 <section class="max-w-6xl mx-auto px-4 pb-10 grid gap-10 lg:grid-cols-3">
     <div class="lg:col-span-2">
-        <p class="text-xs uppercase tracking-wide text-emerald-700 mb-1">{{ $city->name }} city tour</p>
+        <p class="text-xs uppercase tracking-wide text-emerald-700 mb-1">{{ $location->name }} location tour</p>
         @if ($tour->category)
         <p class="text-[11px] text-slate-600 mb-1">{{ $tour->category->name }}</p>
         @endif
@@ -242,7 +242,7 @@
                         </span>
                         <p class="font-semibold">Live tour guide</p>
                     </div>
-                    <p class="mt-0.5 ml-9">English-speaking local guide in {{ $city->name }}.</p>
+                    <p class="mt-0.5 ml-9">English-speaking local guide in {{ $location->name }}.</p>
                 </div>
 
                 <div>
@@ -269,12 +269,12 @@
                         </span>
                         <p class="font-semibold">Group type</p>
                     </div>
-                    <p class="mt-0.5 ml-9">Small-group city tour suitable for first-time visitors.</p>
+                    <p class="mt-0.5 ml-9">Small-group location tour suitable for first-time visitors.</p>
                 </div>
             </div>
             </section>
 
-            <x-itinerary :items="$tour->itineraryItems" :city="$city" />
+            <x-itinerary :items="$tour->itineraryItems" :location="$location" />
         </div>
     </div>
 
@@ -284,12 +284,12 @@
             <p class="text-2xl font-semibold text-emerald-700 mb-4">KES {{ number_format($tour->base_price_adult) }} <span class="text-xs font-normal text-slate-500">per adult</span></p>
 
             <ul class="text-xs text-slate-600 mb-4 space-y-1">
-                <li>Guided city tour with local expert</li>
+                <li>Guided location tour with local expert</li>
                 <li>Comfortable bus transport</li>
                 <li>Perfect for first-time visitors</li>
             </ul>
 
-            <a href="{{ route('bookings.create', [$city, $tour]) }}" class="inline-flex w-full items-center justify-center px-4 py-3 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 mb-3">
+            <a href="{{ route('bookings.create', [$location, $tour]) }}" class="inline-flex w-full items-center justify-center px-4 py-3 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 mb-3">
                 Buy tickets
             </a>
 

@@ -60,20 +60,20 @@
                         class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none">
                 </div>
 
-                <!-- City -->
+                <!-- Location -->
                 <div class="space-y-1.5">
                     <label class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        City
+                        Location
                     </label>
-                    <select name="city_id" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none cursor-pointer">
+                    <select name="location_id" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none cursor-pointer">
                         <option value="">All Cities</option>
-                        @foreach($cities as $city)
-                        <option value="{{ $city->id }}" {{ request('city_id') == $city->id ? 'selected' : '' }}>
-                            {{ $city->name }}
+                        @foreach($locations as $location)
+                        <option value="{{ $location->id }}" {{ request('location_id') == $location->id ? 'selected' : '' }}>
+                            {{ $location->name }}
                         </option>
                         @endforeach
                     </select>
@@ -121,7 +121,7 @@
                     </svg>
                     Filter
                 </button>
-                @if(request()->hasAny(['search', 'city_id', 'category_id', 'status']))
+                @if(request()->hasAny(['search', 'location_id', 'category_id', 'status']))
                 <a href="{{ route('console.tours.index') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 border border-slate-300 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -219,7 +219,7 @@
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                             </svg>
-                                            {{ $tour->city->name ?? 'N/A' }}
+                                            {{ $tour->location->name ?? 'N/A' }}
                                         </span>
                                         <span class="xl:hidden font-medium text-emerald-600">
                                             KES {{ number_format($tour->base_price_adult) }}
@@ -230,7 +230,7 @@
                         </td>
                         <td class="px-4 py-3 hidden lg:table-cell">
                             <div class="flex flex-col gap-1">
-                                <span class="font-medium text-slate-700">{{ $tour->city->name ?? 'N/A' }}</span>
+                                <span class="font-medium text-slate-700">{{ $tour->location->name ?? 'N/A' }}</span>
                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 w-fit">
                                     {{ $tour->category->name ?? 'Uncategorized' }}
                                 </span>

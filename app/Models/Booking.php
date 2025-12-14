@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use App\Models\Tour;
-use App\Models\City;
+use App\Models\Location;
 use App\Models\Payment;
 
 class Booking extends Model
 {
     protected $fillable = [
         'tour_id',
-        'city_id',
+        'location_id',
         'reference',
         'date',
         'time',
@@ -107,9 +107,9 @@ class Booking extends Model
         return $this->belongsTo(Tour::class);
     }
 
-    public function city(): BelongsTo
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(Location::class);
     }
 
     public function payment(): HasOne

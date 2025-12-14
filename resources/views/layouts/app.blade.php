@@ -25,10 +25,10 @@
                 <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-600 text-white font-bold">
                     GB
                 </span>
-                <span>Greenbus City Tours</span>
+                <span>Greenbus Location Tours</span>
             </a> -->
             <a href="{{ route('home') }}" class="flex items-center gap-3">
-                <img src="{{ asset('images/logo.png') }}" alt="Greenbus City Tours" class="h-8 sm:h-8 w-auto"><span class="font-semibold text-emerald-700">Greenbus City Tours</span>
+                <img src="{{ asset('images/logo.png') }}" alt="Greenbus Location Tours" class="h-8 sm:h-8 w-auto"><span class="font-semibold text-emerald-700">Greenbus Location Tours</span>
             </a>
 
             <!-- Desktop Navigation -->
@@ -62,10 +62,10 @@
                     </div>
                 </div>
                 
-                <!-- Tours - Always show if there are active cities -->
-                @if(isset($city))
+                <!-- Tours - Always show if there are active locations -->
+                @if(isset($location))
                 <a
-                    href="{{ route('tours.index', $city) }}"
+                    href="{{ route('tours.index', $location) }}"
                     class="hover:text-emerald-700 {{ request()->routeIs('tours.*') || request()->routeIs('bookings.*') ? 'text-emerald-700 font-semibold' : 'text-slate-700' }}">
                     Tours
                 </a>
@@ -111,9 +111,9 @@
                     Dashboard
                 </a>
                 @else
-                @if(isset($city))
-                <a href="{{ route('tours.index', $city) }}" class="hidden md:inline-flex items-center px-4 py-2 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow hover:bg-emerald-700">
-                    Book a {{ $city->name }} Tour
+                @if(isset($location))
+                <a href="{{ route('tours.index', $location) }}" class="hidden md:inline-flex items-center px-4 py-2 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow hover:bg-emerald-700">
+                    Book a {{ $location->name }} Tour
                 </a>
                 @elseif(isset($activeCities) && $activeCities->count() === 1)
                 <a href="{{ route('tours.index', $activeCities->first()) }}" class="hidden md:inline-flex items-center px-4 py-2 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow hover:bg-emerald-700">
@@ -195,10 +195,10 @@
                     </div>
                 </div>
                 
-                <!-- Tours - Always show if there are active cities -->
-                @if(isset($city))
+                <!-- Tours - Always show if there are active locations -->
+                @if(isset($location))
                 <a
-                    href="{{ route('tours.index', $city) }}"
+                    href="{{ route('tours.index', $location) }}"
                     @click="mobileMenuOpen = false"
                     class="px-3 py-2 rounded-lg {{ request()->routeIs('tours.*') || request()->routeIs('bookings.*') ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-slate-700 hover:bg-slate-50' }}">
                     Tours
@@ -239,9 +239,9 @@
                     Dashboard
                 </a>
                 @else
-                @if(isset($city))
-                <a href="{{ route('tours.index', $city) }}" @click="mobileMenuOpen = false" class="mt-2 inline-flex items-center justify-center px-4 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow hover:bg-emerald-700">
-                    Book a {{ $city->name }} Tour
+                @if(isset($location))
+                <a href="{{ route('tours.index', $location) }}" @click="mobileMenuOpen = false" class="mt-2 inline-flex items-center justify-center px-4 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow hover:bg-emerald-700">
+                    Book a {{ $location->name }} Tour
                 </a>
                 @elseif(isset($activeCities) && $activeCities->count() === 1)
                 <a href="{{ route('tours.index', $activeCities->first()) }}" @click="mobileMenuOpen = false" class="mt-2 inline-flex items-center justify-center px-4 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow hover:bg-emerald-700">
@@ -284,9 +284,9 @@
                 <p class="text-slate-600 leading-relaxed">
                     A licensed tours and safaris company offering memorable, sustainable, and community-supportive travel experiences across Kenya. Explore the country the HAPPY way.
                 </p>
-                @if(isset($city))
-                <a href="{{ route('tours.index', $city) }}" class="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-emerald-700">
-                    <span>Browse {{ $city->name }} tours</span>
+                @if(isset($location))
+                <a href="{{ route('tours.index', $location) }}" class="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-emerald-700">
+                    <span>Browse {{ $location->name }} tours</span>
                     <span class="text-[11px]">→</span>
                 </a>
                 @elseif(isset($activeCities) && $activeCities->count() >= 1)
@@ -309,8 +309,8 @@
                         <a href="{{ route('home') }}#how-it-works" class="hover:text-emerald-700">How Greenbus works</a>
                     </li>
                     <li>
-                        @if(isset($city))
-                        <a href="{{ route('tours.index', $city) }}" class="hover:text-emerald-700">All {{ $city->name }} tours</a>
+                        @if(isset($location))
+                        <a href="{{ route('tours.index', $location) }}" class="hover:text-emerald-700">All {{ $location->name }} tours</a>
                         @elseif(isset($activeCities) && $activeCities->count() >= 1)
                         <a href="{{ route('tours.index', $activeCities->first()) }}" class="hover:text-emerald-700">All {{ $activeCities->first()->name }} tours</a>
                         @else
@@ -387,9 +387,9 @@
                     <p class="text-slate-600 leading-relaxed">
                         A licensed tours and safaris company offering memorable, sustainable, and community-supportive travel experiences across Kenya. Explore the country the HAPPY way.
                     </p>
-                    @if(isset($city))
-                    <a href="{{ route('tours.index', $city) }}" class="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-emerald-700">
-                        <span>Browse {{ $city->name }} tours</span>
+                    @if(isset($location))
+                    <a href="{{ route('tours.index', $location) }}" class="inline-flex items-center gap-1 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow hover:bg-emerald-700">
+                        <span>Browse {{ $location->name }} tours</span>
                         <span class="text-[11px]">→</span>
                     </a>
                     @elseif(isset($activeCities) && $activeCities->count() >= 1)
@@ -413,8 +413,8 @@
                             <a href="{{ route('home') }}#how-it-works" class="hover:text-emerald-700">How Greenbus works</a>
                         </li>
                         <li>
-                            @if(isset($city))
-                            <a href="{{ route('tours.index', $city) }}" class="hover:text-emerald-700">All {{ $city->name }} tours</a>
+                            @if(isset($location))
+                            <a href="{{ route('tours.index', $location) }}" class="hover:text-emerald-700">All {{ $location->name }} tours</a>
                             @elseif(isset($activeCities) && $activeCities->count() >= 1)
                             <a href="{{ route('tours.index', $activeCities->first()) }}" class="hover:text-emerald-700">All {{ $activeCities->first()->name }} tours</a>
                             @else
@@ -525,7 +525,7 @@
         </div>
         <div class="border-t bg-slate-50/80">
             <div class="max-w-6xl mx-auto flex flex-col items-center justify-between gap-3 px-4 py-4 text-xs text-slate-500 sm:flex-row">
-                <p>&copy; {{ date('Y') }} Greenbus City Tours. All rights reserved.</p>
+                <p>&copy; {{ date('Y') }} Greenbus Location Tours. All rights reserved.</p>
                 <div class="flex items-center gap-4">
                     <a href="#contact" class="hover:text-emerald-700">Contact</a>
                     <span class="h-3 w-px bg-slate-300"></span>
