@@ -6,17 +6,17 @@ use App\Enums\BookingStatus;
 use App\Events\BookingCreated;
 use App\Interfaces\BookingRepositoryInterface;
 use App\Models\Booking;
-use App\Models\City;
+use App\Models\Location;
 use App\Models\Tour;
 
 class BookingRepository implements BookingRepositoryInterface
 {
-    public function index(?City $city = null, ?Tour $tour = null, int $perPage = 15)
+    public function index(?Location $location = null, ?Tour $tour = null, int $perPage = 15)
     {
-        $query = Booking::query()->with(['tour', 'city']);
+        $query = Booking::query()->with(['tour', 'location']);
 
-        if ($city) {
-            $query->where('city_id', $city->id);
+        if ($location) {
+            $query->where('location_id', $location->id);
         }
 
         if ($tour) {
@@ -28,12 +28,12 @@ class BookingRepository implements BookingRepositoryInterface
 
     public function get(Booking $booking): Booking
     {
-        return $booking->load(['tour', 'city', 'payment']);
+        return $booking->load(['tour', 'location', 'payment']);
     }
 
-    public function store(City $city, Tour $tour, array $data): Booking
+    public function store(Location $location, Tour $tour, array $data): Booking
     {
-        if ($tour->city_id !== $city->id) {
+        if ($tour->location_id !== $location->id) {
             abort(404);
         }
 
@@ -46,7 +46,7 @@ class BookingRepository implements BookingRepositoryInterface
 
         $booking = Booking::create([
             'tour_id' => $tour->id,
-            'city_id' => $city->id,
+            'location_id' => $location->id,
             'reference' => strtoupper(uniqid('GB')),
             'date' => $data['date'],
             'time' => $data['time'] ?? null,

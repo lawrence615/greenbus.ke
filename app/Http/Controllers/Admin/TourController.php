@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tour\StoreRequest;
 use App\Http\Requests\Tour\UpdateRequest;
-use App\Interfaces\CityRepositoryInterface;
+use App\Interfaces\LocationRepositoryInterface;
 use App\Interfaces\TourCategoryRepositoryInterface;
 use App\Interfaces\TourRepositoryInterface;
 use App\Models\Tour;
@@ -17,27 +17,27 @@ class TourController extends Controller
 {
     public function __construct(
         protected TourRepositoryInterface $tourRepository,
-        protected CityRepositoryInterface $cityRepository,
+        protected LocationRepositoryInterface $cityRepository,
         protected TourCategoryRepositoryInterface $categoryRepository,
         protected TourImageService $imageService
     ) {}
 
     public function index(Request $request)
     {
-        $filters = $request->only(['search', 'city_id', 'status', 'category_id']);
+        $filters = $request->only(['search', 'location_id', 'status', 'category_id']);
         $tours = $this->tourRepository->adminIndex($filters);
-        $cities = $this->cityRepository->getAll();
+        $locations = $this->cityRepository->getAll();
         $categories = $this->categoryRepository->getAll();
 
-        return view('admin.tours.index', compact('tours', 'cities', 'categories'));
+        return view('admin.tours.index', compact('tours', 'locations', 'categories'));
     }
 
     public function create()
     {
-        $cities = $this->cityRepository->getAll();
+        $locations = $this->cityRepository->getAll();
         $categories = $this->categoryRepository->getAll();
 
-        return view('admin.tours.create', compact('cities', 'categories'));
+        return view('admin.tours.create', compact('locations', 'categories'));
     }
 
     public function store(StoreRequest $request)
@@ -89,10 +89,10 @@ class TourController extends Controller
     public function edit(Tour $tour)
     {
         $tour = $this->tourRepository->find($tour->id);
-        $cities = $this->cityRepository->getAll();
+        $locations = $this->cityRepository->getAll();
         $categories = $this->categoryRepository->getAll();
 
-        return view('admin.tours.edit', compact('tour', 'cities', 'categories'));
+        return view('admin.tours.edit', compact('tour', 'locations', 'categories'));
     }
 
     public function update(UpdateRequest $request, Tour $tour)

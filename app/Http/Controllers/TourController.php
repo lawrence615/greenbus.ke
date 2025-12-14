@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\View\View;
 
-use App\Models\City;
+use App\Models\Location;
 use App\Models\Tour;
 use App\Interfaces\TourRepositoryInterface;
 
@@ -16,24 +16,24 @@ class TourController extends Controller
     ) {
     }
 
-    public function index(City $city): View
+    public function index(Location $location): View
     {
         $search = request('q');
 
-        $tours = $this->tourRepository->index($city, 12, $search);
+        $tours = $this->tourRepository->index($location, 12, $search);
 
         return view('tours.index', [
-            'city' => $city,
+            'location' => $location,
             'tours' => $tours,
         ]);
     }
 
-    public function show(City $city, Tour $tour): View
+    public function show(Location $location, Tour $tour): View
     {
-        $tour = $this->tourRepository->get($city, $tour);
+        $tour = $this->tourRepository->get($location, $tour);
 
         return view('tours.show', [
-            'city' => $city,
+            'location' => $location,
             'tour' => $tour,
         ]);
     }

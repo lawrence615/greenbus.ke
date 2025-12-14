@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-use App\Interfaces\CityRepositoryInterface;
-use App\Repositories\CityRepository;
+use App\Interfaces\LocationRepositoryInterface;
+use App\Repositories\LocationRepository;
 use App\Interfaces\TourRepositoryInterface;
 use App\Repositories\TourRepository;
 use App\Interfaces\BookingRepositoryInterface;
@@ -26,7 +26,7 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(CityRepositoryInterface::class, CityRepository::class);
+        $this->app->bind(LocationRepositoryInterface::class, LocationRepository::class);
         $this->app->bind(TourRepositoryInterface::class, TourRepository::class);
         $this->app->bind(BookingRepositoryInterface::class, BookingRepository::class);
         $this->app->bind(TestimonialRepositoryInterface::class, TestimonialRepository::class);

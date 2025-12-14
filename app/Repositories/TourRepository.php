@@ -3,16 +3,16 @@
 namespace App\Repositories;
 
 use App\Interfaces\TourRepositoryInterface;
-use App\Models\City;
+use App\Models\Location;
 use App\Models\Tour;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
 class TourRepository implements TourRepositoryInterface
 {
-    public function index(City $city, int $perPage = 12, ?string $search = null)
+    public function index(Location $location, int $perPage = 12, ?string $search = null)
     {
-        $query = $city->tours()
+        $query = $location->tours()
             ->where('status', 'published')
             ->with(['images', 'category']);
 
@@ -26,9 +26,9 @@ class TourRepository implements TourRepositoryInterface
         return $query->paginate($perPage);
     }
 
-    public function get(City $city, Tour $tour)
+    public function get(Location $location, Tour $tour)
     {
-        if ($tour->city_id !== $city->id || $tour->status !== 'published') {
+        if ($tour->location_id !== $location->id || $tour->status !== 'published') {
             abort(404);
         }
 
@@ -37,7 +37,7 @@ class TourRepository implements TourRepositoryInterface
 
     public function adminIndex(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $query = Tour::with(['city', 'category', 'images'])->latest();
+        $query = Tour::with(['location', 'category', 'images'])->latest();
 
         if (!empty($filters['search'])) {
             $search = $filters['search'];
@@ -47,8 +47,8 @@ class TourRepository implements TourRepositoryInterface
             });
         }
 
-        if (!empty($filters['city_id'])) {
-            $query->where('city_id', $filters['city_id']);
+        if (!empty($filters['location_id'])) {
+            $query->where('location_id', $filters['location_id']);
         }
 
         if (!empty($filters['status'])) {
@@ -64,7 +64,7 @@ class TourRepository implements TourRepositoryInterface
 
     public function find(int $id): ?Tour
     {
-        return Tour::with(['city', 'category', 'images', 'itineraryItems'])->find($id);
+        return Tour::with(['location', 'category', 'images', 'itineraryItems'])->find($id);
     }
 
     public function store(array $data): Tour
@@ -96,7 +96,7 @@ class TourRepository implements TourRepositoryInterface
         }
 
         $tour->update($data);
-        return $tour->fresh(['city', 'category', 'images']);
+        return $tour->fresh(['location', 'category', 'images']);
     }
 
     public function delete(Tour $tour): void

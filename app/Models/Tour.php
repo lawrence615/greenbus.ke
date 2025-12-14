@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\City;
+use App\Models\Location;
 use App\Models\TourImage;
 use App\Models\Booking;
 use App\Models\TourCategory;
@@ -15,7 +15,7 @@ use App\Models\Testimonial;
 class Tour extends Model
 {
     protected $fillable = [
-        'city_id',
+        'location_id',
         'tour_category_id',
         'code',
         'title',
@@ -44,22 +44,22 @@ class Tour extends Model
     {
         static::creating(function (Tour $tour) {
             if (empty($tour->code)) {
-                $tour->code = static::generateCode($tour->city_id);
+                $tour->code = static::generateCode($tour->location_id);
             }
         });
     }
 
     /**
-     * Generate a unique tour code based on city.
-     * Format: {CITY_CODE}-{NUMBER} e.g. NRB-001, MBS-002
+     * Generate a unique tour code based on location.
+     * Format: {LOCATION_CODE}-{NUMBER} e.g. NRB-001, MMA-002
      */
-    public static function generateCode(int $cityId): string
+    public static function generateCode(int $locationId): string
     {
-        $city = City::find($cityId);
-        $cityCode = $city?->code ?? 'TUR';
+        $location = Location::find($locationId);
+        $locationCode = $location?->code ?? 'LOC';
         
-        // Get the last tour number for this city
-        $lastTour = static::where('city_id', $cityId)
+        // Get the last tour number for this location
+        $lastTour = static::where('location_id', $locationId)
             ->whereNotNull('code')
             ->orderByRaw("CAST(SUBSTRING_INDEX(code, '-', -1) AS UNSIGNED) DESC")
             ->first();
@@ -70,12 +70,12 @@ class Tour extends Model
             $nextNumber = 1;
         }
         
-        return $cityCode . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+        return $locationCode . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
     }
 
-    public function city(): BelongsTo
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(Location::class);
     }
 
     public function category(): BelongsTo

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\CityRepositoryInterface;
+use App\Interfaces\LocationRepositoryInterface;
 use App\Interfaces\TestimonialRepositoryInterface;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     public function __construct(
-        private readonly CityRepositoryInterface $cityRepository,
+        private readonly LocationRepositoryInterface $cityRepository,
         private readonly TestimonialRepositoryInterface $testimonialRepository,
     ) {}
 
@@ -28,7 +28,7 @@ class HomeController extends Controller
         $testimonials = $this->testimonialRepository->getFeatured(6);
 
         return view('home', [
-            'city' => $defaultCity,
+            'location' => $defaultCity,
             'featuredTours' => $featuredTours,
             'hasMoreTours' => $totalFeaturedTours > $limit,
             'testimonials' => $testimonials,

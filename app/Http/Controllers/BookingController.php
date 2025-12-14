@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Enums\BookingStatus;
 use App\Interfaces\BookingRepositoryInterface;
 use App\Models\Booking;
-use App\Models\City;
+use App\Models\Location;
 use App\Models\Tour;
 use App\Services\Payment\PaymentService;
 use App\Http\Requests\Booking\StoreRequest;
@@ -19,25 +19,25 @@ class BookingController extends Controller
         private readonly BookingRepositoryInterface $bookingRepository,
         private readonly PaymentService $paymentService,
     ) {}
-    public function create(City $city, Tour $tour): View
+    public function create(Location $location, Tour $tour): View
     {
-        if ($tour->city_id !== $city->id) {
+        if ($tour->location_id !== $location->id) {
             abort(404);
         }
 
         return view('bookings.create', [
-            'city' => $city,
+            'location' => $location,
             'tour' => $tour,
         ]);
     }
 
-    public function store(StoreRequest $request, City $city, Tour $tour): RedirectResponse
+    public function store(StoreRequest $request, Location $location, Tour $tour): RedirectResponse
     {
         try {
             $validated = $request->validated();
 
             // Create booking with pending_payment status
-            $booking = $this->bookingRepository->store($city, $tour, $validated);
+            $booking = $this->bookingRepository->store($location, $tour, $validated);
 
             // Initiate payment and redirect to Stripe Checkout
             $successUrl = route('bookings.success', ['booking' => $booking->reference]);
@@ -60,7 +60,7 @@ class BookingController extends Controller
     public function success(string $booking): View|RedirectResponse
     {
         $booking = Booking::where('reference', $booking)
-            ->with(['tour', 'city', 'payment'])
+            ->with(['tour', 'location', 'payment'])
             ->firstOrFail();
 
         // Flutterwave appends status and tx_ref to the redirect URL
@@ -95,7 +95,7 @@ class BookingController extends Controller
     public function cancel(string $booking): View
     {
         $booking = Booking::where('reference', $booking)
-            ->with(['tour', 'city'])
+            ->with(['tour', 'location'])
             ->firstOrFail();
 
         return view('bookings.cancel', [
