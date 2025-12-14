@@ -114,4 +114,109 @@ class Tour extends Model
     {
         return $this->coverImage()?->url;
     }
+
+    /**
+     * Check if tour is available for a specific date and time
+     */
+    public function isAvailable(string $date, string $time): bool
+    {
+        $bookedParticipants = $this->bookings()
+            ->where('tour_date', $date)
+            ->where('start_time', $time)
+            ->whereIn('status', ['confirmed', 'pending'])
+            ->sum('number_of_participants');
+
+        return $bookedParticipants < $this->no_of_people;
+    }
+
+    /**
+     * Get available slots for a specific date
+     */
+    public function getAvailableSlots(string $date): array
+    {
+        $availableSlots = [];
+        $times = ['09:00', '17:00']; // Fixed start times
+
+        foreach ($times as $time) {
+            $bookedParticipants = $this->bookings()
+                ->where('tour_date', $date)
+                ->where('start_time', $time)
+                ->whereIn('status', ['confirmed', 'pending'])
+                ->sum('number_of_participants');
+
+            $availableSpots = $this->no_of_people - $bookedParticipants;
+            
+            $availableSlots[] = [
+                'time' => $time,
+                'time_display' => $time === '09:00' ? '9:00 AM' : '5:00 PM',
+                'booked_participants' => $bookedParticipants,
+                'available_spots' => max(0, $availableSpots),
+                'max_capacity' => $this->no_of_people,
+                'is_available' => $availableSpots > 0,
+                'is_full' => $availableSpots <= 0
+            ];
+        }
+
+        return $availableSlots;
+    }
+
+    /**
+     * Get remaining capacity for a specific date and time
+     */
+    public function getRemainingCapacity(string $date, string $time): int
+    {
+        $bookedParticipants = $this->bookings()
+            ->where('tour_date', $date)
+            ->where('start_time', $time)
+            ->whereIn('status', ['confirmed', 'pending'])
+            ->sum('number_of_participants');
+
+        return max(0, $this->no_of_people - $bookedParticipants);
+    }
+
+    /**
+     * Check if tour is fully booked for a specific date and time
+     */
+    public function isFullyBooked(string $date, string $time): bool
+    {
+        return !$this->isAvailable($date, $time);
+    }
+
+    /**
+     * Get booking statistics for a date range
+     */
+    public function getBookingStats(string $startDate, string $endDate): array
+    {
+        $bookings = $this->bookings()
+            ->whereBetween('tour_date', [$startDate, $endDate])
+            ->whereIn('status', ['confirmed', 'pending'])
+            ->get();
+
+        $stats = [
+            'total_bookings' => $bookings->count(),
+            'total_participants' => $bookings->sum('number_of_participants'),
+            'max_capacity_per_slot' => $this->no_of_people,
+            'total_possible_slots' => 0, // Will be calculated based on dates
+            'utilization_rate' => 0
+        ];
+
+        // Calculate total possible slots and utilization
+        $period = new \DatePeriod(
+            new \DateTime($startDate),
+            new \DateInterval('P1D'),
+            new \DateTime($endDate . ' +1 day')
+        );
+
+        $totalPossibleCapacity = 0;
+        foreach ($period as $date) {
+            $totalPossibleCapacity += $this->no_of_people * 2; // 2 time slots per day
+        }
+
+        $stats['total_possible_slots'] = $totalPossibleCapacity;
+        if ($totalPossibleCapacity > 0) {
+            $stats['utilization_rate'] = round(($stats['total_participants'] / $totalPossibleCapacity) * 100, 2);
+        }
+
+        return $stats;
+    }
 }
