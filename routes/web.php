@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CityController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\TourController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -95,8 +95,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('console')->name('console.')->
 });
 
 // Booking routes
-Route::get('/book/{city:slug}/{tour:slug}', [BookingController::class, 'create'])->name('bookings.create');
-Route::post('/book/{city:slug}/{tour:slug}', [BookingController::class, 'store'])->name('bookings.store');
+Route::get('/book/{location:slug}/{tour:slug}', [BookingController::class, 'create'])->name('bookings.create');
+Route::post('/book/{location:slug}/{tour:slug}', [BookingController::class, 'store'])->name('bookings.store');
 Route::get('/booking/{booking}/success', [BookingController::class, 'success'])->name('bookings.success');
 Route::get('/booking/{booking}/cancelled', [BookingController::class, 'cancel'])->name('bookings.cancel');
 Route::get('/booking/{booking}/retry', [BookingController::class, 'retryPayment'])->name('bookings.retry');
@@ -104,7 +104,7 @@ Route::get('/booking/{booking}/retry', [BookingController::class, 'retryPayment'
 // Public FAQs
 Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
 
-// City/Tour routes (must be last - catches /{slug} patterns)
-Route::get('/{city:slug}', [CityController::class, 'show'])->name('cities.show');
-Route::get('/{city:slug}/tours', [TourController::class, 'index'])->name('tours.index');
-Route::get('/{city:slug}/tours/{tour:slug}', [TourController::class, 'show'])->name('tours.show');
+// Location/Tour routes (must be last - catches /{slug} patterns)
+Route::get('/{location:slug}', [LocationController::class, 'show'])->name('locations.show');
+Route::get('/{location:slug}/tours', [TourController::class, 'index'])->name('tours.index');
+Route::get('/{location:slug}/tours/{tour:slug}', [TourController::class, 'show'])->name('tours.show');
