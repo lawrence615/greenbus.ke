@@ -15,7 +15,7 @@ class BookingController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Booking::with(['tour', 'city', 'payment'])->latest();
+        $query = Booking::with(['tour', 'location', 'payment'])->latest();
 
         // Filter by status
         if ($request->filled('status')) {
@@ -54,7 +54,7 @@ class BookingController extends Controller
 
     public function show(Booking $booking)
     {
-        $booking->load(['tour', 'city', 'payment']);
+        $booking->load(['tour', 'location', 'payment']);
 
         return view('admin.bookings.show', compact('booking'));
     }

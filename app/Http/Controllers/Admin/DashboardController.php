@@ -22,7 +22,7 @@ class DashboardController extends Controller
             'total_users' => User::count(),
         ];
 
-        $recentBookings = Booking::with(['tour', 'city', 'payment'])
+        $recentBookings = Booking::with(['tour', 'location', 'payment'])
             ->latest()
             ->take(5)
             ->get();

@@ -58,16 +58,33 @@
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        Tour
+                        Tours
                     </label>
-                    <select name="tour_id" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none cursor-pointer">
-                        <option value="">All Tours</option>
-                        @foreach($tours as $tour)
-                        <option value="{{ $tour->id }}" {{ request('tour_id') == $tour->id ? 'selected' : '' }}>
-                            {{ $tour->name }}
-                        </option>
-                        @endforeach
-                    </select>
+                    <div class="relative">
+                        <button type="button" onclick="toggleTourDropdown()" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none cursor-pointer text-left flex items-center justify-between">
+                            <span id="tour-selected-text">All Tours</span>
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        
+                        <div id="tour-dropdown" class="hidden absolute z-10 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                            <div class="p-2 border-b border-slate-200">
+                                <label class="flex items-center gap-2 text-sm text-slate-700 cursor-pointer hover:bg-slate-50 p-1 rounded">
+                                    <input type="checkbox" name="tour_ids[]" value="" onchange="updateTourSelection()" class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                    <span>All Tours</span>
+                                </label>
+                            </div>
+                            @foreach($tours as $tour)
+                            <label class="flex items-center gap-2 text-sm text-slate-700 cursor-pointer hover:bg-slate-50 p-2">
+                                <input type="checkbox" name="tour_ids[]" value="{{ $tour->id }}" onchange="updateTourSelection()" 
+                                    {{ in_array($tour->id, request('tour_ids', [])) ? 'checked' : '' }}
+                                    class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                                <span>{{ $tour->title }}</span>
+                            </label>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Date From -->
@@ -304,4 +321,67 @@
         @endif
     </div>
 </div>
+
+<script>
+function toggleTourDropdown() {
+    const dropdown = document.getElementById('tour-dropdown');
+    dropdown.classList.toggle('hidden');
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function closeDropdown(e) {
+        if (!e.target.closest('#tour-dropdown') && !e.target.closest('button[onclick="toggleTourDropdown()"]')) {
+            dropdown.classList.add('hidden');
+            document.removeEventListener('click', closeDropdown);
+        }
+    });
+}
+
+function updateTourSelection() {
+    const checkboxes = document.querySelectorAll('input[name="tour_ids[]"]');
+    const selectedText = document.getElementById('tour-selected-text');
+    const allCheckbox = document.querySelector('input[name="tour_ids[]"][value=""]');
+    
+    let checkedCount = 0;
+    let totalCount = 0;
+    
+    checkboxes.forEach(checkbox => {
+        if (checkbox.value !== '') {
+            totalCount++;
+            if (checkbox.checked) {
+                checkedCount++;
+            }
+        }
+    });
+    
+    // Handle "All Tours" checkbox
+    if (allCheckbox.checked) {
+        // Uncheck all individual tours when "All Tours" is checked
+        checkboxes.forEach(checkbox => {
+            if (checkbox.value !== '') {
+                checkbox.checked = false;
+            }
+        });
+        selectedText.textContent = 'All Tours';
+    } else if (checkedCount === 0) {
+        selectedText.textContent = 'All Tours';
+    } else if (checkedCount === 1) {
+        // Show the selected tour name
+        const checked = Array.from(checkboxes).find(cb => cb.checked && cb.value !== '');
+        if (checked) {
+            const label = checked.closest('label').querySelector('span').textContent;
+            selectedText.textContent = label;
+        }
+    } else {
+        selectedText.textContent = `${checkedCount} tours selected`;
+    }
+    
+    // Auto-submit form when selection changes (optional)
+    // document.querySelector('form').submit();
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateTourSelection();
+});
+</script>
 @endsection

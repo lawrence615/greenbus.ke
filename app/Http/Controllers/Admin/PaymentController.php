@@ -11,7 +11,7 @@ class PaymentController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Payment::with(['booking.tour', 'booking.city'])->latest();
+        $query = Payment::with(['booking.tour', 'booking.location'])->latest();
 
         // Filter by status
         if ($request->filled('status')) {
@@ -56,7 +56,7 @@ class PaymentController extends Controller
 
     public function show(Payment $payment)
     {
-        $payment->load(['booking.tour', 'booking.city']);
+        $payment->load(['booking.tour', 'booking.location']);
 
         return view('admin.payments.show', compact('payment'));
     }
