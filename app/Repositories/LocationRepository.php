@@ -2,15 +2,16 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\CityRepositoryInterface;
-use App\Models\City;
 use Illuminate\Support\Collection;
 
-class CityRepository implements CityRepositoryInterface
+use App\Interfaces\LocationRepositoryInterface;
+use App\Models\Location;
+
+class LocationRepository implements LocationRepositoryInterface
 {
     public function index(int $perPage = 15, ?bool $onlyActive = null)
     {
-        $query = City::query();
+        $query = Location::query();
 
         if ($onlyActive !== null) {
             $query->where('is_active', $onlyActive);
@@ -21,12 +22,12 @@ class CityRepository implements CityRepositoryInterface
 
     public function getAll(): Collection
     {
-        return City::orderBy('name')->get();
+        return Location::orderBy('name')->get();
     }
 
-    public function getBySlug(string $slug, bool $onlyActive = true): ?City
+    public function getBySlug(string $slug, bool $onlyActive = true): ?Location
     {
-        $query = City::where('slug', $slug);
+        $query = Location::where('slug', $slug);
 
         if ($onlyActive) {
             $query->where('is_active', true);
@@ -35,24 +36,24 @@ class CityRepository implements CityRepositoryInterface
         return $query->first();
     }
 
-    public function getDefaultCity(): ?City
+    public function getDefaultCity(): ?Location
     {
         return $this->getBySlug('nairobi', true);
     }
 
-    public function getFeaturedToursForCity(City $city, int $limit = 6)
+    public function getFeaturedToursForCity(Location $location, int $limit = 6)
     {
-        return $city->tours()
-            ->with('city')
+        return $location->tours()
+            ->with('location')
             ->where('featured', true)
             ->where('status', 'published')
             ->take($limit)
             ->get();
     }
 
-    public function countFeaturedToursForCity(City $city): int
+    public function countFeaturedToursForCity(Location $location): int
     {
-        return $city->tours()
+        return $location->tours()
             ->where('featured', true)
             ->where('status', 'published')
             ->count();
