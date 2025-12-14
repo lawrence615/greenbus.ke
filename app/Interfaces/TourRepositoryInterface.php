@@ -2,15 +2,15 @@
 
 namespace App\Interfaces;
 
-use App\Models\City;
+use App\Models\Location;
 use App\Models\Tour;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface TourRepositoryInterface
 {
-    public function index(City $city, int $perPage = 12, ?string $search = null);
+    public function index(Location $location, int $perPage = 12, ?string $search = null);
     
-    public function get(City $city, Tour $tour);
+    public function get(Location $location, Tour $tour);
 
     /**
      * Get all tours for admin with filters
