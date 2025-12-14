@@ -351,8 +351,12 @@
                                 </span>
                                 Group Size
                             </label>
-                            <input type="number" name="no_of_people" id="no_of_people" value="{{ old('no_of_people') }}" placeholder="e.g. 25" min="1" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                            <p class="text-xs text-slate-500">Maximum participants</p>
+                            <select name="no_of_people" id="no_of_people" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                                <option value="">Select group size</option>
+                                <option value="3" {{ old('no_of_people') == '3' ? 'selected' : '' }}>1–3 participants</option>
+                                <option value="8" {{ old('no_of_people') == '8' ? 'selected' : '' }}>4–8 participants</option>
+                            </select>
+                            <p class="text-xs text-slate-500">This value determines tour capacity and booking availability</p>
                             @error('no_of_people')
                             <p class="text-sm text-red-600 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
@@ -371,7 +375,11 @@
                                 </span>
                                 Start Time
                             </label>
-                            <input type="time" name="starts_at_time" id="starts_at_time" value="{{ old('starts_at_time') }}" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                            <select name="starts_at_time" id="starts_at_time" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                                <option value="">Select start time</option>
+                                <option value="09:00" {{ old('starts_at_time') == '09:00' ? 'selected' : '' }}>9:00 AM</option>
+                                <option value="17:00" {{ old('starts_at_time') == '17:00' ? 'selected' : '' }}>5:00 PM</option>
+                            </select>
                             @error('starts_at_time')
                             <p class="text-sm text-red-600 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
@@ -390,10 +398,15 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
                                 </span>
-                                Booking Deadline
+                                Cut-off Time
                             </label>
-                            <input type="text" name="cut_off_time" id="cut_off_time" value="{{ old('cut_off_time') }}" placeholder="e.g. 24 hours, 2 days" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
-                            <p class="text-xs text-slate-500">How early customers must book</p>
+                            <select name="cut_off_time" id="cut_off_time" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                                <option value="">Select cut-off time</option>
+                                <option value="10" {{ old('cut_off_time') == '10' ? 'selected' : '' }}>10 minutes</option>
+                                <option value="15" {{ old('cut_off_time') == '15' ? 'selected' : '' }}>15 minutes</option>
+                                <option value="30" {{ old('cut_off_time') == '30' ? 'selected' : '' }}>30 minutes</option>
+                            </select>
+                            <p class="text-xs text-slate-500">Latest time participants must arrive before the tour begins</p>
                             @error('cut_off_time')
                             <p class="text-sm text-red-600 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
@@ -413,7 +426,8 @@
                                 </span>
                                 Meeting Point
                             </label>
-                            <input type="text" name="meeting_point" id="meeting_point" value="{{ old('meeting_point') }}" placeholder="e.g. Hotel lobby, Central station" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                            <input type="text" name="meeting_point" id="meeting_point" value="CJ's Koinange" readonly class="w-full rounded-lg border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-600 shadow-sm">
+                            <p class="text-xs text-slate-500">Fixed meeting location for all tours</p>
                             @error('meeting_point')
                             <p class="text-sm text-red-600 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
