@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\City;
+use App\Models\Location;
 use Illuminate\View\View;
 
-class CityController extends Controller
+class LocationController extends Controller
 {
-    public function show(City $city): View
+    public function show(Location $location): View
     {
-        $tours = $city->tours()
+        $tours = $location->tours()
             ->where('status', 'published')
             ->with(['images', 'category'])
             ->paginate(12);
 
-        return view('cities.show', [
-            'city' => $city,
+        return view('locations.show', [
+            'location' => $location,
             'tours' => $tours,
         ]);
     }
