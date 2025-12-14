@@ -64,7 +64,7 @@
                 </div>
                 <div class="flex justify-between">
                     <dt class="text-slate-600">Location</dt>
-                    <dd class="font-medium text-slate-900">{{ $booking->city->name }}</dd>
+                    <dd class="font-medium text-slate-900">{{ $booking->location->name }}</dd>
                 </div>
                 <div class="flex justify-between">
                     <dt class="text-slate-600">Date</dt>
@@ -142,7 +142,7 @@
                class="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700">
                 Explore More Tours
             </a>
-            <a href="{{ route('tours.show', [$booking->city, $booking->tour]) }}" 
+            <a href="{{ route('tours.show', [$booking->location, $booking->tour]) }}" 
                class="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50">
                 View Tour Details
             </a>

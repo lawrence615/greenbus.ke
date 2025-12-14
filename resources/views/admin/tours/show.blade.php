@@ -76,7 +76,7 @@
                     <div class="flex items-start justify-between">
                         <div>
                             <h1 class="text-2xl font-bold text-slate-900">{{ $tour->title }}</h1>
-                            <p class="text-slate-500 mt-1">{{ $tour->city->name ?? 'N/A' }}</p>
+                            <p class="text-slate-500 mt-1">{{ $tour->location->name ?? 'N/A' }}</p>
                         </div>
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
                             {{ $tour->status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }}">

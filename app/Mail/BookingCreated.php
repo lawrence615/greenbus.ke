@@ -15,7 +15,7 @@ class BookingCreated extends Mailable implements ShouldQueue
 
     public function __construct(public Booking $booking)
     {
-        $this->booking->loadMissing(['tour.city']);
+        $this->booking->loadMissing(['tour.location']);
     }
 
     public function build(): self

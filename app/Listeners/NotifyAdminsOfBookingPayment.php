@@ -23,7 +23,7 @@ class NotifyAdminsOfBookingPayment implements ShouldQueue
         }
 
         // Load booking relationships for the notification
-        $event->booking->loadMissing(['tour', 'city']);
+        $event->booking->loadMissing(['tour', 'location']);
 
         // Send notification to all admins and managers
         Notification::send($admins, new BookingPaidNotification($event->booking, $event->payment));

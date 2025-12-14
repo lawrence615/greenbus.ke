@@ -24,7 +24,7 @@ class DashboardController extends Controller
                 ->count(),
         ];
 
-        $upcomingBookings = Booking::with(['tour', 'city'])
+        $upcomingBookings = Booking::with(['tour', 'location'])
             ->where('customer_email', $user->email)
             ->where('status', BookingStatus::CONFIRMED->value)
             ->where('date', '>=', now()->toDateString())

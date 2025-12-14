@@ -78,7 +78,7 @@
                 </svg>
                 Try Payment Again
             </a>
-            <a href="{{ route('tours.show', [$booking->city, $booking->tour]) }}" 
+            <a href="{{ route('tours.show', [$booking->location, $booking->tour]) }}" 
                class="inline-flex items-center justify-center px-6 py-2.5 rounded-full border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50">
                 View Tour Details
             </a>

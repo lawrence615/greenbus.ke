@@ -13,7 +13,7 @@ class BookingController extends Controller
     {
         $user = auth()->user();
 
-        $query = Booking::with(['tour', 'city', 'payment'])
+        $query = Booking::with(['tour', 'location', 'payment'])
             ->where('customer_email', $user->email)
             ->latest();
 
@@ -37,7 +37,7 @@ class BookingController extends Controller
             abort(403);
         }
 
-        $booking->load(['tour', 'city', 'payment']);
+        $booking->load(['tour', 'location', 'payment']);
 
         return view('customer.bookings.show', compact('booking'));
     }

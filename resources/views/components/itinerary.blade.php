@@ -1,9 +1,9 @@
-@props(['items', 'city'])
+@props(['items', 'location'])
 
 <section class="border border-slate-100 rounded-xl bg-white/60 p-4">
     <h2 class="text-base font-semibold mb-3">Itinerary</h2>
     <p class="text-xs sm:text-sm text-slate-600 mb-4">
-        Times and exact order may vary slightly depending on traffic and opening hours, but a typical route for this {{ strtolower($city->name) }} city tour looks like this:
+        Times and exact order may vary slightly depending on traffic and opening hours, but a typical route for this {{ strtolower($location->name) }} location tour looks like this:
     </p>
 
     <div>

@@ -7,7 +7,7 @@
     code="404"
     badge="Page not found"
     title="We couldn't find that page"
-    description="The link you followed might be broken, expired, or the tour is no longer available. You can go back to the homepage or explore our Nairobi city tours."
+    description="The link you followed might be broken, expired, or the tour is no longer available. You can go back to the homepage or explore our Nairobi location tours."
     iconBgClass="bg-emerald-50 text-emerald-700"
     badgeBgClass="bg-emerald-50 text-emerald-700"
     badgeCircleClass="bg-emerald-600 text-white"
@@ -22,7 +22,7 @@
 
     <x-slot:actions>
         <x-back-home-button />
-        <a href="{{ route('tours.index', ['city' => 'nairobi']) }}" class="inline-flex items-center justify-center px-5 py-3 rounded-full border border-emerald-200 text-sm font-semibold text-emerald-800 bg-white hover:bg-emerald-50">
+        <a href="{{ route('tours.index', ['location' => 'nairobi']) }}" class="inline-flex items-center justify-center px-5 py-3 rounded-full border border-emerald-200 text-sm font-semibold text-emerald-800 bg-white hover:bg-emerald-50">
             Browse Nairobi tours
         </a>
     </x-slot:actions>

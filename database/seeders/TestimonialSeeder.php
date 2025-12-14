@@ -61,7 +61,7 @@ class TestimonialSeeder extends Seeder
                 'author_date' => '2025-11-19',
                 'author_cover' => '',
                 'tour_name' => '',
-                'content' => 'My wife and I joined the walking tour with Jeff and it was an amazing experience. Jeff was friendly, knowledgeable and very enthusiastic throughout the tour. He explained everything clearly, shared interesting stories, and made the whole walk fun and engaging. I really appreciated how he always made sure we were comfortable and had enough time to enjoy each spot Overall, Jeff made the tour memorable and I would definitely recommend him to anyone visiting the city',
+                'content' => 'My wife and I joined the walking tour with Jeff and it was an amazing experience. Jeff was friendly, knowledgeable and very enthusiastic throughout the tour. He explained everything clearly, shared interesting stories, and made the whole walk fun and engaging. I really appreciated how he always made sure we were comfortable and had enough time to enjoy each spot Overall, Jeff made the tour memorable and I would definitely recommend him to anyone visiting the location',
                 'travel_type' => 'Couple',
                 'rating' => 5,
                 'is_active' => true,

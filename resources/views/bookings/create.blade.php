@@ -4,8 +4,8 @@
 
 @section('breadcrumb')
 <x-breadcrumb :items="[
-        ['label' => $city->name . ' tours', 'url' => route('tours.index', $city)],
-        ['label' => $tour->title, 'url' => route('tours.show', [$city, $tour])],
+        ['label' => $location->name . ' tours', 'url' => route('tours.index', $location)],
+        ['label' => $tour->title, 'url' => route('tours.show', [$location, $tour])],
         ['label' => 'Buy tickets'],
     ]" />
 @endsection
@@ -21,7 +21,7 @@
     <div class="grid gap-6 lg:grid-cols-3">
         {{-- Main form column --}}
         <div class="lg:col-span-2">
-            <form id="booking-form" method="POST" action="{{ route('bookings.store', [$city, $tour]) }}" class="space-y-5">
+            <form id="booking-form" method="POST" action="{{ route('bookings.store', [$location, $tour]) }}" class="space-y-5">
                 @csrf
 
                 {{-- Section 1: Tour Details --}}
@@ -230,7 +230,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                             Continue to Payment
                         </button>
-                        <a href="{{ route('tours.show', [$city, $tour]) }}" class="text-center text-sm text-slate-500 hover:text-slate-700">
+                        <a href="{{ route('tours.show', [$location, $tour]) }}" class="text-center text-sm text-slate-500 hover:text-slate-700">
                             Cancel and go back
                         </a>
                     </div>
@@ -259,7 +259,7 @@
                     @endif
                     <div class="p-4">
                         <h3 class="font-semibold text-slate-900 leading-tight">{{ $tour->title }}</h3>
-                        <p class="text-xs text-slate-500 mt-1">{{ $city->name }}</p>
+                        <p class="text-xs text-slate-500 mt-1">{{ $location->name }}</p>
                         <div class="flex items-center gap-3 mt-3 text-xs text-slate-600">
                             <span class="inline-flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -306,7 +306,7 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                         Continue to Payment
                     </button>
-                    <a href="{{ route('tours.show', [$city, $tour]) }}" class="block text-center text-sm text-slate-500 hover:text-slate-700">
+                    <a href="{{ route('tours.show', [$location, $tour]) }}" class="block text-center text-sm text-slate-500 hover:text-slate-700">
                         Cancel and go back
                     </a>
                     <p class="text-xs text-slate-500 text-center">

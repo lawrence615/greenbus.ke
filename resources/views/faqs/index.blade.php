@@ -8,7 +8,7 @@
         <p class="text-xs uppercase tracking-wide text-emerald-700 mb-1">Help & support</p>
         <h1 class="text-2xl md:text-3xl font-semibold mb-2">Frequently asked questions</h1>
         <p class="text-sm text-slate-600 max-w-2xl">
-            Answers to common questions about Greenbus City Tours, tickets, cancellations and what to expect on your tour.
+            Answers to common questions about Greenbus Location Tours, tickets, cancellations and what to expect on your tour.
         </p>
     </div>
 

@@ -68,7 +68,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="font-medium text-slate-900">{{ $booking->tour->name }}</p>
-                        <p class="text-sm text-slate-500">{{ $booking->city->name ?? 'N/A' }}</p>
+                        <p class="text-sm text-slate-500">{{ $booking->location->name ?? 'N/A' }}</p>
                     </div>
                     <div class="text-right">
                         <p class="font-medium text-slate-900">{{ $booking->date->format('M d, Y') }}</p>

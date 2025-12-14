@@ -1,5 +1,5 @@
 @php($tour = $booking->tour)
-@php($city = $booking->city)
+@php($location = $booking->location)
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,11 +19,11 @@
                                 <tr>
                                     <td style="vertical-align:middle;">
                                         <!-- <div style="display:inline-flex;align-items:center;gap:8px;">
-                                        <img src="{{ asset('images/logo.png') }}" alt="Greenbus City Tours" style="width:32px;height:32px;display:block;">
+                                        <img src="{{ asset('images/logo.png') }}" alt="Greenbus Location Tours" style="width:32px;height:32px;display:block;">
                                         <div>
-                                            <div style="font-weight:600;font-size:15px;">Greenbus City Tours</div>
-                                            @if($city)
-                                                <div style="font-size:11px;color:#047857;">{{ $city->name }}</div>
+                                            <div style="font-weight:600;font-size:15px;">Greenbus Location Tours</div>
+                                            @if($location)
+                                                <div style="font-size:11px;color:#047857;">{{ $location->name }}</div>
                                             @endif
                                         </div>
                                     </div> -->
@@ -31,12 +31,12 @@
                                         <div style="display:inline-flex;align-items:center;gap:8px;">
                                             <img
                                                 src="{{ asset('images/logo.png') }}"
-                                                alt="Greenbus City Tours"
+                                                alt="Greenbus Location Tours"
                                                 style="width:32px;height:32px;display:block;margin-top:2px;">
                                             <div>
-                                                <div style="font-weight:600;font-size:15px;">Greenbus City Tours</div>
-                                                @if($city)
-                                                <div style="font-size:11px;color:#047857;">{{ $city->name }}</div>
+                                                <div style="font-weight:600;font-size:15px;">Greenbus Location Tours</div>
+                                                @if($location)
+                                                <div style="font-size:11px;color:#047857;">{{ $location->name }}</div>
                                                 @endif
                                             </div>
                                         </div>
@@ -64,9 +64,9 @@
                                     <tr>
                                         <td style="vertical-align:top;padding-right:12px;">
                                             <div style="font-size:12px;color:#6b7280;margin-bottom:4px;">Tour</div>
-                                            <div style="font-size:14px;font-weight:600;">{{ $tour->title ?? 'Nairobi city tour' }}</div>
-                                            @if($city)
-                                            <div style="font-size:12px;color:#6b7280;margin-top:2px;">{{ $city->name }}</div>
+                                            <div style="font-size:14px;font-weight:600;">{{ $tour->title ?? 'Nairobi location tour' }}</div>
+                                            @if($location)
+                                            <div style="font-size:12px;color:#6b7280;margin-top:2px;">{{ $location->name }}</div>
                                             @endif
                                         </td>
                                         <td style="vertical-align:top;padding-left:12px;text-align:right;">
@@ -142,7 +142,7 @@
 
                     <tr>
                         <td style="padding:12px 24px 20px 24px;border-top:1px solid #e2e8f0;font-size:11px;color:#9ca3af;text-align:center;">
-                            &copy; {{ date('Y') }} Greenbus City Tours. Licensed local operator in Nairobi.
+                            &copy; {{ date('Y') }} Greenbus Location Tours. Licensed local operator in Nairobi.
                         </td>
                     </tr>
                 </table>

@@ -42,8 +42,8 @@
                         <p class="font-medium text-slate-900">{{ Str::limit($booking->tour->title, 120) }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-slate-500">City</p>
-                        <p class="font-medium text-slate-900">{{ $booking->city->name ?? 'N/A' }}</p>
+                        <p class="text-sm text-slate-500">Location</p>
+                        <p class="font-medium text-slate-900">{{ $booking->location->name ?? 'N/A' }}</p>
                     </div>
                     <div>
                         <p class="text-sm text-slate-500">Date</p>

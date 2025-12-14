@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Discover Nairobi with Greenbus City Tours')
+@section('title', 'Discover Nairobi with Greenbus Location Tours')
 
 @section('content')
 <section class="bg-gradient-to-br from-emerald-50 via-emerald-100 to-slate-50">
@@ -9,7 +9,7 @@
         <div>
             <span class="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-emerald-700 shadow-sm ring-1 ring-emerald-100">
                 <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                Nairobi city tours made simple
+                Nairobi location tours made simple
             </span>
 
             <h1 class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900">
@@ -20,12 +20,12 @@
             </h1>
 
             <p class="mt-4 text-sm sm:text-base text-slate-700 max-w-xl">
-                Join small-group or private city tours that blend must-see sights with local stories. Ride in a
+                Join small-group or private location tours that blend must-see sights with local stories. Ride in a
                 comfortable Greenbus, meet expert guides, and explore Nairobi at an easy, relaxed pace.
             </p>
 
             <div class="mt-6 flex flex-wrap items-center gap-3 justify-center sm:justify-start text-center sm:text-left">
-                <a href="{{ isset($city) ? route('tours.index', $city) : '#tours' }}" class="inline-flex items-center px-6 py-3 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow-md shadow-emerald-500/30 hover:bg-emerald-700">
+                <a href="{{ isset($location) ? route('tours.index', $location) : '#tours' }}" class="inline-flex items-center px-6 py-3 rounded-full bg-emerald-600 text-white text-sm font-semibold shadow-md shadow-emerald-500/30 hover:bg-emerald-700">
                     Browse Nairobi tours
                 </a>
                 <a href="#how-it-works" class="inline-flex items-center px-5 py-3 rounded-full bg-white/80 text-sm font-semibold text-slate-900 border border-slate-200 hover:bg-slate-50">
@@ -57,7 +57,7 @@
 
                     <!-- Front image card -->
                     <div class="absolute left-2 sm:left-6 bottom-2 sm:bottom-8 w-48 sm:w-60 h-60 sm:h-72 rounded-3xl overflow-hidden shadow-[0_22px_55px_rgba(15,23,42,0.75)] bg-slate-800/20 -rotate-1 origin-top-right">
-                        <img src="{{ asset('images/greenbus_ke_1.jpg') }}" alt="Greenbus city tour" class="w-full h-full object-cover">
+                        <img src="{{ asset('images/greenbus_ke_1.jpg') }}" alt="Greenbus location tour" class="w-full h-full object-cover">
                     </div>
                 </div>
             </div>
@@ -72,7 +72,7 @@
         <div class="grid gap-6 md:grid-cols-4 text-sm">
             <div class="bg-emerald-50 rounded-xl shadow-sm p-5 border border-emerald-100">
                 <p class="font-semibold mb-1">1. Choose your tour</p>
-                <p class="text-slate-600">Browse Nairobi city tours and pick the date that works best for you.</p>
+                <p class="text-slate-600">Browse Nairobi location tours and pick the date that works best for you.</p>
             </div>
             <div class="bg-white rounded-xl shadow-sm p-5 border border-slate-100">
                 <p class="font-semibold mb-1">2. Buy tickets online</p>
@@ -83,7 +83,7 @@
                 <p class="text-slate-600">Receive a confirmation email and PDF ticket with all the details.</p>
             </div>
             <div class="bg-emerald-50 rounded-xl shadow-sm p-5 border border-emerald-100">
-                <p class="font-semibold mb-1">4. Enjoy the city</p>
+                <p class="font-semibold mb-1">4. Enjoy the location</p>
                 <p class="text-slate-600">Meet your guide at the pickup point and discover Nairobi.</p>
             </div>
         </div>
@@ -93,8 +93,8 @@
 <section id="tours" class="max-w-6xl mx-auto px-4 pb-12 pt-10">
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-semibold">Featured Nairobi tours</h2>
-        @if ($hasMoreTours && isset($city))
-        <a href="{{ route('tours.index', $city) }}" class="text-sm text-emerald-700 hover:underline">View all Nairobi tours</a>
+        @if ($hasMoreTours && isset($location))
+        <a href="{{ route('tours.index', $location) }}" class="text-sm text-emerald-700 hover:underline">View all Nairobi tours</a>
         @endif
     </div>
 

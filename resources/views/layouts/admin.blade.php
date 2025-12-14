@@ -29,7 +29,7 @@
                     <span class="text-white font-semibold">Greenbus Admin</span>
                 </a> -->
                 <a href="{{ route('home') }}" class="flex items-center gap-3">
-                    <img src="{{ asset('images/logo.png') }}" alt="Greenbus City Tours" class="h-8 sm:h-8 w-auto"><span class="text-white font-semibold">Greenbus Admin</span>
+                    <img src="{{ asset('images/logo.png') }}" alt="Greenbus Location Tours" class="h-8 sm:h-8 w-auto"><span class="text-white font-semibold">Greenbus Admin</span>
                 </a>
                 <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-white">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

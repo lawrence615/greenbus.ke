@@ -1,5 +1,5 @@
 @php($tour = $booking->tour)
-@php($city = $booking->city)
+@php($location = $booking->location)
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,11 +30,11 @@
         <div class="row">
             <div class="col">
                 <div style="display:flex;align-items:flex-start;gap:8px;">
-                    <img src="{{ public_path('images/logo.png') }}" alt="Greenbus City Tours" style="height:28px;width:auto;display:block;">
+                    <img src="{{ public_path('images/logo.png') }}" alt="Greenbus Location Tours" style="height:28px;width:auto;display:block;">
                     <div>
-                        <div style="font-size:13px;font-weight:600;">Greenbus City Tours</div>
-                        @if($city)
-                            <div class="muted">{{ $city->name }}</div>
+                        <div style="font-size:13px;font-weight:600;">Greenbus Location Tours</div>
+                        @if($location)
+                            <div class="muted">{{ $location->name }}</div>
                         @endif
                     </div>
                 </div>
@@ -53,9 +53,9 @@
         <div class="mt-3 row">
             <div class="col">
                 <div class="label">Tour</div>
-                <div class="value">{{ $tour->title ?? 'Nairobi city tour' }}</div>
-                @if($city)
-                    <div class="muted mt-1">{{ $city->name }}</div>
+                <div class="value">{{ $tour->title ?? 'Nairobi location tour' }}</div>
+                @if($location)
+                    <div class="muted mt-1">{{ $location->name }}</div>
                 @endif
             </div>
             <div class="col" style="text-align:right;">
