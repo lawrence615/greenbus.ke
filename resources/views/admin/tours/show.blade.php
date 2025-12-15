@@ -310,14 +310,15 @@
                     class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer">
                     Cancel
                 </button>
-                <form method="POST" :action="`/console/tours/${selectedTour.slug}/toggle-status`"
+                <form method="POST" :action="selectedTour ? `/console/tours/${selectedTour.slug}/toggle-status` : '#'"
                     @submit="$event.preventDefault(); window.showLoading('Toggling tour status...', 'Updating Tour'); $el.submit();">
                     @csrf
                     @method('PATCH')
                     <button
                         type="submit"
+                        :disabled="!selectedTour"
                         :class="selectedAction === 'draft' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700'"
-                        class="px-4 py-2 text-sm font-medium text-white rounded-lg cursor-pointer">
+                        class="px-4 py-2 text-sm font-medium text-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
                         <span x-text="selectedAction === 'draft' ? 'Unpublish' : 'Publish'"></span>
                     </button>
                 </form>
