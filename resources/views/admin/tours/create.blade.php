@@ -44,7 +44,7 @@
 @endpush
 
 @section('content')
-<div class="max-w-4xl" x-data="multiStepTourForm()">
+<div class="max-w-4xl" x-data="multiStepTourForm()" x-init="console.log('🚀 Alpine.js initialized!')">    
     <!-- Back Link -->
     <div class="mb-6">
         <a href="{{ route('console.tours.index') }}" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">
@@ -108,7 +108,7 @@
                 <span class="text-xs font-medium text-slate-600 mt-2">Pricing</span>
             </div>
 
-            <!-- Step 4: Content -->
+            <!-- Step 4: Itinerary -->
             <div class="flex flex-col items-center relative">
                 <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-slate-300 bg-white"
                      :class="{
@@ -120,10 +120,10 @@
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
                 </div>
-                <span class="text-xs font-medium text-slate-600 mt-2">Content</span>
+                <span class="text-xs font-medium text-slate-600 mt-2">Itinerary</span>
             </div>
 
-            <!-- Step 5: Complete -->
+            <!-- Step 5: Content -->
             <div class="flex flex-col items-center relative">
                 <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-slate-300 bg-white"
                      :class="{
@@ -135,13 +135,40 @@
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
                 </div>
+                <span class="text-xs font-medium text-slate-600 mt-2">Content</span>
+            </div>
+
+            <!-- Step 6: Complete -->
+            <div class="flex flex-col items-center relative">
+                <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-slate-300 bg-white"
+                     :class="{
+                         'active': currentStep === 6,
+                         'completed': currentStep > 6
+                     }">
+                    <span x-show="currentStep <= 6">6</span>
+                    <svg x-show="currentStep > 6" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
                 <span class="text-xs font-medium text-slate-600 mt-2">Complete</span>
             </div>
         </div>
     </div>
 
-    <form method="POST" action="{{ route('console.tours.store') }}" @submit="handleFormSubmit" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('console.tours.store') }}" @submit="console.log('🔥 Form submit detected!'); handleFormSubmit($event)" enctype="multipart/form-data">
         @csrf
+        
+        <!-- General Error Messages -->
+        @if ($errors->any())
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <h3 class="text-sm font-medium text-red-800 mb-2">Please fix the following errors:</h3>
+                <ul class="text-sm text-red-700 space-y-1">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <!-- Step 1: Basic Information -->
         <div class="step-content" x-show="currentStep === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
@@ -191,7 +218,10 @@
                             </label>
                             <div id="short_description_editor" class="bg-white rounded-lg border border-slate-300"></div>
                             <input type="hidden" name="short_description" id="short_description" value="{{ old('short_description') }}">
-                            <p class="text-xs text-slate-500">Brief overview that appears in tour listings (required)</p>
+                            <div class="flex items-center justify-between mt-1">
+                                <p class="text-xs text-slate-500">Brief overview that appears in tour listings (required)</p>
+                                <p id="short_description_char_count" class="text-xs text-slate-500">0 / 250 characters</p>
+                            </div>
                             @error('short_description')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -281,13 +311,13 @@
                             
                             <!-- Dynamic Duration Input -->
                             <div x-show="durationType === 'hourly'">
-                                <select name="duration_text" id="duration_text_hourly" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" required>
+                                <select name="duration_text" id="duration_text_hourly" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
                                     <option value="">Select duration</option>
-                                    <option value="1 hour" @if(old('duration_text') === '1 hour') selected @endif>1 hour</option>
-                                    <option value="2 hours" @if(old('duration_text') === '2 hours') selected @endif>2 hours</option>
-                                    <option value="3 hours" @if(old('duration_text') === '3 hours') selected @endif>3 hours</option>
-                                    <option value="4 hours" @if(old('duration_text') === '4 hours') selected @endif>4 hours</option>
-                                    <option value="5 hours" @if(old('duration_text') === '5 hours') selected @endif>5 hours</option>
+                                    <option value="1" @if(old('duration_text') === '1') selected @endif>1 hour</option>
+                                    <option value="2" @if(old('duration_text') === '2') selected @endif>2 hours</option>
+                                    <option value="3" @if(old('duration_text') === '3') selected @endif>3 hours</option>
+                                    <option value="4" @if(old('duration_text') === '4') selected @endif>4 hours</option>
+                                    <option value="5" @if(old('duration_text') === '5') selected @endif>5 hours</option>
                                 </select>
                             </div>
                             
@@ -310,7 +340,7 @@
                             </div>
                             
                             <div x-show="!durationType">
-                                <input type="text" name="duration_text" id="duration_text_default" value="{{ old('duration_text') }}" placeholder="e.g. 4 hours, Full day" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" required>
+                                <input type="text" name="duration_text" id="duration_text_default" value="{{ old('duration_text') }}" placeholder="e.g. 4 hours, Full day" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
                             </div>
                             
                             @error('duration_text')
@@ -351,11 +381,33 @@
                                 </span>
                                 Group Size
                             </label>
-                            <select name="no_of_people" id="no_of_people" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
-                                <option value="">Select group size</option>
-                                <option value="3" {{ old('no_of_people') == '3' ? 'selected' : '' }}>1–3 participants</option>
-                                <option value="8" {{ old('no_of_people') == '8' ? 'selected' : '' }}>4–8 participants</option>
-                            </select>
+                            
+                            <!-- Group Size Selection -->
+                            <div class="space-y-3">
+                                <select name="group_size_type" id="group_size_type" onchange="toggleGroupSizeInput()" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                                    <option value="">Select group size</option>
+                                    <option value="3" {{ old('group_size_type') == '3' ? 'selected' : '' }}>1–3 participants</option>
+                                    <option value="8" {{ old('group_size_type') == '8' ? 'selected' : '' }}>4–8 participants</option>
+                                    <option value="custom" {{ old('group_size_type') == 'custom' ? 'selected' : '' }}>Custom group size</option>
+                                </select>
+                                
+                                <!-- Custom Group Size Input (hidden by default) -->
+                                <div id="custom_group_size_div" class="hidden">
+                                    <div class="flex items-center gap-2">
+                                        <input type="number" 
+                                            name="no_of_people" 
+                                            id="no_of_people" 
+                                            min="1" 
+                                            max="100" 
+                                            value="{{ old('no_of_people') }}"
+                                            placeholder="Enter max participants"
+                                            class="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                                        <span class="text-sm text-slate-500">max participants</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500">Enter maximum number of participants (1-100)</p>
+                                </div>
+                            </div>
+                            
                             <p class="text-xs text-slate-500">This value determines tour capacity and booking availability</p>
                             @error('no_of_people')
                             <p class="text-sm text-red-600 flex items-center gap-1">
@@ -378,7 +430,7 @@
                             <select name="starts_at_time" id="starts_at_time" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
                                 <option value="">Select start time</option>
                                 <option value="09:00" {{ old('starts_at_time') == '09:00' ? 'selected' : '' }}>9:00 AM</option>
-                                <option value="17:00" {{ old('starts_at_time') == '17:00' ? 'selected' : '' }}>5:00 PM</option>
+                                <option value="15:00" {{ old('starts_at_time') == '15:00' ? 'selected' : '' }}>3:00 PM</option>
                             </select>
                             @error('starts_at_time')
                             <p class="text-sm text-red-600 flex items-center gap-1">
@@ -552,8 +604,8 @@
             </div>
         </div>
 
-        <!-- Step 4: Content -->
-        <div class="step-content" x-show="currentStep === 4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
+        <!-- Step 5: Content -->
+        <div class="step-content" x-show="currentStep === 5" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
             <div class="bg-white rounded-xl shadow-sm border border-slate-200">
                 <div class="px-6 py-4 border-b border-slate-200">
                     <h2 class="font-semibold text-slate-900 flex items-center gap-2">
@@ -625,8 +677,41 @@
             </div>
         </div>
 
-        <!-- Step 5: Review & Complete -->
-        <div class="step-content" x-show="currentStep === 5" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
+        <!-- Step 4: Itinerary -->
+        <div class="step-content" x-show="currentStep === 4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+                <div class="px-6 py-4 border-b border-slate-200">
+                    <h2 class="font-semibold text-slate-900 flex items-center gap-2">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-md bg-orange-50 text-orange-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                            </svg>
+                        </span>
+                        Tour Itinerary
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">Add detailed itinerary items for your tour</p>
+                </div>
+                <div class="p-6">
+                    <div id="itinerary-container" class="space-y-4">
+                        <!-- Itinerary items will be dynamically added here -->
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button type="button" onclick="addItineraryItem()" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                            </svg>
+                            Add Itinerary Item
+                        </button>
+                    </div>
+                    
+                    <input type="hidden" name="itinerary" id="itinerary-data">
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: Review & Complete -->
+        <div class="step-content" x-show="currentStep === 6" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
             <div class="bg-white rounded-xl shadow-sm border border-slate-200">
                 <div class="px-6 py-4 border-b border-slate-200">
                     <h2 class="font-semibold text-slate-900 flex items-center gap-2">
@@ -818,7 +903,7 @@
             <div x-show="currentStep === 1" class="w-6"></div> <!-- Spacer -->
 
             <!-- Next/Submit Button -->
-            <button type="button" @click="nextStep()" x-show="currentStep < 5"
+            <button type="button" @click="nextStep()" x-show="currentStep < 6"
                     class="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors cursor-pointer">
                 Next
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -826,7 +911,7 @@
                 </svg>
             </button>
 
-            <button type="submit" x-show="currentStep === 5"
+            <button type="submit" x-show="currentStep === 6"
                     class="flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -923,57 +1008,94 @@ function multiStepTourForm() {
         
         // Validate Step 1
         validateStep1() {
+            console.log('=== VALIDATING STEP 1 ===');
             this.clearValidationErrors();
             let isValid = true;
             
             // Validate Title
             const title = document.getElementById('title');
             if (!title || !title.value.trim()) {
+                console.log('TITLE VALIDATION FAILED: Empty title');
                 this.showFieldError('title', 'Tour title is required');
                 isValid = false;
             } else if (title.value.trim().length > 60) {
+                console.log('TITLE VALIDATION FAILED: Too long -', title.value.trim().length);
                 this.showFieldError('title', 'Tour title must not exceed 60 characters');
                 isValid = false;
+            } else {
+                console.log('TITLE VALIDATION PASSED:', title.value.trim());
             }
             
             // Validate Short Description
             const shortDescEditor = this.editors['short_description'];
             let shortDescContent = '';
+            let shortDescTextLength = 0;
+            
             if (shortDescEditor) {
+                // Get plain text for character count (excluding HTML tags)
                 shortDescContent = shortDescEditor.getText().trim();
+                shortDescTextLength = shortDescContent.length;
+                
+                // Also get HTML content for form submission
+                const shortDescHtml = shortDescEditor.root.innerHTML.trim();
+                
+                // Store the HTML content in the hidden input
+                const hiddenInput = document.getElementById('short_description');
+                if (hiddenInput) {
+                    hiddenInput.value = shortDescHtml;
+                }
             }
+            
             if (!shortDescContent) {
+                console.log('SHORT DESC VALIDATION FAILED: Empty content');
                 this.showFieldError('short_description_editor', 'Short description is required');
                 isValid = false;
-            } else if (shortDescContent.length > 250) {
-                this.showFieldError('short_description_editor', 'Short description must not exceed 250 characters');
+            } else if (shortDescTextLength > 600) {
+                console.log('SHORT DESC VALIDATION FAILED: Too long -', shortDescTextLength);
+                this.showFieldError('short_description_editor', `Short description must not exceed 600 characters (currently ${shortDescTextLength})`);
                 isValid = false;
+            } else {
+                console.log('SHORT DESC VALIDATION PASSED:', shortDescTextLength, 'characters');
             }
             
             // Validate Location
             const locationId = document.getElementById('location_id');
             if (!locationId || !locationId.value) {
+                console.log('LOCATION VALIDATION FAILED: Empty location');
                 this.showFieldError('location_id', 'Location is required');
                 isValid = false;
+            } else {
+                console.log('LOCATION VALIDATION PASSED:', locationId.value);
             }
             
             // Validate Category
             const categoryId = document.getElementById('tour_category_id');
             if (!categoryId || !categoryId.value) {
+                console.log('CATEGORY VALIDATION FAILED: Empty category');
                 this.showFieldError('tour_category_id', 'Category is required');
                 isValid = false;
+            } else {
+                console.log('CATEGORY VALIDATION PASSED:', categoryId.value);
             }
             
             // Validate Duration
             let durationInput = null;
             let durationValue = '';
             
-            if (this.durationType === 'hourly') {
+            // First check if duration type is set
+            if (!this.durationType) {
+                // No duration type selected - check the default input
+                durationInput = document.getElementById('duration_text_default');
+                if (durationInput) {
+                    durationValue = durationInput.value;
+                }
+            } else if (this.durationType === 'hourly') {
                 durationInput = document.getElementById('duration_text_hourly');
                 if (durationInput) {
                     durationValue = durationInput.value;
                 }
             } else if (this.durationType === 'multiple_days') {
+                // For multiple days, check the duration_text_multiple input
                 durationInput = document.getElementById('duration_text_multiple');
                 if (durationInput) {
                     durationValue = durationInput.value;
@@ -988,12 +1110,6 @@ function multiStepTourForm() {
                 if (durationInput) {
                     durationValue = durationInput.value;
                 }
-            } else {
-                // Default case - check the text input
-                durationInput = document.getElementById('duration_text_default');
-                if (durationInput) {
-                    durationValue = durationInput.value;
-                }
             }
             
             console.log('Duration validation - Type:', this.durationType, 'Input:', durationInput, 'Value:', durationValue);
@@ -1005,9 +1121,22 @@ function multiStepTourForm() {
             } else if (this.durationType === 'full_day' && durationValue === 'Full day') {
                 // This is valid - full day is properly prefilled
                 console.log('Full day duration is valid');
-            } else if (!durationValue || !durationValue.trim()) {
+            } else if (this.durationType === 'multiple_days') {
+                // For multiple days, validate that duration_text has a value like "2 days", "3 days", etc.
+                if (!durationValue || !durationValue.match(/^\d+\s+days$/)) {
+                    const fieldId = durationInput ? durationInput.id : 'duration_text_multiple';
+                    this.showFieldError(fieldId, 'Please specify a valid number of days');
+                    isValid = false;
+                }
+            } else if (!this.durationType && (!durationValue || !durationValue.trim())) {
+                // Only validate if no duration type is set and default input is empty
                 const fieldId = durationInput ? durationInput.id : 'duration_text_default';
                 this.showFieldError(fieldId, 'Duration is required');
+                isValid = false;
+            } else if (this.durationType === 'hourly' && (!durationValue || !durationValue.trim())) {
+                // For hourly tours, validate that a duration is selected
+                const fieldId = durationInput ? durationInput.id : 'duration_text_hourly';
+                this.showFieldError(fieldId, 'Please select a duration');
                 isValid = false;
             }
             
@@ -1028,11 +1157,55 @@ function multiStepTourForm() {
             return isValid;
         },
         
+        // Validate Step 2 (Schedule & Logistics)
+        validateStep2() {
+            let isValid = true;
+            
+            // Validate Group Size
+            const groupSizeType = document.getElementById('group_size_type');
+            const noOfPeopleInput = document.getElementById('no_of_people');
+            
+            if (!groupSizeType || !groupSizeType.value) {
+                this.showFieldError('group_size_type', 'Group size is required');
+                isValid = false;
+            } else if (groupSizeType.value === 'custom') {
+                // For custom group size, validate the number input
+                if (!noOfPeopleInput || !noOfPeopleInput.value) {
+                    this.showFieldError('no_of_people', 'Custom group size is required');
+                    isValid = false;
+                } else {
+                    const value = parseInt(noOfPeopleInput.value);
+                    if (isNaN(value) || value < 1 || value > 100) {
+                        this.showFieldError('no_of_people', 'Group size must be between 1 and 100');
+                        isValid = false;
+                    }
+                }
+            }
+            
+            // Validate Cut-off Time
+            const cutOffTime = document.getElementById('cut_off_time');
+            if (!cutOffTime || !cutOffTime.value) {
+                this.showFieldError('cut_off_time', 'Cut-off time is required');
+                isValid = false;
+            }
+            
+            // Validate Start Time
+            const startTime = document.getElementById('starts_at_time');
+            if (!startTime || !startTime.value) {
+                this.showFieldError('starts_at_time', 'Start time is required');
+                isValid = false;
+            }
+            
+            return isValid;
+        },
+        
         // Main validation function
         validateCurrentStep() {
             switch(this.currentStep) {
                 case 1:
                     return this.validateStep1();
+                case 2:
+                    return this.validateStep2();
                 case 3:
                     return this.validateStep3();
                 default:
@@ -1069,7 +1242,7 @@ function multiStepTourForm() {
         
         nextStep() {
             if (this.validateCurrentStep()) {
-                if (this.currentStep < 5) {
+                if (this.currentStep < 6) {
                     this.currentStep++;
                     this.scrollToTop();
                 }
@@ -1088,14 +1261,49 @@ function multiStepTourForm() {
         },
         
         handleFormSubmit(event) {
+            console.log('🔥 handleFormSubmit CALLED! 🔥');
+            
+            console.log('=== FORM SUBMISSION START ===');
+            
             // Validate all steps before final submission
-            if (!this.validateStep1() || !this.validateStep3()) {
+            const step1Valid = this.validateStep1();
+            const step2Valid = this.validateStep2();
+            const step3Valid = this.validateStep3();
+            
+            console.log('Validation results:', {
+                step1: step1Valid,
+                step2: step2Valid,
+                step3: step3Valid
+            });
+            
+            if (!step1Valid || !step2Valid || !step3Valid) {
+                console.log('VALIDATION FAILED - Preventing submission');
                 event.preventDefault();
                 return false;
             }
             
+            console.log('VALIDATION PASSED - Syncing data');
+            
+            // Sync all data before submission
             this.syncEditors();
-            // Let the form submit normally
+            syncItineraryData();
+            this.syncDurationData();
+            
+            // Debug: Check what will be submitted
+            console.log('=== FORM DATA TO BE SUBMITTED ===');
+            try {
+                const formData = new FormData(event.target);
+                for (let [key, value] of formData.entries()) {
+                    console.log(key + ':', value);
+                }
+                console.log('=== END FORM DATA ===');
+                
+                console.log('✅ FORM SUBMITTING...');
+                // Let the form submit naturally
+            } catch (error) {
+                console.error('❌ Error reading form data:', error);
+                console.log('✅ Form will submit anyway...');
+            }
         },
         
         initEditors() {
@@ -1129,6 +1337,31 @@ function multiStepTourForm() {
                         quill.root.innerHTML = initialContent;
                     }
                     
+                    // Add character counting for short description
+                    if (config.input === 'short_description') {
+                        const updateCharCount = () => {
+                            const text = quill.getText().trim();
+                            const length = text.length;
+                            const charCountElement = document.getElementById('short_description_char_count');
+                            if (charCountElement) {
+                                charCountElement.textContent = `${length} / 600 characters`;
+                                if (length > 600) {
+                                    charCountElement.classList.add('text-red-600');
+                                    charCountElement.classList.remove('text-slate-500');
+                                } else {
+                                    charCountElement.classList.remove('text-red-600');
+                                    charCountElement.classList.add('text-slate-500');
+                                }
+                            }
+                        };
+                        
+                        // Update count on text change
+                        quill.on('text-change', updateCharCount);
+                        
+                        // Initial count
+                        updateCharCount();
+                    }
+                    
                     this.editors[config.input] = quill;
                 }
             });
@@ -1142,6 +1375,58 @@ function multiStepTourForm() {
                     input.value = quill.root.innerHTML;
                 }
             });
+        },
+        
+        syncDurationData() {
+            // Debug: Log current duration type
+            console.log('syncDurationData called, durationType:', this.durationType);
+            
+            // For multiple days, ensure duration_text is updated with current days value
+            if (this.durationType === 'multiple_days') {
+                const daysInput = document.getElementById('duration_days');
+                const durationTextInput = document.getElementById('duration_text_multiple');
+                
+                console.log('Multiple days - daysInput:', daysInput, 'durationTextInput:', durationTextInput);
+                
+                if (daysInput && durationTextInput) {
+                    const days = daysInput.value || 2;
+                    durationTextInput.value = days + ' days';
+                    console.log('Updated duration_text_multiple to:', durationTextInput.value);
+                }
+            } else {
+                // For other duration types, ensure the visible input has the correct name
+                console.log('Other duration type:', this.durationType);
+                
+                // Find all duration text inputs and ensure only the visible one has name="duration_text"
+                const allDurationInputs = [
+                    'duration_text_default',
+                    'duration_text_hourly', 
+                    'duration_text_half_day',
+                    'duration_text_full_day',
+                    'duration_text_multiple'
+                ];
+                
+                allDurationInputs.forEach(inputId => {
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        // Remove name attribute from hidden inputs
+                        input.removeAttribute('name');
+                    }
+                });
+                
+                // Add name attribute to the visible input based on durationType
+                let activeInputId = 'duration_text_default';
+                if (this.durationType === 'hourly') activeInputId = 'duration_text_hourly';
+                else if (this.durationType === 'half_day') activeInputId = 'duration_text_half_day';
+                else if (this.durationType === 'full_day') activeInputId = 'duration_text_full_day';
+                else if (this.durationType === 'multiple_days') activeInputId = 'duration_text_multiple';
+                
+                const activeInput = document.getElementById(activeInputId);
+                if (activeInput) {
+                    activeInput.setAttribute('name', 'duration_text');
+                    console.log('Set name="duration_text" on:', activeInputId, 'value:', activeInput.value);
+                }
+            }
         }
     }
 }
@@ -1186,6 +1471,138 @@ function imageUploader() {
             this.coverIndex = index;
         }
     }
+}
+
+// Toggle custom group size input
+function toggleGroupSizeInput() {
+    const groupSizeType = document.getElementById('group_size_type');
+    const customDiv = document.getElementById('custom_group_size_div');
+    const noOfPeopleInput = document.getElementById('no_of_people');
+    
+    if (groupSizeType.value === 'custom') {
+        customDiv.classList.remove('hidden');
+        noOfPeopleInput.required = true;
+    } else {
+        customDiv.classList.add('hidden');
+        noOfPeopleInput.required = false;
+        noOfPeopleInput.value = '';
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    toggleGroupSizeInput();
+    initializeItinerary();
+});
+
+// Missing function for tour selection (placeholder)
+function updateTourSelection() {
+    // This function is referenced but may not be needed for create form
+    // Keeping it to prevent console errors
+}
+
+// Itinerary functionality
+let itineraryItemCount = 0;
+
+function initializeItinerary() {
+    // Add any existing itinerary items if editing
+    const container = document.getElementById('itinerary-container');
+    if (!container) return;
+    
+    // Start with one empty item
+    if (container.children.length === 0) {
+        addItineraryItem();
+    }
+}
+
+function addItineraryItem() {
+    const container = document.getElementById('itinerary-container');
+    if (!container) return;
+    
+    const itemId = ++itineraryItemCount;
+    const itemHtml = `
+        <div class="itinerary-item border border-slate-200 rounded-lg p-4 space-y-4" id="itinerary-item-${itemId}">
+            <div class="flex items-center justify-between">
+                <h4 class="text-sm font-medium text-slate-900">Itinerary Item ${itemId}</h4>
+                <button type="button" onclick="removeItineraryItem(${itemId})" class="text-red-600 hover:text-red-700 text-sm">
+                    Remove
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Type</label>
+                    <select name="itinerary[${itemId}][type]" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900">
+                        <option value="">Select type</option>
+                        <option value="start">Start</option>
+                        <option value="transit">Transit</option>
+                        <option value="stopover">Stopover</option>
+                        <option value="activity">Activity</option>
+                        <option value="end">End</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
+                    <input type="text" name="itinerary[${itemId}][title]" placeholder="e.g. Hotel Pickup" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+                <textarea name="itinerary[${itemId}][description]" rows="3" placeholder="Detailed description of this itinerary item" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"></textarea>
+            </div>
+        </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', itemHtml);
+}
+
+function removeItineraryItem(itemId) {
+    const item = document.getElementById(`itinerary-item-${itemId}`);
+    if (item) {
+        item.remove();
+    }
+}
+
+function syncItineraryData() {
+    const container = document.getElementById('itinerary-container');
+    if (!container) return;
+    
+    // Remove existing itinerary inputs
+    const existingInputs = container.querySelectorAll('input[name^="itinerary"], textarea[name^="itinerary"], select[name^="itinerary"]');
+    existingInputs.forEach(input => input.remove());
+    
+    const itemElements = container.querySelectorAll('.itinerary-item');
+    
+    itemElements.forEach((element, index) => {
+        const typeSelect = element.querySelector('select[name*="[type]"]');
+        const titleInput = element.querySelector('input[name*="[title]"]');
+        const descriptionTextarea = element.querySelector('textarea[name*="[description]"]');
+        
+        if (titleInput && titleInput.value.trim()) {
+            // Create hidden inputs for each itinerary item
+            const typeHidden = document.createElement('input');
+            typeHidden.type = 'hidden';
+            typeHidden.name = `itinerary[${index}][type]`;
+            typeHidden.value = typeSelect ? typeSelect.value : '';
+            container.appendChild(typeHidden);
+            
+            const titleHidden = document.createElement('input');
+            titleHidden.type = 'hidden';
+            titleHidden.name = `itinerary[${index}][title]`;
+            titleHidden.value = titleInput.value.trim();
+            container.appendChild(titleHidden);
+            
+            const descriptionHidden = document.createElement('input');
+            descriptionHidden.type = 'hidden';
+            descriptionHidden.name = `itinerary[${index}][description]`;
+            descriptionHidden.value = descriptionTextarea ? descriptionTextarea.value.trim() : '';
+            container.appendChild(descriptionHidden);
+        }
+    });
+    
+    console.log('Synced itinerary data for', itemElements.length, 'items');
 }
 </script>
 @endpush
