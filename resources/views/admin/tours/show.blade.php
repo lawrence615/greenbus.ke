@@ -39,7 +39,7 @@
             <div x-data="{ showConfirm: false }" class="inline relative">
                 <button
                     type="button"
-                     @click="openModal({{ $tour->toJson() }}, '{{ $tour->status === 'published' ? 'draft' : 'publish' }}')"
+                    @click="openModal({{ $tour->toJson() }}, '{{ $tour->status === 'published' ? 'draft' : 'publish' }}')"
                     class="inline-flex items-center gap-2 px-4 py-2 {{ $tour->status === 'published' ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }} rounded-lg text-sm font-medium cursor-pointer">
                     {{ $tour->status === 'published' ? 'Unpublish' : 'Publish' }}
                 </button>
@@ -198,6 +198,10 @@
                 <h2 class="font-semibold text-slate-900 mb-4">Pricing</h2>
                 <dl class="space-y-3">
                     <div class="flex justify-between">
+                        <dt class="text-slate-600">Senior</dt>
+                        <dd class="font-semibold text-slate-900">KES {{ number_format($tour->base_price_senior) }}</dd>
+                    </div>
+                    <div class="flex justify-between">
                         <dt class="text-slate-600">Adult</dt>
                         <dd class="font-semibold text-slate-900">KES {{ number_format($tour->base_price_adult) }}</dd>
                     </div>
@@ -268,7 +272,7 @@
                                 Cancel
                             </button>
                             <form method="POST" action="{{ route('console.tours.destroy', $tour) }}"
-                      @submit="$event.preventDefault(); window.showLoading('Deleting tour...', 'Removing Tour'); $el.submit();">
+                                @submit="$event.preventDefault(); window.showLoading('Deleting tour...', 'Removing Tour'); $el.submit();">
                                 @csrf
                                 @method('DELETE')
                                 <button
@@ -306,15 +310,14 @@
                     class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer">
                     Cancel
                 </button>
-                <form method="POST" :action="`/console/tours/${selectedTour.slug}/toggle-status`" 
-      @submit="$event.preventDefault(); window.showLoading('Toggling tour status...', 'Updating Tour'); $el.submit();">
+                <form method="POST" :action="`/console/tours/${selectedTour.slug}/toggle-status`"
+                    @submit="$event.preventDefault(); window.showLoading('Toggling tour status...', 'Updating Tour'); $el.submit();">
                     @csrf
                     @method('PATCH')
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         :class="selectedAction === 'draft' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700'"
-                        class="px-4 py-2 text-sm font-medium text-white rounded-lg cursor-pointer"
-                    >
+                        class="px-4 py-2 text-sm font-medium text-white rounded-lg cursor-pointer">
                         <span x-text="selectedAction === 'draft' ? 'Unpublish' : 'Publish'"></span>
                     </button>
                 </form>
