@@ -43,7 +43,7 @@
         <!-- Basic Information -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200">
             <div class="px-6 py-4 border-b border-slate-200">
-                <h2 class="font-semibold text-slate-900">Basic Information</h2>
+                <h2 class="font-semibold text-slate-900">Step 1: Basic Information</h2>
             </div>
             <div class="p-6 space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -157,7 +157,7 @@
         <!-- Tour Details -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200">
             <div class="px-6 py-4 border-b border-slate-200">
-                <h2 class="font-semibold text-slate-900">Tour Details</h2>
+                <h2 class="font-semibold text-slate-900">Step 2: Content</h2>
             </div>
             <div class="p-6 space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -241,10 +241,117 @@
             </div>
         </div>
 
-        <!-- Itinerary -->
+        <!-- Step 3: Schedule & Logistics -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200">
             <div class="px-6 py-4 border-b border-slate-200">
-                <h2 class="font-semibold text-slate-900">Itinerary</h2>
+                <h2 class="font-semibold text-slate-900">Step 3: Schedule & Logistics</h2>
+                <p class="text-sm text-slate-500 mt-1">Schedule, capacity, and logistics information</p>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Group Size -->
+                    <div class="space-y-2">
+                        <label for="no_of_people" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <span class="flex items-center justify-center w-6 h-6 rounded-md bg-indigo-50 text-indigo-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m9 5.197v1"/>
+                                </svg>
+                            </span>
+                            Maximum Group Size
+                        </label>
+                        <input type="number" name="no_of_people" id="no_of_people" value="{{ old('no_of_people', $tour->no_of_people) }}" min="1" max="100" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                        <p class="text-xs text-slate-500">Maximum number of participants (1-100)</p>
+                        @error('no_of_people')
+                        <p class="text-sm text-red-600 flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <!-- Cut-off Time -->
+                    <div class="space-y-2">
+                        <label for="cut_off_time" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <span class="flex items-center justify-center w-6 h-6 rounded-md bg-orange-50 text-orange-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </span>
+                            Cut-off Time
+                        </label>
+                        <select name="cut_off_time" id="cut_off_time" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                            <option value="5" {{ old('cut_off_time', $tour->cut_off_time) == '5' ? 'selected' : '' }}>5 minutes</option>
+                            <option value="10" {{ old('cut_off_time', $tour->cut_off_time) == '10' ? 'selected' : '' }}>10 minutes</option>
+                            <option value="15" {{ old('cut_off_time', $tour->cut_off_time) == '15' ? 'selected' : '' }}>15 minutes</option>
+                            <option value="30" {{ old('cut_off_time', $tour->cut_off_time) == '30' ? 'selected' : '' }}>30 minutes</option>
+                            <option value="45" {{ old('cut_off_time', $tour->cut_off_time) == '45' ? 'selected' : '' }}>45 minutes</option>
+                            <option value="60" {{ old('cut_off_time', $tour->cut_off_time) == '60' ? 'selected' : '' }}>60 minutes</option>
+                        </select>
+                        <p class="text-xs text-slate-500">Time before departure when booking closes</p>
+                        @error('cut_off_time')
+                        <p class="text-sm text-red-600 flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Start Time -->
+                    <div class="space-y-2">
+                        <label for="starts_at_time" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <span class="flex items-center justify-center w-6 h-6 rounded-md bg-sky-50 text-sky-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </span>
+                            Start Time
+                        </label>
+                        <input type="time" name="starts_at_time" id="starts_at_time" value="{{ old('starts_at_time', $tour->starts_at_time) }}" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none">
+                        @error('starts_at_time')
+                        <p class="text-sm text-red-600 flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    <!-- Meeting Point -->
+                    <div class="space-y-2">
+                        <label for="meeting_point" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <span class="flex items-center justify-center w-6 h-6 rounded-md bg-rose-50 text-rose-600">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </span>
+                            Meeting Point
+                        </label>
+                        <input type="text" name="meeting_point" id="meeting_point" value="{{ old('meeting_point', $tour->meeting_point) }}" placeholder="e.g. Hotel lobby" class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none">
+                        @error('meeting_point')
+                        <p class="text-sm text-red-600 flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Daily Tour -->
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" name="is_daily" id="is_daily" value="1" {{ old('is_daily', $tour->is_daily) ? 'checked' : '' }} class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                    <label for="is_daily" class="text-sm font-medium text-slate-700">
+                        This tour runs daily
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Itinerary -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+            <div class="px-6 py-4 border-b border-slate-200">
+                <h2 class="font-semibold text-slate-900">Step 4: Itinerary</h2>
             </div>
             <div class="p-6">
                 <div class="space-y-4" id="itinerary-list" x-ref="itineraryList">
@@ -392,7 +499,7 @@
         <!-- Pricing -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200">
             <div class="px-6 py-4 border-b border-slate-200">
-                <h2 class="font-semibold text-slate-900">Pricing (KES)</h2>
+                <h2 class="font-semibold text-slate-900">Step 5: Pricing (KES)</h2>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -585,7 +692,7 @@
         <!-- Publication Status -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200">
             <div class="px-6 py-4 border-b border-slate-200">
-                <h2 class="font-semibold text-slate-900">Publication Status</h2>
+                <h2 class="font-semibold text-slate-900">Step 6: Publication Status</h2>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
