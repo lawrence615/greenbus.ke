@@ -121,12 +121,32 @@
             </div>
             @endif
 
+            <!-- What's Exclude -->
+            @if($tour->included)
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h2 class="font-semibold text-slate-900 mb-4">What's Excluded</h2>
+                <div class="prose prose-slate max-w-none">
+                    {!! $tour->excluded !!}
+                </div>
+            </div>
+            @endif
+
             <!-- Important Information -->
             @if($tour->important_information)
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h2 class="font-semibold text-slate-900 mb-4">Additional Information</h2>
                 <div class="prose prose-slate max-w-none">
                     {!! $tour->important_information !!}
+                </div>
+            </div>
+            @endif
+
+            <!-- Cancellation Policy -->
+            @if($tour->cancellation_policy)
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h2 class="font-semibold text-slate-900 mb-4">Cancellation Policy</h2>
+                <div class="prose prose-slate max-w-none">
+                    {!! $tour->cancellation_policy !!}
                 </div>
             </div>
             @endif
