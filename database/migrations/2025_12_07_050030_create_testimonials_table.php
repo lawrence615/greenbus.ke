@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('author_date')->nullable();
             $table->string('author_cover')->nullable();
             $table->string('tour_name')->nullable();
-            $table->text('content');
+            $table->longText('content');
             $table->string('travel_type')->nullable(); // e.g., "Couple", "Solo traveller", "Family"
             $table->integer('rating')->default(5);
             $table->boolean('is_active')->default(true);
