@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('code', 10)->unique()->nullable();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->string('short_description', 300)->nullable();
+            $table->longText('short_description')->nullable();
             $table->longText('description')->nullable();
             $table->longText('included')->nullable();
             $table->longText('excluded')->nullable();
