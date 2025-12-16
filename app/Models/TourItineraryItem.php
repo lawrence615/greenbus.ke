@@ -13,6 +13,8 @@ class TourItineraryItem extends Model
         'time_label',
         'title',
         'description',
+        'duration_value',
+        'duration_unit',
         'sort_order',
     ];
 
