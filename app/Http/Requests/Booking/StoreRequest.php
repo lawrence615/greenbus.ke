@@ -27,11 +27,24 @@ class StoreRequest extends FormRequest
             'adults' => ['required', 'integer', 'min:1'],
             'children' => ['nullable', 'integer', 'min:0'],
             'infants' => ['nullable', 'integer', 'min:0'],
+            'seniors' => ['nullable', 'integer', 'min:0'],
             'customer_name' => ['required', 'string', 'max:255'],
             'customer_email' => ['required', 'email', 'max:255'],
-            'customer_phone' => ['nullable', 'string', 'max:50'],
+            'customer_phone' => ['required', 'string', 'regex:/^\+[1-9]\d{1,14}$/', 'max:20'],
             'pickup_location' => ['nullable', 'string', 'max:255'],
             'special_requests' => ['nullable', 'string']
+        ];
+    }
+
+    /**
+     * Get the custom validation messages that apply to the request.
+     */
+    public function messages(): array
+    {
+        return [
+            'customer_phone.required' => 'Phone number is required',
+            'customer_phone.regex' => 'Please enter a valid international phone number (e.g., +254723384146)',
+            'customer_phone.max' => 'Phone number is too long',
         ];
     }
 }
