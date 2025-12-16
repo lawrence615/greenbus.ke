@@ -14,7 +14,9 @@ return new class extends Migration
             $table->string('type', 20)->default('activity');
             $table->string('time_label', 50)->nullable();
             $table->string('title');
-            $table->text('description')->nullable();
+            $table->longText('description')->nullable();
+            $table->integer('duration_value')->nullable();
+            $table->string('duration_unit', 10)->default('minutes');
             $table->unsignedTinyInteger('sort_order')->default(0);
             $table->timestamps();
         });
