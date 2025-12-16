@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tour\StoreRequest;
 use App\Http\Requests\Tour\UpdateRequest;
@@ -10,8 +14,6 @@ use App\Interfaces\TourCategoryRepositoryInterface;
 use App\Interfaces\TourRepositoryInterface;
 use App\Models\Tour;
 use App\Services\TourImageService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TourController extends Controller
 {
@@ -46,6 +48,14 @@ class TourController extends Controller
 
         $tour = null;
         DB::transaction(function () use ($validated, $request, &$tour) {
+            Log::info('=== ITINERARY DATA DEBUG ===');
+            Log::info('Full validated data:', $validated);
+            Log::info('Itinerary data:', ['data' => $validated['itinerary'] ?? 'NULL or MISSING']);
+            Log::info('Itinerary type:', ['type' => gettype($validated['itinerary'] ?? null)]);
+            if (isset($validated['itinerary'])) {
+                Log::info('Itinerary count:', ['count' => count($validated['itinerary'])]);
+                Log::info('Itinerary contents:', ['contents' => $validated['itinerary']]);
+            }
             $itinerary = $validated['itinerary'] ?? [];
             $images = $validated['images'] ?? [];
             $coverIndex = $validated['cover_image_index'] ?? 0;
@@ -54,11 +64,14 @@ class TourController extends Controller
             $tour = $this->tourRepository->store($validated);
 
             foreach ($itinerary as $index => $item) {
-                if (!empty($item['title'])) {
+                // Save item if it has title OR description (at least some content)
+                if (!empty($item['title']) || !empty($item['description'])) {
                     $tour->itineraryItems()->create([
                         'type' => $item['type'] ?? 'activity',
-                        'title' => $item['title'],
+                        'title' => $item['title'] ?? null,
                         'description' => $item['description'] ?? null,
+                        'duration_value' => $item['duration_value'] ?? null,
+                        'duration_unit' => $item['duration_unit'] ?? 'minutes',
                         'sort_order' => $index,
                     ]);
                 }
