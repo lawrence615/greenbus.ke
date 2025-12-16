@@ -17,7 +17,7 @@ class UpdateRequest extends FormRequest
             'location_id' => ['required', 'exists:locations,id'],
             'tour_category_id' => ['required', 'exists:tour_categories,id'],
             'title' => ['required', 'string', 'max:80'],
-            'short_description' => ['required', 'string', 'max:200'],
+            'short_description' => ['required', 'string', 'max:600'],
             'description' => ['nullable', 'string'],
             'included' => ['nullable', 'string'],
             'excluded' => ['nullable', 'string'],
