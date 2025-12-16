@@ -87,7 +87,7 @@
                         class="absolute left-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 py-1 z-50">
                         @foreach($activeCities as $activeCity)
                         <a 
-                            href="{{ route('tours.index', $activeCity) }}" 
+                            href="{{ route('tours.index', $activeCity->slug) }}" 
                             class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">
                             {{ $activeCity->name }} Tours
                         </a>
@@ -129,7 +129,7 @@
                     </button>
                     <div x-show="open" x-cloak x-transition class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-slate-100 py-1 z-50">
                         @foreach($activeCities as $activeCity)
-                        <a href="{{ route('tours.index', $activeCity) }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">
+                        <a href="{{ route('tours.index', $activeCity->slug) }}" class="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">
                             {{ $activeCity->name }} Tours
                         </a>
                         @endforeach
@@ -216,7 +216,7 @@
                     <div x-show="open" x-collapse class="pl-6 space-y-1">
                         @foreach($activeCities as $activeCity)
                         <a 
-                            href="{{ route('tours.index', $activeCity) }}" 
+                            href="{{ route('tours.index', $activeCity->slug) }}" 
                             @click="mobileMenuOpen = false" 
                             class="block px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-50">
                             {{ $activeCity->name }} Tours
@@ -251,7 +251,7 @@
                 <div class="mt-2 space-y-1">
                     <p class="text-xs text-slate-500 font-medium px-3">Book a Tour</p>
                     @foreach($activeCities as $activeCity)
-                    <a href="{{ route('tours.index', $activeCity) }}" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-lg text-emerald-700 bg-emerald-50 hover:bg-emerald-100 font-medium">
+                    <a href="{{ route('tours.index', $activeCity->slug) }}" @click="mobileMenuOpen = false" class="block px-3 py-2 rounded-lg text-emerald-700 bg-emerald-50 hover:bg-emerald-100 font-medium">
                         {{ $activeCity->name }} Tours
                     </a>
                     @endforeach
