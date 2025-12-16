@@ -16,6 +16,7 @@
             display: none !important;
         }
     </style>
+    @stack('styles')
 </head>
 
 <body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
