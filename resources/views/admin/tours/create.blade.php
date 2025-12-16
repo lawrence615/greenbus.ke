@@ -61,7 +61,7 @@
             <!-- Step Connectors -->
             <div class="absolute left-0 top-5 w-full h-0.5 bg-slate-200 -z-10"></div>
             <div class="absolute left-0 top-5 h-0.5 bg-linear-to-r from-indigo-500 to-indigo-600 transition-all duration-500 step-connector" 
-                 :style="`width: ${(currentStep - 1) / 4 * 100}%`"></div>
+                 :style="`width: ${(currentStep - 1) / 5 * 100}%`"></div>
             
             <!-- Step 1: Basic Info -->
             <div class="flex flex-col items-center relative">
@@ -108,7 +108,7 @@
                 <span class="text-xs font-medium text-slate-600 mt-2">Pricing</span>
             </div>
 
-            <!-- Step 4: Itinerary -->
+            <!-- Step 4: Content -->
             <div class="flex flex-col items-center relative">
                 <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-slate-300 bg-white"
                      :class="{
@@ -120,10 +120,10 @@
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
                 </div>
-                <span class="text-xs font-medium text-slate-600 mt-2">Itinerary</span>
+                <span class="text-xs font-medium text-slate-600 mt-2">Content</span>
             </div>
 
-            <!-- Step 5: Content -->
+            <!-- Step 5: Complete -->
             <div class="flex flex-col items-center relative">
                 <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-slate-300 bg-white"
                      :class="{
@@ -135,10 +135,10 @@
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
                 </div>
-                <span class="text-xs font-medium text-slate-600 mt-2">Content</span>
+                <span class="text-xs font-medium text-slate-600 mt-2">Complete</span>
             </div>
 
-            <!-- Step 6: Complete -->
+            <!-- Step 6: Review -->
             <div class="flex flex-col items-center relative">
                 <div class="step-indicator w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold border-2 border-slate-300 bg-white"
                      :class="{
@@ -150,7 +150,7 @@
                         <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                     </svg>
                 </div>
-                <span class="text-xs font-medium text-slate-600 mt-2">Complete</span>
+                <span class="text-xs font-medium text-slate-600 mt-2">Review</span>
             </div>
         </div>
     </div>
@@ -604,8 +604,8 @@
             </div>
         </div>
 
-        <!-- Step 5: Content -->
-        <div class="step-content" x-show="currentStep === 5" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
+        <!-- Step 4: Content -->
+        <div class="step-content" x-show="currentStep === 4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
             <div class="bg-white rounded-xl shadow-sm border border-slate-200">
                 <div class="px-6 py-4 border-b border-slate-200">
                     <h2 class="font-semibold text-slate-900 flex items-center gap-2">
@@ -677,41 +677,8 @@
             </div>
         </div>
 
-        <!-- Step 4: Itinerary -->
-        <div class="step-content" x-show="currentStep === 4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
-                <div class="px-6 py-4 border-b border-slate-200">
-                    <h2 class="font-semibold text-slate-900 flex items-center gap-2">
-                        <span class="flex items-center justify-center w-8 h-8 rounded-md bg-orange-50 text-orange-600">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                            </svg>
-                        </span>
-                        Tour Itinerary
-                    </h2>
-                    <p class="text-sm text-slate-500 mt-1">Add detailed itinerary items for your tour</p>
-                </div>
-                <div class="p-6">
-                    <div id="itinerary-container" class="space-y-4">
-                        <!-- Itinerary items will be dynamically added here -->
-                    </div>
-                    
-                    <div class="mt-6">
-                        <button type="button" onclick="addItineraryItem()" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                            </svg>
-                            Add Itinerary Item
-                        </button>
-                    </div>
-                    
-                    <input type="hidden" name="itinerary" id="itinerary-data">
-                </div>
-            </div>
-        </div>
-
-        <!-- Step 6: Review & Complete -->
-        <div class="step-content" x-show="currentStep === 6" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
+        <!-- Step 5: Review & Complete -->
+        <div class="step-content" x-show="currentStep === 5" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
             <div class="bg-white rounded-xl shadow-sm border border-slate-200">
                 <div class="px-6 py-4 border-b border-slate-200">
                     <h2 class="font-semibold text-slate-900 flex items-center gap-2">
@@ -725,84 +692,6 @@
                     <p class="text-sm text-slate-500 mt-1">Finalize your tour settings and publish</p>
                 </div>
                 <div class="p-6 space-y-6">
-                    <!-- Tour Images -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-medium text-slate-900">Tour Images</h3>
-                        <div x-data="imageUploader()" class="space-y-4">
-                            <!-- Drop Zone -->
-                            <div
-                                @dragover.prevent="isDragging = true"
-                                @dragleave.prevent="isDragging = false"
-                                @drop.prevent="handleDrop($event)"
-                                :class="isDragging ? 'border-emerald-500 bg-emerald-50' : 'border-slate-300 hover:border-slate-400'"
-                                class="border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer"
-                                @click="$refs.fileInput.click()"
-                            >
-                                <input
-                                    type="file"
-                                    name="images[]"
-                                    multiple
-                                    accept="image/jpeg,image/png,image/jpg,image/webp"
-                                    class="hidden"
-                                    x-ref="fileInput"
-                                    @change="handleFiles($event.target.files)"
-                                >
-                                <div class="flex flex-col items-center gap-3">
-                                    <div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-700">Drop images here or click to upload</p>
-                                        <p class="text-xs text-slate-500 mt-1">JPEG, PNG, WebP up to 5MB each (max 10 images)</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Image Previews -->
-                            <div x-show="previews.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                                <template x-for="(preview, index) in previews" :key="index">
-                                    <div class="relative group aspect-square rounded-lg overflow-hidden border-2 transition-colors"
-                                        :class="coverIndex === index ? 'border-emerald-500 ring-2 ring-emerald-500/20' : 'border-slate-200'">
-                                        <img :src="preview.url" class="w-full h-full object-cover">
-
-                                        <!-- Cover Badge -->
-                                        <div x-show="coverIndex === index" class="absolute top-2 left-2 px-2 py-1 bg-emerald-500 text-white text-xs font-medium rounded">
-                                            Cover
-                                        </div>
-
-                                        <!-- Overlay Actions -->
-                                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                                            <button type="button" @click="setCover(index)" x-show="coverIndex !== index"
-                                                class="p-2 bg-white rounded-full text-slate-700 hover:bg-emerald-50 hover:text-emerald-600" title="Set as cover">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                </svg>
-                                            </button>
-                                            <button type="button" @click="removeImage(index)"
-                                                class="p-2 bg-white rounded-full text-slate-700 hover:bg-red-50 hover:text-red-600" title="Remove">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-
-                            <!-- Hidden input for cover index -->
-                            <input type="hidden" name="cover_image_index" :value="coverIndex">
-                        </div>
-
-                        @error('images')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                        @error('images.*')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <!-- Publication Status -->
                     <div class="space-y-4">
                         <h3 class="text-lg font-medium text-slate-900">Publication Status</h3>
@@ -884,6 +773,144 @@
                                     </div>
                                 </div>
                             </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: Review -->
+        <div class="step-content" x-show="currentStep === 6" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold text-slate-900 mb-2">Review & Confirm</h2>
+                    <p class="text-sm text-slate-600">Please review all the information before creating your tour.</p>
+                </div>
+
+                <!-- Review Summary -->
+                <div class="space-y-6">
+                    <!-- Basic Info Section -->
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <h3 class="font-medium text-slate-900 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Basic Information
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-slate-500">Tour Title:</span>
+                                <p class="font-medium text-slate-900" x-text="document.getElementById('title')?.value || 'Not provided'"></p>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">Category:</span>
+                                <p class="font-medium text-slate-900" x-text="document.getElementById('tour_category_id')?.options[document.getElementById('tour_category_id')?.selectedIndex]?.text || 'Not selected'"></p>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">Duration:</span>
+                                <p class="font-medium text-slate-900" x-text="durationType === 'half_day' ? '6 hours' : durationType === 'full_day' ? 'Full day' : document.getElementById('duration_text_default')?.value || 'Not specified'"></p>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">Location:</span>
+                                <p class="font-medium text-slate-900" x-text="document.getElementById('location')?.value || 'Not provided'"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Details Section -->
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <h3 class="font-medium text-slate-900 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Tour Details
+                        </h3>
+                        <div class="space-y-3 text-sm">
+                            <div>
+                                <span class="text-slate-500">Description:</span>
+                                <div class="mt-1 text-slate-900 prose prose-sm max-w-none">
+                                    <p class="text-slate-500">Description will be shown here</p>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">What's Included:</span>
+                                <div class="mt-1 text-slate-900">
+                                    <p class="text-slate-500">Inclusions will be shown here</p>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">What to Bring:</span>
+                                <div class="mt-1 text-slate-900">
+                                    <p class="text-slate-500">Items to bring will be shown here</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing Section -->
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <h3 class="font-medium text-slate-900 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Pricing Information
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-slate-500">Adult Price:</span>
+                                <p class="font-medium text-slate-900" x-text="document.getElementById('adult_price')?.value ? '$' + document.getElementById('adult_price').value : 'Not set'"></p>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">Child Price:</span>
+                                <p class="font-medium text-slate-900" x-text="document.getElementById('child_price')?.value ? '$' + document.getElementById('child_price').value : 'Not set'"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Images Section -->
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <h3 class="font-medium text-slate-900 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            Images
+                        </h3>
+                        <div class="text-sm text-slate-900">
+                            <p>No images uploaded</p>
+                        </div>
+                    </div>
+
+                    <!-- Settings Section -->
+                    <div class="border border-slate-200 rounded-lg p-4">
+                        <h3 class="font-medium text-slate-900 mb-3 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            Tour Settings
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-slate-500">Daily Tour:</span>
+                                <p class="font-medium text-slate-900" x-text="document.getElementById('is_daily')?.checked ? 'Yes' : 'No'"></p>
+                            </div>
+                            <div>
+                                <span class="text-slate-500">Featured Tour:</span>
+                                <p class="font-medium text-slate-900" x-text="document.getElementById('is_featured')?.checked ? 'Yes' : 'No'"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirmation Notice -->
+                <div class="mt-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                    <div class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-emerald-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                            <p class="text-sm font-medium text-emerald-900">Ready to create your tour!</p>
+                            <p class="text-sm text-emerald-700 mt-1">Click "Create Tour" to publish this tour to your website. You can edit it later if needed.</p>
                         </div>
                     </div>
                 </div>
@@ -1078,38 +1105,27 @@ function multiStepTourForm() {
                 console.log('CATEGORY VALIDATION PASSED:', categoryId.value);
             }
             
-            // Validate Duration
+            // Validate Duration - ensure the active input has the name attribute
+            this.syncDurationData(); // Ensure correct input has name="duration_text"
+            
             let durationInput = null;
             let durationValue = '';
             
-            // First check if duration type is set
-            if (!this.durationType) {
-                // No duration type selected - check the default input
-                durationInput = document.getElementById('duration_text_default');
-                if (durationInput) {
-                    durationValue = durationInput.value;
-                }
-            } else if (this.durationType === 'hourly') {
-                durationInput = document.getElementById('duration_text_hourly');
-                if (durationInput) {
-                    durationValue = durationInput.value;
-                }
-            } else if (this.durationType === 'multiple_days') {
-                // For multiple days, check the duration_text_multiple input
-                durationInput = document.getElementById('duration_text_multiple');
-                if (durationInput) {
-                    durationValue = durationInput.value;
-                }
-            } else if (this.durationType === 'half_day') {
+            if (this.durationType === 'half_day') {
                 durationInput = document.getElementById('duration_text_half_day');
-                if (durationInput) {
-                    durationValue = durationInput.value;
-                }
+                durationValue = durationInput ? durationInput.value : '';
             } else if (this.durationType === 'full_day') {
                 durationInput = document.getElementById('duration_text_full_day');
-                if (durationInput) {
-                    durationValue = durationInput.value;
-                }
+                durationValue = durationInput ? durationInput.value : '';
+            } else if (this.durationType === 'multiple_days') {
+                durationInput = document.getElementById('duration_text_multiple');
+                durationValue = durationInput ? durationInput.value : '';
+            } else if (this.durationType === 'hourly') {
+                durationInput = document.getElementById('duration_text_hourly');
+                durationValue = durationInput ? durationInput.value : '';
+            } else {
+                durationInput = document.getElementById('duration_text_default');
+                durationValue = durationInput ? durationInput.value : '';
             }
             
             console.log('Duration validation - Type:', this.durationType, 'Input:', durationInput, 'Value:', durationValue);
@@ -1138,6 +1154,8 @@ function multiStepTourForm() {
                 const fieldId = durationInput ? durationInput.id : 'duration_text_hourly';
                 this.showFieldError(fieldId, 'Please select a duration');
                 isValid = false;
+            } else {
+                console.log('Duration validation passed for type:', this.durationType);
             }
             
             return isValid;
@@ -1262,10 +1280,13 @@ function multiStepTourForm() {
         
         handleFormSubmit(event) {
             console.log('🔥 handleFormSubmit CALLED! 🔥');
+            console.log('Event target:', event.target);
+            console.log('Event type:', event.type);
             
             console.log('=== FORM SUBMISSION START ===');
             
             // Validate all steps before final submission
+            console.log('🔍 Starting validation...');
             const step1Valid = this.validateStep1();
             const step2Valid = this.validateStep2();
             const step3Valid = this.validateStep3();
@@ -1285,21 +1306,28 @@ function multiStepTourForm() {
             console.log('VALIDATION PASSED - Syncing data');
             
             // Sync all data before submission
+            console.log('🔄 STARTING DATA SYNC...');
             this.syncEditors();
+            console.log('✅ Editors synced');
             syncItineraryData();
+            console.log('✅ Itinerary synced');
             this.syncDurationData();
+            console.log('✅ Duration synced');
+            console.log('🔄 DATA SYNC COMPLETE');
             
             // Debug: Check what will be submitted
             console.log('=== FORM DATA TO BE SUBMITTED ===');
             try {
-                const formData = new FormData(event.target);
+                const form = event.target.closest('form');
+                console.log('Form element:', form);
+                const formData = new FormData(form);
                 for (let [key, value] of formData.entries()) {
                     console.log(key + ':', value);
                 }
                 console.log('=== END FORM DATA ===');
                 
                 console.log('✅ FORM SUBMITTING...');
-                // Let the form submit naturally
+                // Let the form submit naturally - don't prevent default
             } catch (error) {
                 console.error('❌ Error reading form data:', error);
                 console.log('✅ Form will submit anyway...');
@@ -1431,48 +1459,6 @@ function multiStepTourForm() {
     }
 }
 
-function imageUploader() {
-    return {
-        previews: [],
-        coverIndex: 0,
-        isDragging: false,
-        
-        handleDrop(event) {
-            event.preventDefault();
-            this.isDragging = false;
-            this.handleFiles(event.dataTransfer.files);
-        },
-        
-        handleFiles(files) {
-            Array.from(files).forEach(file => {
-                if (this.previews.length >= 10) return;
-                
-                if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        this.previews.push({
-                            url: e.target.result,
-                            file: file
-                        });
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        },
-        
-        removeImage(index) {
-            this.previews.splice(index, 1);
-            if (this.coverIndex >= this.previews.length) {
-                this.coverIndex = Math.max(0, this.previews.length - 1);
-            }
-        },
-        
-        setCover(index) {
-            this.coverIndex = index;
-        }
-    }
-}
-
 // Toggle custom group size input
 function toggleGroupSizeInput() {
     const groupSizeType = document.getElementById('group_size_type');
@@ -1492,117 +1478,12 @@ function toggleGroupSizeInput() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     toggleGroupSizeInput();
-    initializeItinerary();
 });
 
 // Missing function for tour selection (placeholder)
 function updateTourSelection() {
     // This function is referenced but may not be needed for create form
     // Keeping it to prevent console errors
-}
-
-// Itinerary functionality
-let itineraryItemCount = 0;
-
-function initializeItinerary() {
-    // Add any existing itinerary items if editing
-    const container = document.getElementById('itinerary-container');
-    if (!container) return;
-    
-    // Start with one empty item
-    if (container.children.length === 0) {
-        addItineraryItem();
-    }
-}
-
-function addItineraryItem() {
-    const container = document.getElementById('itinerary-container');
-    if (!container) return;
-    
-    const itemId = ++itineraryItemCount;
-    const itemHtml = `
-        <div class="itinerary-item border border-slate-200 rounded-lg p-4 space-y-4" id="itinerary-item-${itemId}">
-            <div class="flex items-center justify-between">
-                <h4 class="text-sm font-medium text-slate-900">Itinerary Item ${itemId}</h4>
-                <button type="button" onclick="removeItineraryItem(${itemId})" class="text-red-600 hover:text-red-700 text-sm">
-                    Remove
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Type</label>
-                    <select name="itinerary[${itemId}][type]" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900">
-                        <option value="">Select type</option>
-                        <option value="start">Start</option>
-                        <option value="transit">Transit</option>
-                        <option value="stopover">Stopover</option>
-                        <option value="activity">Activity</option>
-                        <option value="end">End</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
-                    <input type="text" name="itinerary[${itemId}][title]" placeholder="e.g. Hotel Pickup" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900">
-                </div>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
-                <textarea name="itinerary[${itemId}][description]" rows="3" placeholder="Detailed description of this itinerary item" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"></textarea>
-            </div>
-        </div>
-    `;
-    
-    container.insertAdjacentHTML('beforeend', itemHtml);
-}
-
-function removeItineraryItem(itemId) {
-    const item = document.getElementById(`itinerary-item-${itemId}`);
-    if (item) {
-        item.remove();
-    }
-}
-
-function syncItineraryData() {
-    const container = document.getElementById('itinerary-container');
-    if (!container) return;
-    
-    // Remove existing itinerary inputs
-    const existingInputs = container.querySelectorAll('input[name^="itinerary"], textarea[name^="itinerary"], select[name^="itinerary"]');
-    existingInputs.forEach(input => input.remove());
-    
-    const itemElements = container.querySelectorAll('.itinerary-item');
-    
-    itemElements.forEach((element, index) => {
-        const typeSelect = element.querySelector('select[name*="[type]"]');
-        const titleInput = element.querySelector('input[name*="[title]"]');
-        const descriptionTextarea = element.querySelector('textarea[name*="[description]"]');
-        
-        if (titleInput && titleInput.value.trim()) {
-            // Create hidden inputs for each itinerary item
-            const typeHidden = document.createElement('input');
-            typeHidden.type = 'hidden';
-            typeHidden.name = `itinerary[${index}][type]`;
-            typeHidden.value = typeSelect ? typeSelect.value : '';
-            container.appendChild(typeHidden);
-            
-            const titleHidden = document.createElement('input');
-            titleHidden.type = 'hidden';
-            titleHidden.name = `itinerary[${index}][title]`;
-            titleHidden.value = titleInput.value.trim();
-            container.appendChild(titleHidden);
-            
-            const descriptionHidden = document.createElement('input');
-            descriptionHidden.type = 'hidden';
-            descriptionHidden.name = `itinerary[${index}][description]`;
-            descriptionHidden.value = descriptionTextarea ? descriptionTextarea.value.trim() : '';
-            container.appendChild(descriptionHidden);
-        }
-    });
-    
-    console.log('Synced itinerary data for', itemElements.length, 'items');
 }
 </script>
 @endpush
