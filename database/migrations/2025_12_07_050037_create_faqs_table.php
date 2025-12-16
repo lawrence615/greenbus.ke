@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tour_category_id')->nullable()->constrained('tour_categories')->nullOnDelete();
             $table->string('question');
-            $table->text('answer');
+            $table->longText('answer');
             $table->string('category')->nullable(); // e.g., "Booking", "Tours", "Payment"
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
