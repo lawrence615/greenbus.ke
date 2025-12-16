@@ -12,6 +12,8 @@ use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
+use App\Http\Controllers\Admin\TourItineraryController;
+use App\Http\Controllers\Admin\TourMultimediaController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
@@ -68,6 +70,22 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::put('/tours/{tour:slug}', [AdminTourController::class, 'update'])->name('tours.update');
     Route::delete('/tours/{tour:slug}', [AdminTourController::class, 'destroy'])->name('tours.destroy');
     Route::patch('/tours/{tour:slug}/toggle-status', [AdminTourController::class, 'toggleStatus'])->name('tours.toggle-status');
+
+    // Tour itinerary management
+    Route::get('/tours/{tour:slug}/itinerary', [TourItineraryController::class, 'index'])->name('tours.itinerary.index');
+    Route::get('/tours/{tour:slug}/itinerary/create', [TourItineraryController::class, 'create'])->name('tours.itinerary.create');
+    Route::post('/tours/{tour:slug}/itinerary', [TourItineraryController::class, 'store'])->name('tours.itinerary.store');
+    Route::get('/tours/{tour:slug}/itinerary/{itineraryItem}/edit', [TourItineraryController::class, 'edit'])->name('tours.itinerary.edit');
+    Route::put('/tours/{tour:slug}/itinerary/{itineraryItem}', [TourItineraryController::class, 'update'])->name('tours.itinerary.update');
+    Route::delete('/tours/{tour:slug}/itinerary/{itineraryItem}', [TourItineraryController::class, 'destroy'])->name('tours.itinerary.destroy');
+    Route::post('/tours/{tour:slug}/itinerary/reorder', [TourItineraryController::class, 'reorder'])->name('tours.itinerary.reorder');
+
+    // Tour multimedia management
+    Route::get('/tours/{tour:slug}/multimedia', [TourMultimediaController::class, 'index'])->name('tours.multimedia.index');
+    Route::post('/tours/{tour:slug}/multimedia/upload', [TourMultimediaController::class, 'upload'])->name('tours.multimedia.upload');
+    Route::put('/tours/{tour:slug}/multimedia', [TourMultimediaController::class, 'update'])->name('tours.multimedia.update');
+    Route::delete('/tours/{tour:slug}/multimedia', [TourMultimediaController::class, 'destroy'])->name('tours.multimedia.destroy');
+    Route::post('/tours/{tour:slug}/multimedia/set-cover', [TourMultimediaController::class, 'setCover'])->name('tours.multimedia.set-cover');
 
     // Testimonials management
     Route::get('/testimonials', [AdminTestimonialController::class, 'index'])->name('testimonials.index');
