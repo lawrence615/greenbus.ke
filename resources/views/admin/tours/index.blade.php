@@ -236,7 +236,7 @@ function formatDurationByCategory($tour) {
                                         {{ $tour->code }}
                                     </span>
                                     <!-- Clickable Tour Title -->
-                                    <a href="{{ route('console.tours.show', $tour) }}" class="block font-semibold text-slate-900 hover:text-emerald-600 transition-colors truncate max-w-[200px] lg:max-w-[280px]" title="{{ $tour->title }}">
+                                    <a href="{{ route('console.tours.show', $tour) }}" class="block font-semibold text-slate-900 hover:text-emerald-600 transition-colors truncate max-w-[200px] lg:max-w-[350px]" title="{{ $tour->title }}">
                                         {{ $tour->title }}
                                     </a>
                                     <!-- Mobile: Show location & price inline -->
