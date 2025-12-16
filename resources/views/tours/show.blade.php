@@ -85,8 +85,7 @@
                     src="{{ $cover->url }}"
                     alt="{{ $tour->title }}"
                     class="w-full h-[220px] object-cover sm:h-[260px]"
-                    onerror="this.parentElement.style.display='none';"
-                >
+                    onerror="this.parentElement.style.display='none';">
             </div>
 
             @if ($otherImages->count() > 0)
@@ -97,8 +96,7 @@
                         src="{{ $image->url }}"
                         alt="{{ $tour->title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        onerror="this.parentElement.style.display='none';"
-                    >
+                        onerror="this.parentElement.style.display='none';">
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
 
                     @if ($loop->last && $totalImages > 4)
@@ -120,8 +118,7 @@
                     src="{{ $cover->url }}"
                     alt="{{ $tour->title }}"
                     class="w-full h-full object-cover"
-                    onerror="this.parentElement.style.display='none';"
-                >
+                    onerror="this.parentElement.style.display='none';">
             </div>
 
             <!-- Thumbnail Images (Right Side - 3 rows stacked vertically) -->
@@ -132,8 +129,7 @@
                         src="{{ $image->url }}"
                         alt="{{ $tour->title }}"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        onerror="this.parentElement.style.display='none';"
-                    >
+                        onerror="this.parentElement.style.display='none';">
                     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
 
                     @if ($loop->last && $totalImages > 4)
@@ -147,43 +143,35 @@
 
                 <!-- Fill empty slots if less than 3 other images -->
                 @for ($i = $otherImages->count(); $i < 3; $i++)
-                <div class="flex-1 rounded-xl overflow-hidden bg-slate-100"></div>
-                @endfor
+                    <div class="flex-1 rounded-xl overflow-hidden bg-slate-100">
             </div>
+            @endfor
         </div>
-        @else
-        <div class="rounded-2xl border border-dashed border-slate-200 bg-white mb-6 px-4 py-10 flex items-center justify-center text-center">
-            <p class="text-xs text-slate-500">Tour photos coming soon</p>
-        </div>
-        @endif
+    </div>
+    @else
+    <div class="rounded-2xl border border-dashed border-slate-200 bg-white mb-6 px-4 py-10 flex items-center justify-center text-center">
+        <p class="text-xs text-slate-500">Tour photos coming soon</p>
+    </div>
+    @endif
 
-        <div class="space-y-6 text-sm text-slate-700 mt-10">
-            <section>
-                <h2 class="text-base font-semibold mb-2">Overview</h2>
-                <div class="prose prose-sm max-w-none">
-                    {!! $tour->description !!}
-                </div>
-            </section>
+    <div class="space-y-6 text-sm text-slate-700 mt-10">
+        <section>
+            <h2 class="text-base font-semibold mb-2">Overview</h2>
+            <div class="prose prose-sm max-w-none">
+                {!! $tour->description !!}
+            </div>
+        </section>
 
-            <section>
-                <h2 class="text-base font-semibold mb-2">What the package covers</h2>
-                @if ($tour->included)
-                <div class="prose prose-sm max-w-none">
-                    {!! $tour->included !!}
-                </div>
-                @endif
-            </section>
+        <section>
+            <h2 class="text-base font-semibold mb-2">What the package covers</h2>
+            @if ($tour->included)
+            <div class="prose prose-sm max-w-none">
+                {!! $tour->included !!}
+            </div>
+            @endif
+        </section>
 
-            <section>
-                <h2 class="text-base font-semibold mb-2">Important information</h2>
-                @if ($tour->important_information)
-                <div class="prose prose-sm max-w-none">
-                    {!! $tour->important_information !!}
-                </div>
-                @endif
-            </section>
-
-            <section class="border border-slate-100 rounded-xl bg-white/60 p-4">
+        <section class="border border-slate-100 rounded-xl bg-white/60 p-4">
             <h2 class="text-base font-semibold mb-3">About this activity</h2>
             <div class="grid gap-3 sm:grid-cols-2 text-xs sm:text-sm text-slate-700">
                 @if ($tour->duration_text)
@@ -272,10 +260,28 @@
                     <p class="mt-0.5 ml-9">Small-group location tour suitable for first-time visitors.</p>
                 </div>
             </div>
-            </section>
+        </section>
 
-            <x-itinerary :items="$tour->itineraryItems" :location="$location" />
-        </div>
+        <x-itinerary :items="$tour->itineraryItems" :location="$location" />
+
+        <section>
+            <h2 class="text-base font-semibold mb-2">Important information</h2>
+            @if ($tour->important_information)
+            <div class="prose prose-sm max-w-none">
+                {!! $tour->important_information !!}
+            </div>
+            @endif
+        </section>
+
+        @if ($tour->cancellation_policy)
+        <section>
+            <h2 class="text-base font-semibold mb-2">Cancellation policy</h2>
+            <div class="prose prose-sm max-w-none">
+                {!! $tour->cancellation_policy !!}
+            </div>
+        </section>
+        @endif
+    </div>
     </div>
 
     <aside class="lg:col-span-1">
@@ -345,7 +351,7 @@
         // Thumbnails are otherImages (excluding cover), so we need to map to the full array
         const clickedImageUrl = otherImagesOnly[index - 1];
         currentImageIndex = galleryImages.indexOf(clickedImageUrl);
-        
+
         updateGalleryImage();
         const modal = document.getElementById('galleryModal');
         modal.classList.remove('hidden', 'pointer-events-none');
@@ -364,7 +370,7 @@
         // Use the correct image URL based on current index
         const imageUrl = galleryImages[currentImageIndex];
         const img = document.getElementById('galleryImage');
-        
+
         if (imageUrl) {
             img.src = imageUrl;
             img.style.display = 'block';
