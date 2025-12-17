@@ -64,6 +64,11 @@
                 </div>
                 <div class="pb-6 flex-1" x-data="{ expanded: false }">
                     <p class="font-semibold text-slate-800">{{ $item->title }}</p>
+                    @if ($item->duration_value && $item->duration_unit)
+                    <p class="text-sm text-gray-500 font-medium mb-1">
+                        {{ $item->duration_value }} {{ $item->duration_unit }}
+                    </p>
+                    @endif
                     @if ($item->description)
                     @php $descLength = Str::length($item->description); @endphp
                     <p class="text-slate-500">
