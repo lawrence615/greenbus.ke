@@ -4,6 +4,7 @@
 @section('page-title', 'Bookings')
 
 @push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <style>
     [x-cloak] {
         display: none !important;
@@ -11,12 +12,16 @@
 </style>
 @endpush
 
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+@endpush
+
 @section('content')
 <div class="space-y-6">
     <!-- Filters -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
         <form method="GET" action="{{ route('console.bookings.index') }}" class="flex flex-col xl:flex-row xl:items-end gap-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 flex-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-1">
                 <!-- Search -->
                 <div class="space-y-1.5">
                     <label class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
@@ -87,36 +92,25 @@
                     </div>
                 </div>
                 
-                <!-- Date From -->
+                <!-- Date Range -->
                 <div class="space-y-1.5">
                     <label class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                         </svg>
-                        Date From
+                        Date Range
                     </label>
-                    <input 
-                        type="date" 
-                        name="date_from" 
-                        value="{{ request('date_from') }}"
-                        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                    >
-                </div>
-                
-                <!-- Date To -->
-                <div class="space-y-1.5">
-                    <label class="flex items-center gap-1.5 text-sm font-medium text-slate-700">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        Date To
-                    </label>
-                    <input 
-                        type="date" 
-                        name="date_to" 
-                        value="{{ request('date_to') }}"
-                        class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                    >
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="date-range"
+                            placeholder="Select date range"
+                            class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none cursor-pointer"
+                            readonly
+                        >
+                        <input type="hidden" name="date_from" id="date_from" value="{{ request('date_from') }}">
+                        <input type="hidden" name="date_to" id="date_to" value="{{ request('date_to') }}">
+                    </div>
                 </div>
             </div>
             
@@ -128,7 +122,7 @@
                     </svg>
                     Filter
                 </button>
-                @if(request()->hasAny(['search', 'status', 'tour_id', 'date_from', 'date_to']))
+                @if(request()->hasAny(['search', 'status', 'tour_ids', 'tour_id', 'date_from', 'date_to']))
                 <a href="{{ route('console.bookings.index') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 border border-slate-300 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -193,26 +187,26 @@
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @forelse($bookings as $booking)
-                    <tr class="hover:bg-emerald-50/50 transition-colors duration-150 group">
+                    <tr class="hover:bg-emerald-50/50 transition-colors duration-150 group cursor-pointer" onclick="window.location.href='{{ route('console.bookings.show', $booking->id) }}'">
                         <td class="px-4 py-3">
                             <div class="min-w-0">
                                 <!-- Booking Reference -->
-                                <a href="{{ route('console.bookings.show', $booking) }}" class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 text-slate-600 hover:bg-emerald-100 hover:text-emerald-700 transition-colors mb-1">
+                                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 text-slate-600 mb-1">
                                     {{ $booking->reference }}
-                                </a>
-                                <!-- Customer Name - Clickable -->
-                                <a href="{{ route('console.bookings.show', $booking) }}" class="block font-semibold text-slate-900 hover:text-emerald-600 transition-colors truncate max-w-[180px] lg:max-w-[220px]" title="{{ $booking->customer_name }}">
+                                </span>
+                                <!-- Customer Name -->
+                                <div class="font-semibold text-slate-900 truncate max-w-[180px] lg:max-w-[220px]" title="{{ $booking->customer_name }}">
                                     {{ $booking->customer_name }}
-                                </a>
+                                </div>
                                 <!-- Tour Code & Mobile Info -->
                                 <div class="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1 text-xs text-slate-500">
                                     @if($booking->tour)
-                                    <a href="{{ route('console.tours.show', $booking->tour) }}" class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 hover:bg-blue-100 font-medium transition-colors" title="{{ $booking->tour->title }}">
+                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-medium" title="{{ $booking->tour->title }}">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                         {{ $booking->tour->code ?? 'N/A' }}
-                                    </a>
+                                    </span>
                                     @endif
                                     <!-- Mobile: Show date inline -->
                                     <span class="lg:hidden flex items-center gap-1">
@@ -230,7 +224,7 @@
                         </td>
                         <td class="px-4 py-3 hidden lg:table-cell">
                             <div class="flex flex-col">
-                                <span class="font-medium text-slate-900">{{ $booking->date->format('M d, Y') }}</span>
+                                <span class="font-medium text-slate-900">{{ $booking->date->format('D, M d, Y') }}</span>
                                 <span class="text-xs text-slate-500">{{ $booking->time }}</span>
                             </div>
                         </td>
@@ -287,7 +281,7 @@
                             </span>
                         </td>
                         <td class="px-4 py-3 text-right">
-                            <a href="{{ route('console.bookings.show', $booking) }}" class="p-1.5 inline-flex text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors duration-150" title="View Details">
+                            <a href="{{ route('console.bookings.show', $booking) }}" onclick="event.stopPropagation()" class="p-1.5 inline-flex text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors duration-150" title="View Details">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -382,6 +376,68 @@ function updateTourSelection() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
     updateTourSelection();
+    initializeDateRangePicker();
 });
+
+// Date Range Picker
+function initializeDateRangePicker() {
+    const dateRangeInput = document.getElementById('date-range');
+    const dateFromInput = document.getElementById('date_from');
+    const dateToInput = document.getElementById('date_to');
+    
+    // Set initial display value
+    updateDateRangeDisplay();
+    
+    // Create flatpickr instance
+    flatpickr(dateRangeInput, {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        altInput: true,
+        altFormat: "M j, Y",
+        defaultDate: [
+            dateFromInput.value ? new Date(dateFromInput.value) : null,
+            dateToInput.value ? new Date(dateToInput.value) : null
+        ],
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length === 2) {
+                dateFromInput.value = instance.formatDate(selectedDates[0], 'Y-m-d');
+                dateToInput.value = instance.formatDate(selectedDates[1], 'Y-m-d');
+            } else if (selectedDates.length === 1) {
+                dateFromInput.value = instance.formatDate(selectedDates[0], 'Y-m-d');
+                dateToInput.value = instance.formatDate(selectedDates[0], 'Y-m-d');
+            } else {
+                dateFromInput.value = '';
+                dateToInput.value = '';
+            }
+        }
+    });
+}
+
+function updateDateRangeDisplay() {
+    const dateFromInput = document.getElementById('date_from');
+    const dateToInput = document.getElementById('date_to');
+    const dateRangeInput = document.getElementById('date-range');
+    
+    if (dateFromInput.value && dateToInput.value) {
+        if (dateFromInput.value === dateToInput.value) {
+            dateRangeInput.value = new Date(dateFromInput.value).toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        } else {
+            const fromDate = new Date(dateFromInput.value).toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric' 
+            });
+            const toDate = new Date(dateToInput.value).toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+            dateRangeInput.value = `${fromDate} - ${toDate}`;
+        }
+    }
+}
 </script>
 @endsection
