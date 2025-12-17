@@ -141,9 +141,26 @@
             @endif
 
             <!-- Upload New Images -->
-            <div>
+            <div class="relative">
                 <h3 class="text-sm font-medium text-slate-700 mb-3">Add New Images</h3>
-                <form action="{{ route('console.tours.multimedia.upload', $tour) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                
+                <!-- Loading Overlay -->
+                <div x-show="isUploading" x-cloak 
+                     class="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-xl z-50 flex items-center justify-center">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 rounded-full mb-3">
+                            <svg class="w-6 h-6 text-emerald-600 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-medium text-slate-900">Uploading images...</p>
+                        <p class="text-xs text-slate-500 mt-1">Please don't close this window</p>
+                    </div>
+                </div>
+
+                <form action="{{ route('console.tours.multimedia.upload', $tour) }}" method="POST" enctype="multipart/form-data" class="space-y-4"
+                      @submit="isUploading = true">
                     @csrf
                     <div
                         @dragover.prevent="isDragging = true"
@@ -191,11 +208,22 @@
 
                     <!-- Upload Button -->
                     <div x-show="previews.length > 0" class="flex justify-end">
-                        <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                            </svg>
-                            Upload Images
+                        <button type="submit" 
+                                :disabled="isUploading"
+                                :class="isUploading ? 'bg-emerald-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700'"
+                                class="px-4 py-2 text-white text-sm font-medium rounded-lg transition-colors">
+                            <template x-if="!isUploading">
+                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                </svg>
+                            </template>
+                            <template x-if="isUploading">
+                                <svg class="w-4 h-4 inline mr-2 animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                            </template>
+                            <span x-text="isUploading ? 'Uploading...' : 'Upload Images'"></span>
                         </button>
                     </div>
                 </form>
@@ -221,6 +249,7 @@ function imageEditor() {
         coverImageId: {{ $images->where('is_cover', true)->first()?->id ?? $images->first()?->id ?? 'null' }},
         originalCoverId: {{ $images->where('is_cover', true)->first()?->id ?? $images->first()?->id ?? 'null' }},
         maxSize: 5 * 1024 * 1024, // 5MB
+        isUploading: false,
 
         handleDrop(event) {
             this.isDragging = false;
@@ -313,6 +342,13 @@ function imageEditor() {
             const dt = new DataTransfer();
             this.files.forEach(file => dt.items.add(file));
             this.$refs.fileInput.files = dt.files;
+        },
+
+        resetUploadState() {
+            this.isUploading = false;
+            this.files = [];
+            this.previews = [];
+            this.updateFileInput();
         }
     }
 }
