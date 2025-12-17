@@ -51,7 +51,7 @@
                     <div class="bg-gradient-to-r from-emerald-50 to-teal-50 px-5 py-3 border-b border-slate-100">
                         <div class="flex items-center gap-2">
                             <span class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold">1</span>
-                            <h2 class="font-semibold text-slate-800">Select date & time</h2>
+                            <h2 class="font-semibold text-slate-800">Plan Your Tour</h2>
                         </div>
                     </div>
                     <div class="p-5">
@@ -65,7 +65,7 @@
                                         Tour date
                                     </span>
                                 </label>
-                                <input type="date" id="date" name="date" value="{{ old('date') }}" min="{{ now()->toDateString() }}" class="w-full rounded-lg border border-slate-200 bg-slate-50 text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition">
+                                <input type="date" id="date" name="date" value="{{ old('date') }}" min="{{ now()->toDateString() }}" class="w-full rounded-lg border border-slate-200 bg-slate-50 text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition cursor-pointer">
                                 @error('date')
                                 <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
@@ -476,6 +476,14 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        // Make date input fully clickable
+        const dateInput = document.getElementById('date');
+        if (dateInput) {
+            dateInput.addEventListener('click', function() {
+                this.showPicker();
+            });
+        }
+
         // Initialize price summary
         updatePriceSummary();
 
