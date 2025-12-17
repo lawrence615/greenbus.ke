@@ -27,7 +27,7 @@ class Booking extends Model
         'customer_name',
         'customer_email',
         'customer_phone',
-        'pickup_location',
+        'country_of_origin',
         'special_requests',
         'status',
         'refunded_at',

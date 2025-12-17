@@ -58,7 +58,7 @@ class BookingRepository implements BookingRepositoryInterface
             'customer_name' => $data['customer_name'],
             'customer_email' => $data['customer_email'],
             'customer_phone' => $data['customer_phone'] ?? null,
-            'pickup_location' => $data['pickup_location'] ?? null,
+            'country_of_origin' => $data['country_of_origin'] ?? null,
             'special_requests' => $data['special_requests'] ?? null,
             'status' => BookingStatus::PENDING_PAYMENT->value,
         ]);

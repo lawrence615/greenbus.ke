@@ -261,7 +261,7 @@
                                 @enderror
                             </div>
                             <div>
-                                <label for="pickup_location" class="block text-xs font-medium text-slate-600 mb-1.5">
+                                <label for="country_of_origin" class="block text-xs font-medium text-slate-600 mb-1.5">
                                     <span class="inline-flex items-center gap-1">
                                         <svg class="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
@@ -270,8 +270,8 @@
                                         Country of origin <span class="text-slate-400 font-normal">(optional)</span>
                                     </span>
                                 </label>
-                                <input type="text" id="pickup_location" name="pickup_location" value="{{ old('pickup_location') }}" class="w-full rounded-lg border border-slate-200 bg-slate-50 text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition" placeholder="e.g. USA, UK, Canada">
-                                @error('pickup_location')
+                                <input type="text" id="country_of_origin" name="country_of_origin" value="{{ old('country_of_origin') }}" class="w-full rounded-lg border border-slate-200 bg-slate-50 text-sm px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:bg-white transition" placeholder="e.g. USA, UK, Canada">
+                                @error('country_of_origin')
                                 <p class="text-xs text-red-600 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>

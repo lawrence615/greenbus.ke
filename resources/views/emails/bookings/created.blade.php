@@ -105,10 +105,10 @@
                                     <td style="padding:4px 0;font-size:12px;color:#6b7280;">Total amount</td>
                                     <td style="padding:4px 0;text-align:right;font-weight:600;">{{ number_format($booking->total_amount, 0) }} {{ $booking->currency }}</td>
                                 </tr>
-                                @if($booking->pickup_location)
+                                @if($booking->country_of_origin)
                                 <tr>
-                                    <td style="padding:4px 0;font-size:12px;color:#6b7280;">Pickup</td>
-                                    <td style="padding:4px 0;text-align:right;">{{ $booking->pickup_location }}</td>
+                                    <td style="padding:4px 0;font-size:12px;color:#6b7280;">Country of Origin</td>
+                                    <td style="padding:4px 0;text-align:right;">{{ $booking->country_of_origin }}</td>
                                 </tr>
                                 @endif
                                 @if($booking->special_requests)
