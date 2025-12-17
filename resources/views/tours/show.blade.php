@@ -300,7 +300,7 @@
             </a>
 
             <p class="text-[11px] text-slate-500">
-                You’ll see the full price before payment. Secure card payments powered by a local provider.
+                You’ll see the full price before payment. Secure card payments are processed by a trusted global provider.
             </p>
         </div>
     </aside>
