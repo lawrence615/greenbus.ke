@@ -64,8 +64,8 @@
                         <p class="font-medium text-slate-900">{{ $booking->currency }} {{ number_format($booking->total_amount) }}</p>
                     </div>
                     <div class="col-span-2">
-                        <p class="text-sm text-slate-500">Pickup Location</p>
-                        <p class="font-medium text-slate-900">{{ $booking->pickup_location ?? 'Not specified' }}</p>
+                        <p class="text-sm text-slate-500">Country of Origin</p>
+                        <p class="font-medium text-slate-900">{{ $booking->country_of_origin ?? 'Not specified' }}</p>
                     </div>
                     @if($booking->special_requests)
                     <div class="col-span-2">
