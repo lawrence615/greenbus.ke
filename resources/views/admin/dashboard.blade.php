@@ -66,7 +66,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-slate-500">Total Revenue</p>
-                    <p class="text-2xl font-bold text-slate-900">KES {{ number_format($stats['total_revenue']) }}</p>
+                    <p class="text-2xl font-bold text-slate-900">USD {{ number_format($stats['total_revenue']) }}</p>
                 </div>
             </div>
         </div>
@@ -125,7 +125,7 @@
                             <p class="text-sm text-slate-500">{{ Str::limit($payment->booking->tour->title, 120) }}</p>
                         </div>
                         <div class="text-right">
-                            <p class="text-sm font-bold text-emerald-600">KES {{ number_format($payment->amount) }}</p>
+                            <p class="text-sm font-bold text-emerald-600">USD {{ number_format($payment->amount) }}</p>
                             <p class="text-xs text-slate-500">{{ $payment->created_at->diffForHumans() }}</p>
                         </div>
                     </div>

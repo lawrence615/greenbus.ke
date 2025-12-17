@@ -105,7 +105,7 @@
                                         <p class="text-sm font-medium text-slate-800">Adults</p>
                                         <p class="text-xs text-slate-500">Age 13+</p>
                                     </div>
-                                    <span class="text-xs text-emerald-600 font-medium">KES {{ number_format($tour->base_price_adult ?? 0) }}</span>
+                                    <span class="text-xs text-emerald-600 font-medium">USD {{ number_format($tour->base_price_adult ?? 0) }}</span>
                                 </div> -->
                                 <p class="text-sm font-medium text-slate-800">Adults</p>
                                 <div class="flex items-center justify-center gap-3">
@@ -154,7 +154,7 @@
                                         <p class="text-sm font-medium text-slate-800">Children</p>
                                         <p class="text-xs text-slate-500">Age 3–12</p>
                                     </div>
-                                    <span class="text-xs text-emerald-600 font-medium">KES {{ number_format($tour->base_price_child ?? 0) }}</span>
+                                    <span class="text-xs text-emerald-600 font-medium">USD {{ number_format($tour->base_price_child ?? 0) }}</span>
                                 </div> -->
                                 <p class="text-sm font-medium text-slate-800">Children</p>
                                 <div class="flex items-center justify-center gap-3">
@@ -182,7 +182,7 @@
                                         <p class="text-sm font-medium text-slate-800">Infants</p>
                                         <p class="text-xs text-slate-500">Under 3</p>
                                     </div>
-                                    <span class="text-xs text-emerald-600 font-medium">{{ $tour->base_price_infant > 0 ? 'KES ' . number_format($tour->base_price_infant) : 'Free' }}</span>
+                                    <span class="text-xs text-emerald-600 font-medium">{{ $tour->base_price_infant > 0 ? 'USD ' . number_format($tour->base_price_infant) : 'Free' }}</span>
                                 </div> -->
                                 <p class="text-sm font-medium text-slate-800">Infants</p>
                                 <div class="flex items-center justify-center gap-3">
@@ -359,26 +359,26 @@
                     <h4 class="text-sm font-semibold text-slate-800 mb-3">Price breakdown</h4>
                     <div class="space-y-2 text-sm" id="price-breakdown">
                         <div class="flex justify-between text-slate-600">
-                            <span>Adults (<span id="summary-adults">1</span> x KES {{ number_format($tour->base_price_adult) }})</span>
-                            <span id="total-adults">KES {{ number_format($tour->base_price_adult) }}</span>
+                            <span>Adults (<span id="summary-adults">1</span> x USD {{ number_format($tour->base_price_adult) }})</span>
+                            <span id="total-adults">USD {{ number_format($tour->base_price_adult) }}</span>
                         </div>
                         <div class="flex justify-between text-slate-600" id="seniors-row" style="display: none;">
-                            <span>Seniors (<span id="summary-seniors">0</span> x KES {{ number_format($tour->base_price_senior ?? $tour->base_price_adult) }})</span>
-                            <span id="total-seniors">KES 0</span>
+                            <span>Seniors (<span id="summary-seniors">0</span> x USD {{ number_format($tour->base_price_senior ?? $tour->base_price_adult) }})</span>
+                            <span id="total-seniors">USD 0</span>
                         </div>
                         <div class="flex justify-between text-slate-600" id="children-row" style="display: none;">
-                            <span>Children (<span id="summary-children">0</span> x KES {{ number_format($tour->base_price_child) }})</span>
-                            <span id="total-children">KES 0</span>
+                            <span>Children (<span id="summary-children">0</span> x USD {{ number_format($tour->base_price_child) }})</span>
+                            <span id="total-children">USD 0</span>
                         </div>
                         <div class="flex justify-between text-slate-600" id="infants-row" style="display: none;">
-                            <span>Infants (<span id="summary-infants">0</span>@if($tour->base_price_infant > 0) x KES {{ number_format($tour->base_price_infant) }}@endif)</span>
-                            <span id="total-infants" class="text-emerald-600">{{ $tour->base_price_infant > 0 ? 'KES 0' : 'Free' }}</span>
+                            <span>Infants (<span id="summary-infants">0</span>@if($tour->base_price_infant > 0) x USD {{ number_format($tour->base_price_infant) }}@endif)</span>
+                            <span id="total-infants" class="text-emerald-600">{{ $tour->base_price_infant > 0 ? 'USD 0' : 'Free' }}</span>
                         </div>
                     </div>
                     <div class="border-t border-slate-100 mt-3 pt-3">
                         <div class="flex justify-between items-center">
                             <span class="font-semibold text-slate-900">Total</span>
-                            <span class="text-lg font-bold text-emerald-600" id="grand-total">KES {{ number_format($tour->price_adult) }}</span>
+                            <span class="text-lg font-bold text-emerald-600" id="grand-total">USD {{ number_format($tour->price_adult) }}</span>
                         </div>
                     </div>
                 </div>
@@ -454,11 +454,11 @@
         const grandTotal = totalAdults + totalChildren + totalInfants + totalSeniors;
 
         // Update displayed totals
-        document.getElementById('total-adults').textContent = 'KES ' + formatNumber(totalAdults);
-        document.getElementById('total-children').textContent = 'KES ' + formatNumber(totalChildren);
-        document.getElementById('total-infants').textContent = PRICE_INFANT > 0 ? 'KES ' + formatNumber(totalInfants) : 'Free';
-        document.getElementById('total-seniors').textContent = 'KES ' + formatNumber(totalSeniors);
-        document.getElementById('grand-total').textContent = 'KES ' + formatNumber(grandTotal);
+        document.getElementById('total-adults').textContent = 'USD ' + formatNumber(totalAdults);
+        document.getElementById('total-children').textContent = 'USD ' + formatNumber(totalChildren);
+        document.getElementById('total-infants').textContent = PRICE_INFANT > 0 ? 'USD ' + formatNumber(totalInfants) : 'Free';
+        document.getElementById('total-seniors').textContent = 'USD ' + formatNumber(totalSeniors);
+        document.getElementById('grand-total').textContent = 'USD ' + formatNumber(grandTotal);
 
         // Show/hide rows
         document.getElementById('children-row').style.display = children > 0 ? 'flex' : 'none';

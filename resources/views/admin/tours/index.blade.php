@@ -254,7 +254,7 @@ function formatDurationByCategory($tour) {
                                             {{ $tour->location->name ?? 'N/A' }}
                                         </span>
                                         <span class="xl:hidden font-medium text-emerald-600">
-                                            KES {{ number_format($tour->base_price_adult) }}
+                                            USD {{ number_format($tour->base_price_adult) }}
                                         </span>
                                     </div>
                                 </div>
@@ -270,7 +270,7 @@ function formatDurationByCategory($tour) {
                         </td>
                         <td class="px-4 py-3 hidden xl:table-cell">
                             <div class="flex flex-col">
-                                <span class="font-semibold text-slate-900">KES {{ number_format($tour->base_price_adult) }}</span>
+                                <span class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_adult) }}</span>
                                 <span class="text-[10px] text-slate-500">per adult</span>
                             </div>
                         </td>

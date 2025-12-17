@@ -54,7 +54,7 @@ class BookingRepository implements BookingRepositoryInterface
             'children' => $children,
             'infants' => $infants,
             'total_amount' => $total,
-            'currency' => 'KES',
+            'currency' => 'USD',
             'customer_name' => $data['customer_name'],
             'customer_email' => $data['customer_email'],
             'customer_phone' => $data['customer_phone'] ?? null,

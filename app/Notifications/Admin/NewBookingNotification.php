@@ -46,7 +46,7 @@ class NewBookingNotification extends Notification implements ShouldQueue
             ->line("- **Customer:** {$booking->customer_name}")
             ->line("- **Tour:** {$booking->tour->title}")
             ->line("- **Date:** {$booking->date->format('M j, Y')}")
-            ->line("- **Amount:** KES " . number_format($booking->total_amount))
+            ->line("- **Amount:** USD " . number_format($booking->total_amount))
             ->action('View Booking', $viewUrl)
             ->salutation('GreenBus Notifications');
     }
@@ -77,6 +77,6 @@ class NewBookingNotification extends Notification implements ShouldQueue
     // public function toVonage(object $notifiable): \Illuminate\Notifications\Messages\VonageMessage
     // {
     //     return (new \Illuminate\Notifications\Messages\VonageMessage)
-    //         ->content("New booking {$this->booking->reference} - {$this->booking->customer_name} - KES " . number_format($this->booking->total_amount));
+    //         ->content("New booking {$this->booking->reference} - {$this->booking->customer_name} - USD " . number_format($this->booking->total_amount));
     // }
 }

@@ -505,7 +505,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                         </span>
-                        Pricing (KES)
+                        Pricing (USD)
                     </h2>
                     <p class="text-sm text-slate-500 mt-1">Set competitive prices for different customer segments</p>
                 </div>
@@ -522,7 +522,7 @@
                                 Adult Price <span class="text-red-500">*</span>
                             </label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">KES</span>
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
                                 <input type="number" name="base_price_adult" id="base_price_adult" value="{{ old('base_price_adult') }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" required>
                             </div>
                             @error('base_price_adult')
@@ -544,7 +544,7 @@
                                 Child Price
                             </label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">KES</span>
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
                                 <input type="number" name="base_price_child" id="base_price_child" value="{{ old('base_price_child', 0) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                             </div>
                             @error('base_price_child')
@@ -566,7 +566,7 @@
                                 Senior Price
                             </label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">KES</span>
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
                                 <input type="number" name="base_price_senior" id="base_price_senior" value="{{ old('base_price_senior', 0) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                             </div>
                             @error('base_price_senior')
@@ -588,7 +588,7 @@
                                 Infant Price
                             </label>
                             <div class="relative">
-                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">KES</span>
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
                                 <input type="number" name="base_price_infant" id="base_price_infant" value="{{ old('base_price_infant', 0) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                             </div>
                             <p class="text-xs text-slate-500">Set to 0 for free</p>

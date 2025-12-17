@@ -67,7 +67,8 @@ class StripePaymentGateway implements PaymentGatewayInterface
                     [
                         'price_data' => [
                             'currency' => 'usd',
-                            'unit_amount' => $this->convertToUsdCents($booking->total_amount),
+                            // 'unit_amount' => $this->convertToUsdCents($booking->total_amount),
+                            'unit_amount' => $booking->total_amount * 100,
                             'product_data' => [
                                 'name' => $booking->tour->title,
                                 'description' => $this->buildDescription($booking),

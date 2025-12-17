@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('amount_settled', 10, 2)->nullable();
             $table->decimal('provider_fee', 10, 2)->nullable();
             $table->string('payment_method')->default('card');
-            $table->string('currency', 10)->default('KES');
+            $table->string('currency', 10)->default('USD');
             $table->string('status')->default('initiated');
             $table->json('raw_payload')->nullable();
             $table->timestamps();

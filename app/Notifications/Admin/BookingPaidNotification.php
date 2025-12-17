@@ -50,7 +50,7 @@ class BookingPaidNotification extends Notification implements ShouldQueue
             ->line("- **Tour:** {$booking->tour->title}")
             ->line("- **Date:** {$booking->date->format('M j, Y')}")
             ->line("**Payment Details:**")
-            ->line("- **Amount:** KES " . number_format($payment->amount))
+            ->line("- **Amount:** USD " . number_format($payment->amount))
             ->line("- **Method:** {$payment->payment_method}")
             ->line("- **Transaction ID:** {$payment->transaction_id}")
             ->action('View Booking', $viewUrl)
@@ -73,7 +73,7 @@ class BookingPaidNotification extends Notification implements ShouldQueue
             'customer_name' => $this->booking->customer_name,
             'tour_name' => $this->booking->tour->name,
             'amount' => $this->payment->amount,
-            'message' => "Booking {$this->booking->reference} paid - KES " . number_format($this->payment->amount),
+            'message' => "Booking {$this->booking->reference} paid - USD " . number_format($this->payment->amount),
         ];
     }
 
@@ -84,6 +84,6 @@ class BookingPaidNotification extends Notification implements ShouldQueue
     // public function toVonage(object $notifiable): \Illuminate\Notifications\Messages\VonageMessage
     // {
     //     return (new \Illuminate\Notifications\Messages\VonageMessage)
-    //         ->content("Payment received! Booking {$this->booking->reference} - KES " . number_format($this->payment->amount));
+    //         ->content("Payment received! Booking {$this->booking->reference} - USD " . number_format($this->payment->amount));
     // }
 }

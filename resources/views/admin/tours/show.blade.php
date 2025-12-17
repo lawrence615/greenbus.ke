@@ -231,19 +231,19 @@
                 <dl class="space-y-3">
                     <div class="flex justify-between">
                         <dt class="text-slate-600">Senior</dt>
-                        <dd class="font-semibold text-slate-900">KES {{ number_format($tour->base_price_senior) }}</dd>
+                        <dd class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_senior) }}</dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-slate-600">Adult</dt>
-                        <dd class="font-semibold text-slate-900">KES {{ number_format($tour->base_price_adult) }}</dd>
+                        <dd class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_adult) }}</dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-slate-600">Child</dt>
-                        <dd class="font-semibold text-slate-900">KES {{ number_format($tour->base_price_child ?? 0) }}</dd>
+                        <dd class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_child ?? 0) }}</dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-slate-600">Infant</dt>
-                        <dd class="font-semibold text-slate-900">{{ $tour->base_price_infant > 0 ? 'KES ' . number_format($tour->base_price_infant) : 'Free' }}</dd>
+                        <dd class="font-semibold text-slate-900">{{ $tour->base_price_infant > 0 ? 'USD ' . number_format($tour->base_price_infant) : 'Free' }}</dd>
                     </div>
                 </dl>
             </div>

@@ -499,7 +499,7 @@
         <!-- Pricing -->
         <div class="bg-white rounded-xl shadow-sm border border-slate-200">
             <div class="px-6 py-4 border-b border-slate-200">
-                <h2 class="font-semibold text-slate-900">Step 5: Pricing (KES)</h2>
+                <h2 class="font-semibold text-slate-900">Step 5: Pricing (USD)</h2>
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -514,7 +514,7 @@
                             Adult Price <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">KES</span>
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
                             <input type="number" name="base_price_adult" id="base_price_adult" value="{{ old('base_price_adult', $tour->base_price_adult) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" required>
                         </div>
                         @error('base_price_adult')
@@ -536,7 +536,7 @@
                             Child Price
                         </label>
                         <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">KES</span>
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
                             <input type="number" name="base_price_child" id="base_price_child" value="{{ old('base_price_child', $tour->base_price_child ?? 0) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                         </div>
                         @error('base_price_child')
@@ -558,7 +558,7 @@
                             Infant Price
                         </label>
                         <div class="relative">
-                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">KES</span>
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
                             <input type="number" name="base_price_infant" id="base_price_infant" value="{{ old('base_price_infant', $tour->base_price_infant ?? 0) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                         </div>
                         <p class="text-xs text-slate-500">Set to 0 for free</p>

@@ -368,7 +368,7 @@
             <div class="space-y-3">
                 <h3 class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Practical info</h3>
                 <ul class="space-y-2 text-slate-600">
-                    <li>All prices in Kenyan Shillings (KES).</li>
+                    <li>All prices in USD.</li>
                     <li>Instant confirmation for online bookings.</li>
                     <li>Free cancellation up to 24 hours before departure.</li>
                 </ul>
@@ -474,7 +474,7 @@
                 <div x-show="activeTab === 'info'" x-cloak class="space-y-3">
                     <h3 class="text-xs font-semibold tracking-wide text-slate-500 uppercase">Practical info</h3>
                     <ul class="space-y-2 text-slate-600">
-                        <li>All prices in Kenyan Shillings (KES).</li>
+                        <li>All prices in USD.</li>
                         <li>Instant confirmation for online bookings.</li>
                         <li>Free cancellation up to 24 hours before departure.</li>
                     </ul>

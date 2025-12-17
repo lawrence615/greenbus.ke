@@ -51,7 +51,8 @@ class FlutterwavePaymentGateway implements PaymentGatewayInterface
             $response = Http::withToken($this->secretKey)
                 ->post("{$this->baseUrl}/payments", [
                     'tx_ref' => $booking->reference,
-                    'amount' => $this->convertToUsd($booking->total_amount),
+                    // 'amount' => $this->convertToUsd($booking->total_amount),
+                    'amount' => $booking->total_amount,
                     'currency' => 'USD',
                     'redirect_url' => $successUrl,
                     'customer' => [

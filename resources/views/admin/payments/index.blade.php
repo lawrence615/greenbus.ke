@@ -24,7 +24,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-slate-500">Total Successful</p>
-                    <p class="text-2xl font-bold text-slate-900">KES {{ number_format($totalSuccessful) }}</p>
+                    <p class="text-2xl font-bold text-slate-900">USD {{ number_format($totalSuccessful) }}</p>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-slate-500">Pending</p>
-                    <p class="text-2xl font-bold text-slate-900">KES {{ number_format($totalPending) }}</p>
+                    <p class="text-2xl font-bold text-slate-900">USD {{ number_format($totalPending) }}</p>
                 </div>
             </div>
         </div>

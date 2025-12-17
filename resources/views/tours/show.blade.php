@@ -287,7 +287,7 @@
     <aside class="lg:col-span-1">
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 sticky top-24">
             <p class="text-xs uppercase tracking-wide text-slate-500 mb-1">From</p>
-            <p class="text-2xl font-semibold text-emerald-700 mb-4">KES {{ number_format($tour->base_price_adult) }} <span class="text-xs font-normal text-slate-500">per adult</span></p>
+            <p class="text-2xl font-semibold text-emerald-700 mb-4">USD {{ number_format($tour->base_price_adult) }} <span class="text-xs font-normal text-slate-500">per adult</span></p>
 
             <ul class="text-xs text-slate-600 mb-4 space-y-1">
                 <li>Guided location tour with local expert</li>
