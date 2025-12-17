@@ -45,7 +45,7 @@ class LocationRepository implements LocationRepositoryInterface
     {
         return $location->tours()
             ->with('location')
-            ->where('featured', true)
+            ->where('is_featured', true)
             ->where('status', 'published')
             ->take($limit)
             ->get();
@@ -54,7 +54,7 @@ class LocationRepository implements LocationRepositoryInterface
     public function countFeaturedToursForCity(Location $location): int
     {
         return $location->tours()
-            ->where('featured', true)
+            ->where('is_featured', true)
             ->where('status', 'published')
             ->count();
     }

@@ -220,7 +220,7 @@
                     </div>
                     <div>
                         <dt class="text-sm text-slate-500">Featured</dt>
-                        <dd class="font-medium text-slate-900">{{ $tour->featured ? 'Yes' : 'No' }}</dd>
+                        <dd class="font-medium text-slate-900">{{ $tour->is_featured ? 'Yes' : 'No' }}</dd>
                     </div>
                 </dl>
             </div>

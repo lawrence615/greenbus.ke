@@ -31,7 +31,7 @@ class StoreRequest extends FormRequest
             'group_size_type' => ['required', 'string', 'in:3,8,custom'],
             'no_of_people' => ['required_if:group_size_type,custom', 'integer', 'min:1', 'max:100'],
             'is_daily' => ['boolean'],
-            'featured' => ['boolean'],
+            'is_featured' => ['boolean'],
             'base_price_senior' => ['required', 'numeric', 'min:0'],
             'base_price_adult' => ['required', 'numeric', 'min:0'],
             'base_price_child' => ['nullable', 'numeric', 'min:0'],
@@ -81,7 +81,7 @@ class StoreRequest extends FormRequest
         
         $this->merge([
             'is_daily' => $this->boolean('is_daily'),
-            'featured' => $this->boolean('featured'),
+            'is_featured' => $this->boolean('is_featured'),
         ]);
         
         // Map group_size_type to no_of_people for non-custom options

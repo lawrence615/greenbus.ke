@@ -747,7 +747,7 @@
                         <span class="text-sm text-slate-700">Daily tour (runs every day)</span>
                     </label>
                     <label class="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox" name="featured" id="featured" value="1" {{ old('featured', $tour->featured) ? 'checked' : '' }} class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                        <input type="checkbox" name="is_featured" id="is_featured" value="1" {{ old('is_featured', $tour->is_featured) ? 'checked' : '' }} class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
                         <span class="text-sm text-slate-700">Featured tour (show on homepage)</span>
                     </label>
                 </div>

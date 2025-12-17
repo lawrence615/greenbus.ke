@@ -28,7 +28,7 @@ class UpdateRequest extends FormRequest
             'starts_at_time' => ['nullable', 'string', 'max:10'],
             'cut_off_time' => ['required', 'integer', 'in:5,10,15,30,45,60'],
             'is_daily' => ['boolean'],
-            'featured' => ['boolean'],
+            'is_featured' => ['boolean'],
            'base_price_senior' => ['required', 'numeric', 'min:0'],
             'base_price_adult' => ['required', 'numeric', 'min:0'],
             'base_price_child' => ['nullable', 'numeric', 'min:0'],
@@ -50,7 +50,7 @@ class UpdateRequest extends FormRequest
     {
         $this->merge([
             'is_daily' => $this->boolean('is_daily'),
-            'featured' => $this->boolean('featured'),
+            'is_featured' => $this->boolean('is_featured'),
         ]);
     }
 }

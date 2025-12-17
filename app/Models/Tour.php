@@ -32,7 +32,7 @@ class Tour extends Model
         'starts_at_time',
         'cut_off_time',
         'is_daily',
-        'featured',
+        'is_featured',
         'base_price_adult',
         'base_price_child',
         'base_price_infant',
