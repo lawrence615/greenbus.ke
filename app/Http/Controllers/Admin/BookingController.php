@@ -30,8 +30,15 @@ class BookingController extends Controller
             $query->whereDate('date', '<=', $request->date_to);
         }
 
-        // Filter by tour
-        if ($request->filled('tour_id')) {
+        // Filter by tour(s)
+        if ($request->filled('tour_ids')) {
+            $tourIds = $request->tour_ids;
+            // Handle empty value for "All Tours"
+            if (!empty($tourIds) && !in_array('', $tourIds)) {
+                $query->whereIn('tour_id', $tourIds);
+            }
+        } elseif ($request->filled('tour_id')) {
+            // Fallback for single tour_id (backward compatibility)
             $query->where('tour_id', $request->tour_id);
         }
 
