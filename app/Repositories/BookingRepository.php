@@ -38,6 +38,7 @@ class BookingRepository implements BookingRepositoryInterface
         }
 
         $adults = (int) ($data['adults'] ?? 0);
+        $seniors = (int) ($data['seniors'] ?? 0);
         $children = (int) ($data['children'] ?? 0);
         $infants = (int) ($data['infants'] ?? 0);
 
@@ -51,6 +52,7 @@ class BookingRepository implements BookingRepositoryInterface
             'date' => $data['date'],
             'time' => $data['time'] ?? null,
             'adults' => $adults,
+            'seniors' => $seniors,
             'children' => $children,
             'infants' => $infants,
             'total_amount' => $total,
