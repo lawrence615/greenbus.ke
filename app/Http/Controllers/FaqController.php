@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\FaqRepositoryInterface;
+use App\Interfaces\FAQRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class FaqController extends Controller
+class FAQController extends Controller
 {
-    public function __construct(private readonly FaqRepositoryInterface $faqs)
+    public function __construct(private readonly FAQRepositoryInterface $faqEepositoryInterface)
     {
     }
 
@@ -18,8 +18,8 @@ class FaqController extends Controller
     public function index(Request $request): View
     {
         $selectedCategory = $request->query('category');
-        $faqs = $this->faqs->getActive($selectedCategory);
-        $categories = $this->faqs->getCategories();
+        $faqs = $this->faqEepositoryInterface->getActive($selectedCategory);
+        $categories = $this->faqEepositoryInterface->getCategories();
 
         return view('faqs.index', [
             'faqs' => $faqs,
