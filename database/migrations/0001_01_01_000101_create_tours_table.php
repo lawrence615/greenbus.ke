@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('starts_at_time')->nullable();
             $table->unsignedInteger('cut_off_time')->default(15);
             $table->boolean('is_daily')->default(true);
-            $table->boolean('featured')->default(false);
+            $table->boolean('is_featured')->default(false);
             $table->decimal('base_price_senior', 10, 2)->default(0);
             $table->decimal('base_price_adult', 10, 2)->default(0);
             $table->decimal('base_price_child', 10, 2)->nullable();
