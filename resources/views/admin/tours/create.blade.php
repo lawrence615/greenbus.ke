@@ -910,7 +910,7 @@
                         </svg>
                         <div>
                             <p class="text-sm font-medium text-emerald-900">Ready to create your tour!</p>
-                            <p class="text-sm text-emerald-700 mt-1">Click "Create Tour" to publish this tour to your website. You can edit it later if needed.</p>
+                            <p class="text-sm text-emerald-700 mt-1">Click "Create Tour" to persist this tour data. You can edit it later if needed.</p>
                         </div>
                     </div>
                 </div>
