@@ -2,16 +2,16 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\FaqRepositoryInterface;
-use App\Models\Faq;
+use App\Interfaces\FAQRepositoryInterface;
+use App\Models\FAQ;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
-class FaqRepository implements FaqRepositoryInterface
+class FAQRepository implements FAQRepositoryInterface
 {
     public function index(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        $query = Faq::query()->latest();
+        $query = FAQ::query()->latest();
 
         if (!empty($filters['search'])) {
             $search = $filters['search'];
@@ -34,44 +34,44 @@ class FaqRepository implements FaqRepositoryInterface
 
     public function getActive(?string $category = null): Collection
     {
-        return Faq::active()->byCategory($category)->ordered()->get();
+        return FAQ::active()->byCategory($category)->ordered()->get();
     }
 
     public function getPublicFaqs(): Collection
     {
-        return Faq::active()->ordered()->get();
+        return FAQ::active()->ordered()->get();
     }
 
     public function getCategories(): array
     {
-        return Faq::whereNotNull('category')
+        return FAQ::whereNotNull('category')
             ->distinct()
             ->pluck('category')
             ->toArray();
     }
 
-    public function find(int $id): ?Faq
+    public function find(int $id): ?FAQ
     {
-        return Faq::find($id);
+        return FAQ::find($id);
     }
 
-    public function store(array $data): Faq
+    public function store(array $data): FAQ
     {
-        return Faq::create($data);
+        return FAQ::create($data);
     }
 
-    public function update(Faq $faq, array $data): Faq
+    public function update(FAQ $faq, array $data): FAQ
     {
         $faq->update($data);
         return $faq->fresh();
     }
 
-    public function delete(Faq $faq): void
+    public function delete(FAQ $faq): void
     {
         $faq->delete();
     }
 
-    public function toggleStatus(Faq $faq): Faq
+    public function toggleStatus(FAQ $faq): FAQ
     {
         $faq->is_active = !$faq->is_active;
         $faq->save();
