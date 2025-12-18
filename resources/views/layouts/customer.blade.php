@@ -22,11 +22,14 @@
         >
             <!-- Logo -->
             <div class="flex items-center justify-between h-16 px-4 border-b border-slate-200">
-                <a href="{{ route('home') }}" class="flex items-center gap-2">
+                <!-- <a href="{{ route('home') }}" class="flex items-center gap-2">
                     <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-sm">
                         GB
                     </span>
                     <span class="text-slate-900 font-semibold">Greenbus</span>
+                </a> -->
+                <a href="{{ route('home') }}" class="flex items-center gap-3">
+                    <img src="{{ asset('images/logo.png') }}" alt="Greenbus Location Tours" class="h-8 sm:h-8 w-auto"><span class="text-slate-900 font-semibold">Greenbus</span>
                 </a>
                 <button @click="sidebarOpen = false" class="lg:hidden text-slate-400 hover:text-slate-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
