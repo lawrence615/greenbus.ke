@@ -4,7 +4,39 @@
 @section('page-title', 'Booking Details')
 
 @section('content')
-<div class="space-y-6">
+<div x-data="{ 
+    showConfirmModal: false,
+    selectedStatus: '',
+    selectedStatusLabel: '',
+    statusDescription: '',
+    openModal: function() {
+        const statusSelect = document.getElementById('status-select');
+        const selectedOption = statusSelect.options[statusSelect.selectedIndex];
+        const descriptions = {
+            'pending_payment': 'Customer has not yet completed payment for this booking.',
+            'confirmed': 'Booking is confirmed and payment has been received.',
+            'cancelled': 'Booking has been cancelled by customer or administrator.',
+            'completed': 'Tour/service has been successfully completed.',
+            'refunded': 'Payment has been refunded to the customer.',
+            'no_show': 'Customer paid but did not show up for the scheduled tour.',
+            'expired': 'Booking has expired due to non-payment or time limit.'
+        };
+        
+        this.selectedStatus = statusSelect.value;
+        this.selectedStatusLabel = selectedOption.text;
+        this.statusDescription = descriptions[statusSelect.value] || '';
+        this.showConfirmModal = true;
+    },
+    closeModal: function() {
+        this.showConfirmModal = false;
+        this.selectedStatus = '';
+        this.selectedStatusLabel = '';
+        this.statusDescription = '';
+    },
+    confirmUpdate: function() {
+        document.getElementById('status-update-form').submit();
+    }
+}" class="space-y-6">
     <!-- Back Link -->
     <div>
         <a href="{{ route('console.bookings.index') }}" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">
@@ -31,6 +63,7 @@
                         @elseif($status?->color() === 'yellow') bg-yellow-100 text-yellow-700
                         @elseif($status?->color() === 'red') bg-red-100 text-red-700
                         @elseif($status?->color() === 'blue') bg-blue-100 text-blue-700
+                        @elseif($status?->color() === 'orange') bg-orange-100 text-orange-700
                         @else bg-slate-100 text-slate-700
                         @endif">
                         {{ $status?->label() ?? $booking->status }}
@@ -39,7 +72,13 @@
                 <div class="p-6 grid grid-cols-2 gap-6">
                     <div>
                         <p class="text-sm text-slate-500">Tour</p>
-                        <p class="font-medium text-slate-900">{{ Str::limit($booking->tour->title, 120) }}</p>
+                        @if($booking->tour)
+                        <a href="{{ route('console.tours.show', $booking->tour) }}" class="font-medium text-emerald-600 hover:text-emerald-700 hover:underline">
+                            {{ Str::limit($booking->tour->title, 120) }}
+                        </a>
+                        @else
+                        <p class="font-medium text-slate-900">Tour not available</p>
+                        @endif
                     </div>
                     <div>
                         <p class="text-sm text-slate-500">Location</p>
@@ -56,7 +95,7 @@
                     <div>
                         <p class="text-sm text-slate-500">Guests</p>
                         <p class="font-medium text-slate-900">
-                            {{ $booking->adults }} Adults, {{ $booking->children }} Children, {{ $booking->infants }} Infants
+                            {{ $booking->adults }} Adults, {{ $booking->seniors }} Senior, {{ $booking->children }} Children, {{ $booking->infants }} Infants
                         </p>
                     </div>
                     <div>
@@ -141,21 +180,35 @@
             <!-- Update Status -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200">
                 <div class="px-6 py-4 border-b border-slate-200">
-                    <h2 class="font-semibold text-slate-900">Update Status</h2>
+                    <div>
+                        <h2 class="font-semibold text-slate-900">Update Status</h2>
+                        <p class="text-sm text-slate-500 mt-1">Change the booking status to track its progress  </p>
+                    </div>
                 </div>
                 <div class="p-6">
-                    <form method="POST" action="{{ route('console.bookings.update-status', $booking) }}">
+                    <form method="POST" action="{{ route('console.bookings.update-status', $booking) }}" id="status-update-form" @submit.prevent="openModal()">
                         @csrf
                         @method('PATCH')
                         <div class="space-y-4">
-                            <select name="status" class="w-full rounded-lg border-slate-300 text-sm focus:border-emerald-500 focus:ring-emerald-500">
-                                @foreach(\App\Enums\BookingStatus::cases() as $statusOption)
-                                <option value="{{ $statusOption->value }}" {{ $booking->status === $statusOption->value ? 'selected' : '' }}>
-                                    {{ $statusOption->label() }}
-                                </option>
-                                @endforeach
-                            </select>
-                            <button type="submit" class="w-full px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 cursor-pointer">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Select New Status</label>
+                                <select name="status" id="status-select" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none">
+                                    @foreach(\App\Enums\BookingStatus::cases() as $statusOption)
+                                    <option value="{{ $statusOption->value }}" {{ $booking->status === $statusOption->value ? 'selected' : '' }}>
+                                        {{ $statusOption->label() }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                            <div id="status-info" class="hidden p-3 bg-slate-50 rounded-lg">
+                                <p class="text-sm text-slate-600" id="status-description"></p>
+                            </div>
+                            
+                            <button type="submit" class="w-full px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 cursor-pointer transition-colors duration-200 flex items-center justify-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                </svg>
                                 Update Status
                             </button>
                         </div>
@@ -288,5 +341,80 @@
             </div>
         </div>
     </div>
+
+    <!-- Alpine.js Confirmation Modal -->
+    <div
+        x-show="showConfirmModal"
+        x-cloak
+        class="fixed inset-0 z-50 flex items-center justify-center"
+        @keydown.escape.window="closeModal()">
+        <div class="fixed inset-0 bg-black/50" @click="closeModal()"></div>
+        <div class="relative bg-white rounded-xl shadow-xl p-6 max-w-md mx-4 z-10">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="flex items-center justify-center w-10 h-10 bg-amber-100 rounded-full">
+                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-slate-900">Confirm Status Update</h3>
+                    <p class="text-sm text-slate-500">This action will update the booking status</p>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <p class="text-sm text-slate-600">Are you sure you want to change the booking status to <span class="font-semibold text-emerald-600" x-text="selectedStatusLabel"></span>?</p>
+                <p class="text-xs text-slate-500 mt-2" x-text="statusDescription"></p>
+            </div>
+            
+            <div class="flex gap-3">
+                <button
+                    type="button"
+                    @click="closeModal()"
+                    class="flex-1 px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">
+                    Cancel
+                </button>
+                <button
+                    type="button"
+                    @click="confirmUpdate()"
+                    class="flex-1 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors">
+                    Confirm Update
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusSelect = document.getElementById('status-select');
+    const statusInfo = document.getElementById('status-info');
+    const statusDescription = document.getElementById('status-description');
+    
+    const statusDescriptions = {
+        'pending_payment': 'Customer has not yet completed payment for this booking.',
+        'confirmed': 'Booking is confirmed and payment has been received.',
+        'cancelled': 'Booking has been cancelled by customer or administrator.',
+        'completed': 'Tour/service has been successfully completed.',
+        'refunded': 'Payment has been refunded to the customer.',
+        'no_show': 'Customer paid but did not show up for the scheduled tour.',
+        'expired': 'Booking has expired due to non-payment or time limit.'
+    };
+    
+    statusSelect.addEventListener('change', function() {
+        const selectedStatus = this.value;
+        const description = statusDescriptions[selectedStatus] || '';
+        
+        if (description) {
+            statusDescription.textContent = description;
+            statusInfo.classList.remove('hidden');
+        } else {
+            statusInfo.classList.add('hidden');
+        }
+    });
+    
+    // Show initial status description
+    statusSelect.dispatchEvent(new Event('change'));
+});
+</script>
 @endsection
