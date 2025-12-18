@@ -54,6 +54,31 @@
                 </div>
             </div>
 
+            <!-- Payment Details -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+                <div class="px-6 py-4 border-b border-slate-200">
+                    <h2 class="font-semibold text-slate-900">Payment Details</h2>
+                </div>
+                <div class="p-6 grid grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-sm text-slate-500">Transaction ID</p>
+                        <p class="font-medium text-slate-900 font-mono">{{ $payment->provider_transaction_id ?? 'N/A' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500">Payment Method</p>
+                        <p class="font-medium text-slate-900">{{ $payment->payment_method ?? 'N/A' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500">Status</p>
+                        <p class="font-medium text-slate-900">{{ $payment->status }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500">Amount</p>
+                        <p class="font-medium text-slate-900">{{ $payment->currency }} {{ number_format($payment->amount) }}</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Associated Booking -->
             @if($payment->booking)
             <div class="bg-white rounded-xl shadow-sm border border-slate-200">
@@ -84,14 +109,96 @@
             </div>
             @endif
 
-            <!-- Raw Payload -->
+            <!-- Technical Details -->
             @if($payment->raw_payload)
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
-                <div class="px-6 py-4 border-b border-slate-200">
-                    <h2 class="font-semibold text-slate-900">Raw Payload</h2>
+            <div x-data="{ expanded: false, copied: false }" class="bg-white rounded-xl shadow-sm border border-slate-200">
+                <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                    <div>
+                        <h2 class="font-semibold text-slate-900">Technical Details</h2>
+                        <p class="text-sm text-slate-500 mt-1">Payment gateway response data</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button 
+                            @click="expanded = !expanded"
+                            class="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                            x-text="expanded ? 'Show Simple' : 'Show Raw JSON'">
+                        </button>
+                    </div>
                 </div>
-                <div class="p-6">
-                    <pre class="bg-slate-900 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto">{{ json_encode($payment->raw_payload, JSON_PRETTY_PRINT) }}</pre>
+                
+                <!-- Simple View -->
+                <div x-show="!expanded" class="p-6">
+                    <div class="space-y-4">
+                        @php
+                            $payload = $payment->raw_payload;
+                            $summary = [];
+                            
+                            // Extract key information for simple view
+                            if (is_array($payload)) {
+                                if (isset($payload['status'])) $summary[] = ['Status' => $payload['status']];
+                                if (isset($payload['transaction_id'])) $summary[] = ['Transaction ID' => $payload['transaction_id']];
+                                if (isset($payload['amount'])) $summary[] = ['Amount' => ($payload['currency'] ?? '') . ' ' . ($payload['amount'] ?? '')];
+                                if (isset($payload['payment_method'])) $summary[] = ['Payment Method' => $payload['payment_method']];
+                                if (isset($payload['created_at'])) $summary[] = ['Created' => $payload['created_at']];
+                                if (isset($payload['response_code'])) $summary[] = ['Response Code' => $payload['response_code']];
+                                if (isset($payload['auth_code'])) $summary[] = ['Auth Code' => $payload['auth_code']];
+                                
+                                // Handle common payment gateway fields
+                                if (isset($payload['merchant_reference'])) $summary[] = ['Merchant Reference' => $payload['merchant_reference']];
+                                if (isset($payload['gateway_response'])) $summary[] = ['Gateway Response' => $payload['gateway_response']];
+                                if (isset($payload['payment_status'])) $summary[] = ['Payment Status' => $payload['payment_status']];
+                                if (isset($payload['transaction_status'])) $summary[] = ['Transaction Status' => $payload['transaction_status']];
+                                if (isset($payload['failure_reason'])) $summary[] = ['Failure Reason' => $payload['failure_reason']];
+                                if (isset($payload['success'])) $summary[] = ['Success' => $payload['success'] ? 'Yes' : 'No'];
+                                
+                                // Add any other important scalar fields
+                                foreach ($payload as $key => $value) {
+                                    $excluded_keys = ['status', 'transaction_id', 'amount', 'currency', 'payment_method', 'created_at', 'response_code', 'auth_code', 'merchant_reference', 'gateway_response', 'payment_status', 'transaction_status', 'failure_reason', 'success'];
+                                    if (!in_array($key, $excluded_keys) && is_scalar($value) && strlen($value) < 200) {
+                                        $summary[] = [ucwords(str_replace('_', ' ', $key)) => $value];
+                                        if (count($summary) >= 10) break; // Limit to 10 items
+                                    }
+                                }
+                            }
+                        @endphp
+                        
+                        @if(!empty($summary))
+                            @foreach($summary as $item)
+                                @foreach($item as $key => $value)
+                                <div class="flex justify-between items-center py-2 border-b border-slate-100">
+                                    <span class="text-sm font-medium text-slate-700">{{ $key }}</span>
+                                    <span class="text-sm text-slate-900 font-mono">{{ $value }}</span>
+                                </div>
+                                @endforeach
+                            @endforeach
+                        @else
+                            <div class="text-center py-8">
+                                <svg class="w-12 h-12 text-slate-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                <p class="text-slate-500">No structured data available</p>
+                                <p class="text-sm text-slate-400 mt-1">View raw JSON for complete details</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                
+                <!-- Raw JSON View -->
+                <div x-show="expanded" class="p-6">
+                    <div class="mb-4 flex items-center justify-between">
+                        <p class="text-sm text-slate-600">Complete payment gateway response in JSON format</p>
+                        <button 
+                            @click="navigator.clipboard.writeText(document.getElementById('raw-payload').textContent); copied = true; setTimeout(() => copied = false, 2000)"
+                            class="flex items-center gap-2 px-3 py-1 text-sm bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                            <span x-text="copied ? 'Copied!' : 'Copy'"></span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <pre id="raw-payload" class="bg-slate-900 text-slate-100 p-4 rounded-lg text-xs overflow-x-auto font-mono leading-relaxed">{{ json_encode($payment->raw_payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
+                    </div>
                 </div>
             </div>
             @endif
