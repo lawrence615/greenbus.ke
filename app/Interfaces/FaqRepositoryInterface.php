@@ -2,11 +2,11 @@
 
 namespace App\Interfaces;
 
-use App\Models\Faq;
+use App\Models\FAQ;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
-interface FaqRepositoryInterface
+interface FAQRepositoryInterface
 {
     /**
      * Get paginated FAQs for admin
@@ -31,25 +31,25 @@ interface FaqRepositoryInterface
     /**
      * Find a FAQ by ID
      */
-    public function find(int $id): ?Faq;
+    public function find(int $id): ?FAQ;
 
     /**
      * Create a new FAQ
      */
-    public function store(array $data): Faq;
+    public function store(array $data): FAQ;
 
     /**
      * Update an existing FAQ
      */
-    public function update(Faq $faq, array $data): Faq;
+    public function update(FAQ $faq, array $data): FAQ;
 
     /**
      * Delete a FAQ
      */
-    public function delete(Faq $faq): void;
+    public function delete(FAQ $faq): void;
 
     /**
      * Toggle FAQ active status
      */
-    public function toggleStatus(Faq $faq): Faq;
+    public function toggleStatus(FAQ $faq): FAQ;
 }
