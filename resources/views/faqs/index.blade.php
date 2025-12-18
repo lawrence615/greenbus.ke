@@ -50,7 +50,7 @@
                             </svg>
                         </span>
                     </summary>
-                    <div class="mt-3 text-sm text-slate-700 prose prose-sm max-w-none">
+                    <div class="mt-3 text-sm text-slate-500 prose prose-sm max-w-none">
                         {!! $faq->answer !!}
                     </div>
                     @if($faq->category)
