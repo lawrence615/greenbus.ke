@@ -44,7 +44,7 @@ Route::middleware('auth')->get('/dashboard', function () {
 })->name('dashboard');
 
 // Customer routes
-Route::middleware('auth')->prefix('account')->name('customer.')->group(function () {
+Route::middleware(['auth', 'role:customer'])->prefix('account')->name('customer.')->group(function () {
     Route::get('/', [CustomerDashboardController::class, 'index'])->name('dashboard');
     Route::get('/bookings', [CustomerBookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{booking}', [CustomerBookingController::class, 'show'])->name('bookings.show');
@@ -57,7 +57,6 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
     Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
-    Route::post('/bookings/{booking}/refund', [AdminBookingController::class, 'refund'])->name('bookings.refund');
 
     Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/{payment}', [AdminPaymentController::class, 'show'])->name('payments.show');
@@ -110,6 +109,7 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
 Route::middleware(['auth', 'role:admin'])->prefix('console')->name('console.')->group(function () {
     Route::resource('users', AdminUserController::class);
     Route::post('users/{user}/resend-invite', [AdminUserController::class, 'resendInvite'])->name('users.resend-invite');
+    Route::post('/bookings/{booking}/refund', [AdminBookingController::class, 'refund'])->name('bookings.refund');
 });
 
 // Booking routes
