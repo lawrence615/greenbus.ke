@@ -74,7 +74,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-slate-500">Tour</p>
-                        <p class="font-medium text-slate-900">{{ $payment->booking->tour->name ?? 'N/A' }}</p>
+                        <p class="font-medium text-slate-900">{{ $payment->booking->tour->title ?? 'N/A' }}</p>
                     </div>
                     <div>
                         <p class="text-sm text-slate-500">Tour Date</p>
