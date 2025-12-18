@@ -3,6 +3,10 @@
 @section('title', 'My Bookings')
 @section('page-title', 'My Bookings')
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+@endpush
+
 @section('content')
 <div class="space-y-6">
     <!-- Filters -->
