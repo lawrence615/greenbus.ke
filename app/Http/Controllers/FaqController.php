@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\FAQRepositoryInterface;
+use App\Interfaces\FaqRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class FaqController extends Controller
 {
-    public function __construct(private readonly FAQRepositoryInterface $faqEepositoryInterface)
+    public function __construct(private readonly FaqRepositoryInterface $faqEepositoryInterface)
     {
     }
 
