@@ -35,11 +35,15 @@ class FAQController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $this->faqRepositoryInterface->store($request->validated());
+        $validated = $request->validated();
+        
+        try {
+            $this->faqRepositoryInterface->store($validated);
 
-        return redirect()
-            ->route('console.faqs.index')
-            ->with('success', 'FAQ created successfully.');
+            return redirect()->route('console.faqs.index')->with('success', 'FAQ created successfully.');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Failed to update itinerary item. Please try again.');
+        }
     }
 
     public function edit(FAQ $faq)
