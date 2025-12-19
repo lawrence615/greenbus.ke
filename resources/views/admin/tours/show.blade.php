@@ -248,6 +248,18 @@
                 </dl>
             </div>
 
+            <!-- Cancellation Policy -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <h2 class="font-semibold text-slate-900 mb-4">Cancellation Policy</h2>
+                <div class="prose prose-sm max-w-none text-slate-700">
+                    @if($tour->cancellation_policy)
+                        {!! $tour->cancellation_policy !!}
+                    @else
+                        <p class="text-slate-500 italic">No cancellation policy specified.</p>
+                    @endif
+                </div>
+            </div>
+
             <!-- Metadata -->
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h2 class="font-semibold text-slate-900 mb-4">Metadata</h2>
