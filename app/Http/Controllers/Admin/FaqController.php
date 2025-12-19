@@ -36,13 +36,13 @@ class FAQController extends Controller
     public function store(StoreRequest $request)
     {
         $validated = $request->validated();
-        
+
         try {
             $this->faqRepositoryInterface->store($validated);
 
             return redirect()->route('console.faqs.index')->with('success', 'FAQ created successfully.');
         } catch (\Exception $e) {
-            return back()->withInput()->with('error', 'Failed to update itinerary item. Please try again.');
+            return back()->withInput()->with('error', 'Failed to create FAQ. Please try again.');
         }
     }
 
@@ -55,11 +55,15 @@ class FAQController extends Controller
 
     public function update(UpdateRequest $request, FAQ $faq)
     {
-        $this->faqRepositoryInterface->update($faq, $request->validated());
+        $validated = $request->validated();
 
-        return redirect()
-            ->route('console.faqs.index')
-            ->with('success', 'FAQ updated successfully.');
+        try {
+            $this->faqRepositoryInterface->update($faq, $validated);
+
+            return redirect()->route('console.faqs.index')->with('success', 'FAQ updated successfully.');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Failed to update FAQ. Please try again.');
+        }
     }
 
     public function destroy(FAQ $faq)
