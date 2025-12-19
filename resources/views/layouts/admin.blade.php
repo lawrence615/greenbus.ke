@@ -12,11 +12,64 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 
+    <!-- Toastr.js CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css">
+
     <style>
         [x-cloak] {
             display: none !important;
         }
     </style>
+
+    <!-- Custom Toastr Styles -->
+    <style>
+        .toast-top-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .toast {
+            background-color: white !important;
+            border-radius: 0.5rem !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+            border: 1px solid #e2e8f0 !important;
+            min-width: 300px;
+        }
+
+        .toast-success {
+            background-color: #10b981 !important;
+            color: white !important;
+        }
+
+        .toast-error {
+            background-color: #ef4444 !important;
+            color: white !important;
+        }
+
+        .toast-info {
+            background-color: #3b82f6 !important;
+            color: white !important;
+        }
+
+        .toast-warning {
+            background-color: #f59e0b !important;
+            color: white !important;
+        }
+
+        .toast-progress {
+            background-color: rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .toast-close-button {
+            color: white !important;
+            opacity: 0.8 !important;
+        }
+
+        .toast-close-button:hover {
+            opacity: 1 !important;
+        }
+    </style>
+
     @stack('styles')
 </head>
 
@@ -188,7 +241,7 @@
 
             <!-- Page Content -->
             <main class="flex-1 overflow-y-auto p-4 lg:p-6">
-                @if(session('success'))
+                <!-- @if(session('success'))
                 <div class="mb-4 p-4 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg">
                     {{ session('success') }}
                 </div>
@@ -198,7 +251,7 @@
                 <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
                     {{ session('error') }}
                 </div>
-                @endif
+                @endif -->
 
                 @yield('content')
             </main>
@@ -221,6 +274,54 @@
     @include('components.global-loading')
 </body>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<!-- jQuery (required for Toastr) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Toastr.js -->
+<script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.js"></script>
+
+<!-- Toastr Configuration -->
+<script>
+    $(document).ready(function() {
+        // Configure Toastr
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        // Show Laravel flash messages as toasts
+        @if(session('success'))
+        toastr.success("{{ addslashes(session('success')) }}");
+        @endif
+
+        @if(session('error'))
+        toastr.error("{{ addslashes(session('error')) }}");
+        @endif
+
+        @if(session('info'))
+        toastr.info("{{ addslashes(session('info')) }}");
+        @endif
+
+        @if(session('warning'))
+        toastr.warning("{{ addslashes(session('warning')) }}");
+        @endif
+    });
+</script>
+
 @stack('scripts')
 
 </html>
