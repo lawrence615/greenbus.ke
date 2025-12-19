@@ -3,6 +3,7 @@
 namespace App\Http\Requests\FAQ;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 
 class StoreRequest extends FormRequest
 {
@@ -15,7 +16,23 @@ class StoreRequest extends FormRequest
     {
         return [
             'question' => ['required', 'string', 'max:500'],
-            'answer' => ['required', 'string'],
+            'answer' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    // Strip HTML tags and check text length
+                    $plainText = strip_tags($value);
+                    $textLength = Str::length(trim($plainText));
+                    
+                    if ($textLength > 300) {
+                        $fail('The answer may not be greater than 300 characters.');
+                    }
+                    
+                    if (empty(trim($plainText))) {
+                        $fail('The answer field is required.');
+                    }
+                }
+            ],
             'category' => ['nullable', 'string', 'max:40'],
             'tour_category_id' => ['nullable', 'exists:tour_categories,id'],
             'is_active' => ['boolean'],
