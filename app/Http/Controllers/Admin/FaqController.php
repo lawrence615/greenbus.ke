@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FAQ\StoreRequest;
 use App\Http\Requests\FAQ\UpdateRequest;
-use App\Interfaces\FaqRepositoryInterface;
+use App\Interfaces\FAQRepositoryInterface;
 use App\Interfaces\TourCategoryRepositoryInterface;
 use App\Models\FAQ;
 use Illuminate\Http\Request;
@@ -13,29 +13,29 @@ use Illuminate\Http\Request;
 class FAQController extends Controller
 {
     public function __construct(
-        protected FaqRepositoryInterface $faqRepository,
+        protected FAQRepositoryInterface $faqRepositoryInterface,
         protected TourCategoryRepositoryInterface $tourCategoryRepository
     ) {}
 
     public function index(Request $request)
     {
         $filters = $request->only(['search', 'category', 'is_active']);
-        $faqs = $this->faqRepository->index($filters);
-        $categories = $this->faqRepository->getCategories();
+        $faqs = $this->faqRepositoryInterface->index($filters);
+        $categories = $this->faqRepositoryInterface->getCategories();
 
         return view('admin.faqs.index', compact('faqs', 'categories'));
     }
 
     public function create()
     {
-        $categories = $this->faqRepository->getCategories();
+        $categories = $this->faqRepositoryInterface->getCategories();
         $tourCategories = $this->tourCategoryRepository->getAll();
         return view('admin.faqs.create', compact('categories', 'tourCategories'));
     }
 
     public function store(StoreRequest $request)
     {
-        $this->faqRepository->store($request->validated());
+        $this->faqRepositoryInterface->store($request->validated());
 
         return redirect()
             ->route('console.faqs.index')
@@ -44,14 +44,14 @@ class FAQController extends Controller
 
     public function edit(FAQ $faq)
     {
-        $categories = $this->faqRepository->getCategories();
+        $categories = $this->faqRepositoryInterface->getCategories();
         $tourCategories = $this->tourCategoryRepository->getAll();
         return view('admin.faqs.edit', compact('faq', 'categories', 'tourCategories'));
     }
 
     public function update(UpdateRequest $request, FAQ $faq)
     {
-        $this->faqRepository->update($faq, $request->validated());
+        $this->faqRepositoryInterface->update($faq, $request->validated());
 
         return redirect()
             ->route('console.faqs.index')
@@ -60,7 +60,7 @@ class FAQController extends Controller
 
     public function destroy(FAQ $faq)
     {
-        $this->faqRepository->delete($faq);
+        $this->faqRepositoryInterface->delete($faq);
 
         return redirect()
             ->route('console.faqs.index')
@@ -69,7 +69,7 @@ class FAQController extends Controller
 
     public function toggleStatus(FAQ $faq)
     {
-        $this->faqRepository->toggleStatus($faq);
+        $this->faqRepositoryInterface->toggleStatus($faq);
         $status = $faq->is_active ? 'activated' : 'deactivated';
 
         return redirect()
