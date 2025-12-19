@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Interfaces\FAQRepositoryInterface;
+use App\Interfaces\FaqRepositoryInterface;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -11,7 +11,7 @@ class FAQSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(FAQRepositoryInterface $fAQRepositoryInterface): void
+    public function run(FaqRepositoryInterface $fAQRepositoryInterface): void
     {
         $faqs = [
             [
