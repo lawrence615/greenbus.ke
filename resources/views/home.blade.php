@@ -99,7 +99,7 @@
     </div>
 
     @if ($featuredTours->isEmpty())
-    <p class="text-slate-600 text-sm">We’re currently updating our tour listings. Available tours will appear here shortly.</p>
+    <p class="text-slate-600 text-sm">No tours are available at the moment. Please check back soon for upcoming experiences.</p>
     @else
     <div class="grid gap-6 md:grid-cols-3">
         @foreach ($featuredTours as $tour)
