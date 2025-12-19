@@ -15,11 +15,11 @@ use App\Http\Controllers\Admin\TourController as AdminTourController;
 use App\Http\Controllers\Admin\TourItineraryController;
 use App\Http\Controllers\Admin\TourMultimediaController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
-use App\Http\Controllers\Admin\FAQController as AdminFAQController;
+use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\Customer\DashboardController as CustomerDashboardController;
 use App\Http\Controllers\Customer\BookingController as CustomerBookingController;
 use App\Http\Controllers\Auth\InviteController;
-use App\Http\Controllers\FAQController;
+use App\Http\Controllers\FaqController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -96,13 +96,13 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::patch('/testimonials/{testimonial}/toggle-status', [AdminTestimonialController::class, 'toggleStatus'])->name('testimonials.toggle-status');
 
     // FAQs management
-    Route::get('/faqs', [AdminFAQController::class, 'index'])->name('faqs.index');
-    Route::get('/faqs/create', [AdminFAQController::class, 'create'])->name('faqs.create');
-    Route::post('/faqs', [AdminFAQController::class, 'store'])->name('faqs.store');
-    Route::get('/faqs/{faq}/edit', [AdminFAQController::class, 'edit'])->name('faqs.edit');
-    Route::put('/faqs/{faq}', [AdminFAQController::class, 'update'])->name('faqs.update');
-    Route::delete('/faqs/{faq}', [AdminFAQController::class, 'destroy'])->name('faqs.destroy');
-    Route::patch('/faqs/{faq}/toggle-status', [AdminFAQController::class, 'toggleStatus'])->name('faqs.toggle-status');
+    Route::get('/faqs', [AdminFaqController::class, 'index'])->name('faqs.index');
+    Route::get('/faqs/create', [AdminFaqController::class, 'create'])->name('faqs.create');
+    Route::post('/faqs', [AdminFaqController::class, 'store'])->name('faqs.store');
+    Route::get('/faqs/{faq}/edit', [AdminFaqController::class, 'edit'])->name('faqs.edit');
+    Route::put('/faqs/{faq}', [AdminFaqController::class, 'update'])->name('faqs.update');
+    Route::delete('/faqs/{faq}', [AdminFaqController::class, 'destroy'])->name('faqs.destroy');
+    Route::patch('/faqs/{faq}/toggle-status', [AdminFaqController::class, 'toggleStatus'])->name('faqs.toggle-status');
 });
 
 // User management routes (admin only)
@@ -120,7 +120,7 @@ Route::get('/booking/{booking}/cancelled', [BookingController::class, 'cancel'])
 Route::get('/booking/{booking}/retry', [BookingController::class, 'retryPayment'])->name('bookings.retry');
 
 // Public FAQs
-Route::get('/faqs', [FAQController::class, 'index'])->name('faqs.index');
+Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
 
 // Location/Tour routes (must be last - catches /{slug} patterns)
 Route::get('/{location:slug}', [LocationController::class, 'show'])->name('locations.show');
