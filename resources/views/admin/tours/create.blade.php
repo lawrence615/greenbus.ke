@@ -1435,39 +1435,36 @@ function multiStepTourForm() {
                     durationTextInput.value = days + ' days';
                     console.log('Updated duration_text_multiple to:', durationTextInput.value);
                 }
-            } else {
-                // For other duration types, ensure the visible input has the correct name
-                console.log('Other duration type:', this.durationType);
-                
-                // Find all duration text inputs and ensure only the visible one has name="duration_text"
-                const allDurationInputs = [
-                    'duration_text_default',
-                    'duration_text_hourly', 
-                    'duration_text_half_day',
-                    'duration_text_full_day',
-                    'duration_text_multiple'
-                ];
-                
-                allDurationInputs.forEach(inputId => {
-                    const input = document.getElementById(inputId);
-                    if (input) {
-                        // Remove name attribute from hidden inputs
-                        input.removeAttribute('name');
-                    }
-                });
-                
-                // Add name attribute to the visible input based on durationType
-                let activeInputId = 'duration_text_default';
-                if (this.durationType === 'hourly') activeInputId = 'duration_text_hourly';
-                else if (this.durationType === 'half_day') activeInputId = 'duration_text_half_day';
-                else if (this.durationType === 'full_day') activeInputId = 'duration_text_full_day';
-                else if (this.durationType === 'multiple_days') activeInputId = 'duration_text_multiple';
-                
-                const activeInput = document.getElementById(activeInputId);
-                if (activeInput) {
-                    activeInput.setAttribute('name', 'duration_text');
-                    console.log('Set name="duration_text" on:', activeInputId, 'value:', activeInput.value);
+            }
+            
+            // Find all duration text inputs and ensure only the visible one has name="duration_text"
+            const allDurationInputs = [
+                'duration_text_default',
+                'duration_text_hourly', 
+                'duration_text_half_day',
+                'duration_text_full_day',
+                'duration_text_multiple'
+            ];
+            
+            allDurationInputs.forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    // Remove name attribute from hidden inputs
+                    input.removeAttribute('name');
                 }
+            });
+            
+            // Add name attribute to the visible input based on durationType
+            let activeInputId = 'duration_text_default';
+            if (this.durationType === 'hourly') activeInputId = 'duration_text_hourly';
+            else if (this.durationType === 'half_day') activeInputId = 'duration_text_half_day';
+            else if (this.durationType === 'full_day') activeInputId = 'duration_text_full_day';
+            else if (this.durationType === 'multiple_days') activeInputId = 'duration_text_multiple';
+            
+            const activeInput = document.getElementById(activeInputId);
+            if (activeInput) {
+                activeInput.setAttribute('name', 'duration_text');
+                console.log('Set name="duration_text" on:', activeInputId, 'value:', activeInput.value);
             }
         }
     }
