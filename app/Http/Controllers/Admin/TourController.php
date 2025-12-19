@@ -85,7 +85,7 @@ class TourController extends Controller
 
         return redirect()
             ->route('console.tours.show', $tour)
-            ->with('success', 'Tour created successfully.');
+            ->with('success', 'Tour created successfully. You can now add itinerary and images.');
     }
 
     public function show(Tour $tour)
