@@ -1034,7 +1034,7 @@ function multiStepTourForm() {
         },
         
         // Validate Step 1
-        validateStep1() {
+        validateStep1() {   
             console.log('=== VALIDATING STEP 1 ===');
             this.clearValidationErrors();
             let isValid = true;
@@ -1108,6 +1108,18 @@ function multiStepTourForm() {
             // Validate Duration - ensure the active input has the name attribute
             this.syncDurationData(); // Ensure correct input has name="duration_text"
             
+            // For multiple_days, ensure the duration text is updated with current days value
+            if (this.durationType === 'multiple_days') {
+                const daysInput = document.getElementById('duration_days');
+                const durationInput = document.getElementById('duration_text_multiple');
+                
+                if (daysInput && durationInput) {
+                    const days = daysInput.value || 2;
+                    durationInput.value = days + ' days';
+                    console.log('Updated duration_text_multiple to:', durationInput.value);
+                }
+            }
+            
             let durationInput = null;
             let durationValue = '';
             
@@ -1143,6 +1155,8 @@ function multiStepTourForm() {
                     const fieldId = durationInput ? durationInput.id : 'duration_text_multiple';
                     this.showFieldError(fieldId, 'Please specify a valid number of days');
                     isValid = false;
+                } else {
+                    console.log('Multiple days duration is valid:', durationValue);
                 }
             } else if (!this.durationType && (!durationValue || !durationValue.trim())) {
                 // Only validate if no duration type is set and default input is empty
