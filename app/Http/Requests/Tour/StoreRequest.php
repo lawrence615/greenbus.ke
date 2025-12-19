@@ -23,6 +23,7 @@ class StoreRequest extends FormRequest
             'included' => ['nullable', 'string'],
             'excluded' => ['nullable', 'string'],
             'important_information' => ['nullable', 'string'],
+            'cancellation_policy' => ['nullable', 'string'],
             'duration_text' => ['required', 'string', 'max:100'],
             'duration_days' => ['nullable', 'integer', 'min:2', 'max:30'],
             'meeting_point' => ['nullable', 'string', 'max:255'],
