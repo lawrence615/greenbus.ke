@@ -24,7 +24,7 @@
         </a>
     </div>
 
-    <form method="POST" action="{{ route('console.faqs.store') }}" class="space-y-6" x-data="faqForm()" @submit="syncEditor">
+    <form method="POST" action="{{ route('console.faqs.store') }}" class="space-y-6" x-data="faqForm()">
         @csrf
 
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
@@ -48,7 +48,6 @@
                     value="{{ old('question') }}"
                     placeholder="e.g., How do I book a tour?"
                     class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none @error('question') border-red-500 @enderror"
-                    required
                 >
                 @error('question')
                 <p class="text-xs text-red-500">{{ $message }}</p>
@@ -63,11 +62,15 @@
                         <svg class="w-4 h-4 text-slate-400 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 text-xs text-white bg-slate-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10">A clear, helpful response to the question</span>
+                        <span class="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 px-2 py-1 text-xs text-white bg-slate-800 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity z-10">A clear, helpful response to the question (max 300 characters)</span>
                     </span>
                 </label>
                 <input type="hidden" name="answer" id="answer" value="{{ old('answer') }}">
                 <div id="answer-editor" class="bg-white rounded-lg border border-slate-300 @error('answer') border-red-500 @enderror"></div>
+                <div class="flex justify-between items-center mt-1">
+                    <span class="text-xs text-slate-500">Maximum 300 characters</span>
+                    <span id="char-count" class="text-xs text-slate-500">0 / 300</span>
+                </div>
                 @error('answer')
                 <p class="text-xs text-red-500">{{ $message }}</p>
                 @enderror
@@ -213,6 +216,7 @@
 function faqForm() {
     return {
         editor: null,
+        maxLength: 300,
         
         init() {
             this.initEditor();
@@ -236,6 +240,34 @@ function faqForm() {
             const initialContent = document.getElementById('answer').value;
             if (initialContent) {
                 this.editor.root.innerHTML = initialContent;
+            }
+            
+            // Update character count and sync on text change
+            this.editor.on('text-change', () => {
+                this.updateCharCount();
+                this.syncEditor();
+            });
+            
+            // Initial character count
+            this.updateCharCount();
+        },
+        
+        updateCharCount() {
+            const text = this.editor.getText(); // Quill's getText() returns plain text without HTML
+            const charCount = text.trim().length;
+            const charCountElement = document.getElementById('char-count');
+            
+            if (charCountElement) {
+                charCountElement.textContent = `${charCount} / ${this.maxLength}`;
+                
+                // Change color based on count
+                if (charCount > this.maxLength) {
+                    charCountElement.classList.add('text-red-500');
+                    charCountElement.classList.remove('text-slate-500');
+                } else {
+                    charCountElement.classList.add('text-slate-500');
+                    charCountElement.classList.remove('text-red-500');
+                }
             }
         },
         
