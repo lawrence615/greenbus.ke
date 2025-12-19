@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
             TourCategorySeeder::class,
             TourSeeder::class,
             TestimonialSeeder::class,
-            FaqSeeder::class,
         ]);
     }
 }
