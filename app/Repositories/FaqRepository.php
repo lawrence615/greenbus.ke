@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\FAQRepositoryInterface;
+use App\Interfaces\FaqRepositoryInterface;
 use App\Models\Faq;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
