@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class FAQ extends Model
+class Faq extends Model
 {
-    protected $table = 'faqs';
-    
     protected $fillable = [
         'question',
         'answer',

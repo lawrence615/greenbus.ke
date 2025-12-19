@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FAQ\StoreRequest;
-use App\Http\Requests\FAQ\UpdateRequest;
+use App\Http\Requests\Faq\StoreRequest;
+use App\Http\Requests\Faq\UpdateRequest;
 use App\Interfaces\FAQRepositoryInterface;
 use App\Interfaces\TourCategoryRepositoryInterface;
-use App\Models\FAQ;
+use App\Models\Faq;
 use Illuminate\Http\Request;
 
-class FAQController extends Controller
+class FaqController extends Controller
 {
     public function __construct(
-        protected FAQRepositoryInterface $faqRepositoryInterface,
+        protected FaqRepositoryInterface $faqRepositoryInterface,
         protected TourCategoryRepositoryInterface $tourCategoryRepository
     ) {}
 
@@ -46,14 +46,14 @@ class FAQController extends Controller
         }
     }
 
-    public function edit(FAQ $faq)
+    public function edit(Faq $faq)
     {
         $categories = $this->faqRepositoryInterface->getCategories();
         $tourCategories = $this->tourCategoryRepository->getAll();
         return view('admin.faqs.edit', compact('faq', 'categories', 'tourCategories'));
     }
 
-    public function update(UpdateRequest $request, FAQ $faq)
+    public function update(UpdateRequest $request, Faq $faq)
     {
         $validated = $request->validated();
 
@@ -66,7 +66,7 @@ class FAQController extends Controller
         }
     }
 
-    public function destroy(FAQ $faq)
+    public function destroy(Faq $faq)
     {
         $this->faqRepositoryInterface->delete($faq);
 
@@ -75,7 +75,7 @@ class FAQController extends Controller
             ->with('success', 'FAQ deleted successfully.');
     }
 
-    public function toggleStatus(FAQ $faq)
+    public function toggleStatus(Faq $faq)
     {
         $this->faqRepositoryInterface->toggleStatus($faq);
         $status = $faq->is_active ? 'activated' : 'deactivated';
