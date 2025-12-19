@@ -666,6 +666,18 @@
                     <!-- Cancellation Policy -->
                     <div class="space-y-2">
                         <label class="block text-sm font-medium text-slate-700">Cancellation Policy</label>
+                        
+                        <!-- Template Selection -->
+                        <div class="flex items-center gap-3">
+                            <select id="cancellation_policy_template" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none">
+                                <option value="custom">Custom Text</option>
+                                <option value="template">Use Standard Template</option>
+                            </select>
+                            <button type="button" @click="applyCancellationTemplate()" class="px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition-colors">
+                                Apply Template
+                            </button>
+                        </div>
+                        
                         <div id="cancellation_policy_editor" class="bg-white rounded-lg border border-slate-300"></div>
                         <input type="hidden" name="cancellation_policy" id="cancellation_policy" value="{{ old('cancellation_policy') }}">
                         <p class="text-xs text-slate-500">Refund and cancellation rules</p>
@@ -1465,6 +1477,31 @@ function multiStepTourForm() {
             if (activeInput) {
                 activeInput.setAttribute('name', 'duration_text');
                 console.log('Set name="duration_text" on:', activeInputId, 'value:', activeInput.value);
+            }
+        },
+        
+        applyCancellationTemplate() {
+            const templateSelect = document.getElementById('cancellation_policy_template');
+            
+            if (!this.editors['cancellation_policy']) {
+                console.error('Cancellation policy editor not found');
+                return;
+            }
+            
+            const editor = this.editors['cancellation_policy'];
+            
+            if (templateSelect.value === 'template') {
+                const templateContent = `<p>For a full refund, you must cancel at least 24 hours before the experience's start time.</p><ol><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>If you cancel less than 24 hours before the experience's start time, the amount you paid will not be refunded.</li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>Any changes made less than 24 hours before the experience's start time will not be accepted.</li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>Cut-off times are based on the experience's local time.</li></ol>`;
+                
+                editor.root.innerHTML = templateContent;
+                
+                // Update the hidden input
+                const hiddenInput = document.getElementById('cancellation_policy');
+                if (hiddenInput) {
+                    hiddenInput.value = templateContent;
+                }
+                
+                console.log('Cancellation policy template applied');
             }
         }
     }
