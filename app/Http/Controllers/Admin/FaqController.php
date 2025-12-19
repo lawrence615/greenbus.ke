@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Faq\StoreRequest;
 use App\Http\Requests\Faq\UpdateRequest;
-use App\Interfaces\FAQRepositoryInterface;
+use App\Interfaces\FaqRepositoryInterface;
 use App\Interfaces\TourCategoryRepositoryInterface;
 use App\Models\Faq;
 use Illuminate\Http\Request;
