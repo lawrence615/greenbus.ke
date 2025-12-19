@@ -6,7 +6,7 @@ use App\Interfaces\FAQRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class FAQController extends Controller
+class FaqController extends Controller
 {
     public function __construct(private readonly FAQRepositoryInterface $faqEepositoryInterface)
     {
