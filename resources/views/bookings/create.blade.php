@@ -43,6 +43,7 @@
             <p class="text-sm text-slate-600 mb-4">You're just a few steps away from an amazing experience</p>
         </div>
 
+        {{-- Tour Details Form --}}
         <form id="booking-form" method="POST" action="{{ route('bookings.store', [$location, $tour]) }}" class="space-y-5">
                 @csrf
 
@@ -97,110 +98,147 @@
                         </div>
                     </div>
                     <div class="p-5">
-                        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                            {{-- Adults --}}
+                        {{-- Traveller Selection Dropdown --}}
+                        <div class="space-y-4">
+                            {{-- Adults (always shown) --}}
                             <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
-                                <!-- <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center justify-between">
                                     <div>
-                                        <p class="text-sm font-medium text-slate-800">Adults</p>
-                                        <p class="text-xs text-slate-500">Age 13+</p>
+                                        <p class="text-sm font-medium text-slate-800">Adults (18-63)</p>
+                                        <p class="text-xs text-slate-500">Required minimum 1</p>
                                     </div>
-                                    <span class="text-xs text-emerald-600 font-medium">USD {{ number_format($tour->base_price_adult ?? 0) }}</span>
-                                </div> -->
-                                <p class="text-sm font-medium text-slate-800">Adults</p>
-                                <div class="flex items-center justify-center gap-3">
-                                    <button type="button" onclick="updateTraveller('adults', -1, 1)" class="w-9 h-9 rounded-md bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition flex items-center justify-center cursor-pointer">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                        </svg>
-                                    </button>
-                                    <input type="number" min="1" id="adults" name="adults" value="{{ old('adults', 1) }}" class="w-12 border-0 bg-transparent text-center text-lg font-semibold text-slate-800 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                                    <button type="button" onclick="updateTraveller('adults', 1, 1)" class="w-9 h-9 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition flex items-center justify-center cursor-pointer">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                        </svg>
-                                    </button>
+                                    <div class="flex items-center gap-3">
+                                        <button type="button" onclick="updateTraveller('adults', -1, 1)" class="w-9 h-9 rounded-md bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition flex items-center justify-center cursor-pointer">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                            </svg>
+                                        </button>
+                                        <input type="number" min="1" id="adults" name="adults" value="{{ old('adults', 1) }}" class="w-12 border-0 bg-transparent text-center text-lg font-semibold text-slate-800 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                        <button type="button" onclick="updateTraveller('adults', 1, 1)" class="w-9 h-9 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition flex items-center justify-center cursor-pointer">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                                 @error('adults')
                                 <p class="text-xs text-red-600 mt-2 text-center">{{ $message }}</p>
                                 @enderror
                             </div>
 
-                            {{-- Seniors --}}
-                            <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
-                                <p class="text-sm font-medium text-slate-800">Seniors</p>
-                                <div class="flex items-center justify-center gap-3">
-                                    <button type="button" onclick="updateTraveller('seniors', -1, 0)" class="w-9 h-9 rounded-md bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition flex items-center justify-center cursor-pointer">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                            {{-- Additional Travellers Dropdown --}}
+                            <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                                <button type="button" onclick="toggleTravellerDropdown()" class="w-full px-4 py-3 flex items-center justify-between hover:bg-slate-50 transition cursor-pointer">
+                                    <div class="flex items-center gap-3">
+                                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                         </svg>
-                                    </button>
-                                    <input type="number" min="0" id="seniors" name="seniors" value="{{ old('seniors', 0) }}" class="w-12 border-0 bg-transparent text-center text-lg font-semibold text-slate-800 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                                    <button type="button" onclick="updateTraveller('seniors', 1, 0)" class="w-9 h-9 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition flex items-center justify-center cursor-pointer">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                                @error('seniors')
-                                <p class="text-xs text-red-600 mt-2 text-center">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            {{-- Children --}}
-                            <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
-                                <!-- <div class="flex items-center justify-between mb-2">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-800">Children</p>
-                                        <p class="text-xs text-slate-500">Age 3–12</p>
+                                        <span class="text-sm font-medium text-slate-700">Add more travellers</span>
                                     </div>
-                                    <span class="text-xs text-emerald-600 font-medium">USD {{ number_format($tour->base_price_child ?? 0) }}</span>
-                                </div> -->
-                                <p class="text-sm font-medium text-slate-800">Children</p>
-                                <div class="flex items-center justify-center gap-3">
-                                    <button type="button" onclick="updateTraveller('children', -1, 0)" class="w-9 h-9 rounded-md bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition flex items-center justify-center cursor-pointer">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                        </svg>
-                                    </button>
-                                    <input type="number" min="0" id="children" name="children" value="{{ old('children', 0) }}" class="w-12 border-0 bg-transparent text-center text-lg font-semibold text-slate-800 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                                    <button type="button" onclick="updateTraveller('children', 1, 0)" class="w-9 h-9 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition flex items-center justify-center cursor-pointer">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                                @error('children')
-                                <p class="text-xs text-red-600 mt-2 text-center">{{ $message }}</p>
-                                @enderror
-                            </div>
+                                    <svg id="dropdown-arrow" class="w-4 h-4 text-slate-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                
+                                <div id="traveller-dropdown" class="hidden border-t border-slate-100">
+                                    <div class="p-4 space-y-4">
+                                        {{-- Seniors --}}
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-800">Seniors (63-90)</p>
+                                                <p class="text-xs text-emerald-600 font-medium">USD {{ number_format($tour->base_price_senior ?? $tour->base_price_adult) }} each</p>
+                                            </div>
+                                            <div class="flex items-center gap-3">
+                                                <button type="button" onclick="updateTraveller('seniors', -1, 0)" class="w-8 h-8 rounded-md bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition flex items-center justify-center cursor-pointer">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                                    </svg>
+                                                </button>
+                                                <input type="number" min="0" id="seniors" name="seniors" value="{{ old('seniors', 0) }}" class="w-10 border-0 bg-transparent text-center text-base font-semibold text-slate-800 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                                <button type="button" onclick="updateTraveller('seniors', 1, 0)" class="w-8 h-8 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition flex items-center justify-center cursor-pointer">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        @error('seniors')
+                                        <p class="text-xs text-red-600">{{ $message }}</p>
+                                        @enderror
 
-                            {{-- Infants --}}
-                            <div class="bg-slate-50 rounded-lg p-4 border border-slate-100">
-                                <!-- <div class="flex items-center justify-between mb-2">
-                                    <div>
-                                        <p class="text-sm font-medium text-slate-800">Infants</p>
-                                        <p class="text-xs text-slate-500">Under 3</p>
+                                        {{-- Youth --}}
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-800">Youth (13-17)</p>
+                                                <p class="text-xs text-emerald-600 font-medium">USD {{ number_format($tour->base_price_youth ?? $tour->base_price_child) }} each</p>
+                                            </div>
+                                            <div class="flex items-center gap-3">
+                                                <button type="button" onclick="updateTraveller('youth', -1, 0)" class="w-8 h-8 rounded-md bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition flex items-center justify-center cursor-pointer">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                                    </svg>
+                                                </button>
+                                                <input type="number" min="0" id="youth" name="youth" value="{{ old('youth', 0) }}" class="w-10 border-0 bg-transparent text-center text-base font-semibold text-slate-800 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                                <button type="button" onclick="updateTraveller('youth', 1, 0)" class="w-8 h-8 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition flex items-center justify-center cursor-pointer">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        @error('youth')
+                                        <p class="text-xs text-red-600">{{ $message }}</p>
+                                        @enderror
+
+                                        {{-- Children --}}
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-800">Children (5-12)</p>
+                                                <p class="text-xs text-emerald-600 font-medium">USD {{ number_format($tour->base_price_child) }} each</p>
+                                            </div>
+                                            <div class="flex items-center gap-3">
+                                                <button type="button" onclick="updateTraveller('children', -1, 0)" class="w-8 h-8 rounded-md bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition flex items-center justify-center cursor-pointer">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                                    </svg>
+                                                </button>
+                                                <input type="number" min="0" id="children" name="children" value="{{ old('children', 0) }}" class="w-10 border-0 bg-transparent text-center text-base font-semibold text-slate-800 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                                <button type="button" onclick="updateTraveller('children', 1, 0)" class="w-8 h-8 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition flex items-center justify-center cursor-pointer">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        @error('children')
+                                        <p class="text-xs text-red-600">{{ $message }}</p>
+                                        @enderror
+
+                                        {{-- Infants --}}
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium text-slate-800">Infants (0-4)</p>
+                                                <p class="text-xs text-emerald-600 font-medium">{{ $tour->base_price_infant > 0 ? 'USD ' . number_format($tour->base_price_infant) . ' each' : 'Free' }}</p>
+                                            </div>
+                                            <div class="flex items-center gap-3">
+                                                <button type="button" onclick="updateTraveller('infants', -1, 0)" class="w-8 h-8 rounded-md bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition flex items-center justify-center cursor-pointer">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                                    </svg>
+                                                </button>
+                                                <input type="number" min="0" id="infants" name="infants" value="{{ old('infants', 0) }}" class="w-10 border-0 bg-transparent text-center text-base font-semibold text-slate-800 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                                <button type="button" onclick="updateTraveller('infants', 1, 0)" class="w-8 h-8 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition flex items-center justify-center cursor-pointer">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        @error('infants')
+                                        <p class="text-xs text-red-600">{{ $message }}</p>
+                                        @enderror
                                     </div>
-                                    <span class="text-xs text-emerald-600 font-medium">{{ $tour->base_price_infant > 0 ? 'USD ' . number_format($tour->base_price_infant) : 'Free' }}</span>
-                                </div> -->
-                                <p class="text-sm font-medium text-slate-800">Infants</p>
-                                <div class="flex items-center justify-center gap-3">
-                                    <button type="button" onclick="updateTraveller('infants', -1, 0)" class="w-9 h-9 rounded-md bg-white border border-rose-200 text-rose-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-600 transition flex items-center justify-center cursor-pointer">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                        </svg>
-                                    </button>
-                                    <input type="number" min="0" id="infants" name="infants" value="{{ old('infants', 0) }}" class="w-12 border-0 bg-transparent text-center text-lg font-semibold text-slate-800 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
-                                    <button type="button" onclick="updateTraveller('infants', 1, 0)" class="w-9 h-9 rounded-md bg-emerald-600 text-white hover:bg-emerald-700 transition flex items-center justify-center cursor-pointer">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                        </svg>
-                                    </button>
                                 </div>
-                                @error('infants')
-                                <p class="text-xs text-red-600 mt-2 text-center">{{ $message }}</p>
-                                @enderror
                             </div>
                         </div>
                     </div>
@@ -359,19 +397,23 @@
                     <h4 class="text-sm font-semibold text-slate-800 mb-3">Price breakdown</h4>
                     <div class="space-y-2 text-sm" id="price-breakdown">
                         <div class="flex justify-between text-slate-600">
-                            <span>Adults (<span id="summary-adults">1</span> x USD {{ number_format($tour->base_price_adult) }})</span>
+                            <span>Adults (18-63) (<span id="summary-adults">1</span> x USD {{ number_format($tour->base_price_adult) }})</span>
                             <span id="total-adults">USD {{ number_format($tour->base_price_adult) }}</span>
                         </div>
                         <div class="flex justify-between text-slate-600" id="seniors-row" style="display: none;">
-                            <span>Seniors (<span id="summary-seniors">0</span> x USD {{ number_format($tour->base_price_senior ?? $tour->base_price_adult) }})</span>
+                            <span>Seniors (63-90) (<span id="summary-seniors">0</span> x USD {{ number_format($tour->base_price_senior ?? $tour->base_price_adult) }})</span>
                             <span id="total-seniors">USD 0</span>
                         </div>
+                        <div class="flex justify-between text-slate-600" id="youth-row" style="display: none;">
+                            <span>Youth (13-17) (<span id="summary-youth">0</span> x USD {{ number_format($tour->base_price_youth ?? $tour->base_price_child) }})</span>
+                            <span id="total-youth">USD 0</span>
+                        </div>
                         <div class="flex justify-between text-slate-600" id="children-row" style="display: none;">
-                            <span>Children (<span id="summary-children">0</span> x USD {{ number_format($tour->base_price_child) }})</span>
+                            <span>Children (5-12) (<span id="summary-children">0</span> x USD {{ number_format($tour->base_price_child) }})</span>
                             <span id="total-children">USD 0</span>
                         </div>
                         <div class="flex justify-between text-slate-600" id="infants-row" style="display: none;">
-                            <span>Infants (<span id="summary-infants">0</span>@if($tour->base_price_infant > 0) x USD {{ number_format($tour->base_price_infant) }}@endif)</span>
+                            <span>Infants (0-4) (<span id="summary-infants">0</span>@if($tour->base_price_infant > 0) x USD {{ number_format($tour->base_price_infant) }}@endif)</span>
                             <span id="total-infants" class="text-emerald-600">{{ $tour->base_price_infant > 0 ? 'USD 0' : 'Free' }}</span>
                         </div>
                     </div>
@@ -424,11 +466,12 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/js/intlTelInput.min.js"></script>
 <script>
-    // Pricing constants
+    // Pricing constants - eslint-disable no-undef
     const PRICE_ADULT = {{ $tour->base_price_adult ?? 0 }};
     const PRICE_CHILD = {{ $tour->base_price_child ?? 0 }};
     const PRICE_INFANT = {{ $tour->base_price_infant ?? 0 }};
     const PRICE_SENIOR = {{ $tour->base_price_senior ?? $tour->base_price_adult ?? 0 }};
+    const PRICE_YOUTH = {{ $tour->base_price_youth ?? $tour->base_price_child ?? 0 }};
 
     function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -439,31 +482,36 @@
         const children = parseInt(document.getElementById('children').value || '0', 10);
         const infants = parseInt(document.getElementById('infants').value || '0', 10);
         const seniors = parseInt(document.getElementById('seniors').value || '0', 10);
+        const youth = parseInt(document.getElementById('youth').value || '0', 10);
 
         // Update summary counts
         document.getElementById('summary-adults').textContent = adults;
         document.getElementById('summary-children').textContent = children;
         document.getElementById('summary-infants').textContent = infants;
         document.getElementById('summary-seniors').textContent = seniors;
+        document.getElementById('summary-youth').textContent = youth;
 
         // Calculate totals
         const totalAdults = adults * PRICE_ADULT;
         const totalChildren = children * PRICE_CHILD;
         const totalInfants = infants * PRICE_INFANT;
         const totalSeniors = seniors * PRICE_SENIOR;
-        const grandTotal = totalAdults + totalChildren + totalInfants + totalSeniors;
+        const totalYouth = youth * PRICE_YOUTH;
+        const grandTotal = totalAdults + totalChildren + totalInfants + totalSeniors + totalYouth;
 
         // Update displayed totals
         document.getElementById('total-adults').textContent = 'USD ' + formatNumber(totalAdults);
         document.getElementById('total-children').textContent = 'USD ' + formatNumber(totalChildren);
         document.getElementById('total-infants').textContent = PRICE_INFANT > 0 ? 'USD ' + formatNumber(totalInfants) : 'Free';
         document.getElementById('total-seniors').textContent = 'USD ' + formatNumber(totalSeniors);
+        document.getElementById('total-youth').textContent = 'USD ' + formatNumber(totalYouth);
         document.getElementById('grand-total').textContent = 'USD ' + formatNumber(grandTotal);
 
         // Show/hide rows
         document.getElementById('children-row').style.display = children > 0 ? 'flex' : 'none';
         document.getElementById('infants-row').style.display = infants > 0 ? 'flex' : 'none';
         document.getElementById('seniors-row').style.display = seniors > 0 ? 'flex' : 'none';
+        document.getElementById('youth-row').style.display = youth > 0 ? 'flex' : 'none';
     }
 
     function updateTraveller(field, delta, min) {
@@ -473,6 +521,19 @@
         const next = Math.max(min, current + delta);
         input.value = next;
         updatePriceSummary();
+    }
+
+    function toggleTravellerDropdown() {
+        const dropdown = document.getElementById('traveller-dropdown');
+        const arrow = document.getElementById('dropdown-arrow');
+        
+        if (dropdown.classList.contains('hidden')) {
+            dropdown.classList.remove('hidden');
+            arrow.style.transform = 'rotate(180deg)';
+        } else {
+            dropdown.classList.add('hidden');
+            arrow.style.transform = 'rotate(0deg)';
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -550,7 +611,7 @@
         updatePriceSummary();
 
         // Listen for manual input changes
-        ['adults', 'children', 'infants'].forEach(function(field) {
+        ['adults', 'children', 'infants', 'seniors', 'youth'].forEach(function(field) {
             const input = document.getElementById(field);
             if (input) {
                 input.addEventListener('change', updatePriceSummary);
