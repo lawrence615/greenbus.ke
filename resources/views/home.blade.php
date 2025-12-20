@@ -59,6 +59,16 @@
                     <div class="absolute left-2 sm:left-6 bottom-2 sm:bottom-8 w-48 sm:w-60 h-60 sm:h-72 rounded-3xl overflow-hidden shadow-[0_22px_55px_rgba(15,23,42,0.75)] bg-slate-800/20 -rotate-1 origin-top-right">
                         <img src="{{ asset('images/greenbus_ke_1.jpg') }}" alt="Greenbus location tour" class="w-full h-full object-cover">
                     </div>
+
+                    <!-- The bus Tour CTA Button -->
+                    <div class="absolute bottom-2 right-4 z-10">
+                        <a href="/nairobi/tours/nai-nami-storytelling-tour" class="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-linear-to-r from-yellow-400 to-orange-500 text-slate-900 text-sm sm:text-base font-bold shadow-xl shadow-orange-500/50 hover:from-yellow-500 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 backdrop-blur-sm bg-white/90 border-2 border-white">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            The Bus Tour
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
