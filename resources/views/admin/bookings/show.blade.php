@@ -96,8 +96,63 @@
                             <p class="font-medium text-slate-900">{{ $booking->location->name ?? 'N/A' }}</p>
                         </div>
                         <div>
-                            <p class="text-sm text-slate-500">Date</p>
-                            <p class="font-medium text-slate-900">{{ $booking->date->format('l, F j, Y') }}</p>
+                            <div class="flex items-center justify-between">
+                                <p class="text-sm text-slate-500">Date</p>
+                                <button 
+                                    onclick="document.getElementById('edit-date-form').classList.toggle('hidden')"
+                                    class="text-xs text-emerald-600 hover:text-emerald-700 font-medium cursor-pointer"
+                                >
+                                    Edit
+                                </button>
+                            </div>
+                            <div id="date-display" class="font-medium text-slate-900">{{ $booking->date->format('l, F j, Y') }}</div>
+                            
+                            <!-- Edit Date Form (Hidden by default) -->
+                            <div id="edit-date-form" class="hidden mt-2">
+                                <form method="POST" action="{{ route('console.bookings.update-date', $booking) }}" class="space-y-2">
+                                    @csrf
+                                    @method('PATCH')
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-700 mb-1">Date</label>
+                                            <input 
+                                                type="date" 
+                                                name="date" 
+                                                value="{{ $booking->date->format('Y-m-d') }}"
+                                                min="{{ now()->format('Y-m-d') }}"
+                                                required
+                                                class="w-full px-2 py-1 text-sm border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                            >
+                                        </div>
+                                        <div>
+                                            <label class="block text-xs font-medium text-slate-700 mb-1">Time</label>
+                                            <select 
+                                                name="time" 
+                                                required
+                                                class="w-full px-2 py-1 text-sm border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                            >
+                                                @foreach(['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'] as $time)
+                                                <option value="{{ $time }}" {{ $booking->time === $time ? 'selected' : '' }}>
+                                                    {{ $time }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button 
+                                            type="button"
+                                            onclick="document.getElementById('edit-date-form').classList.add('hidden')"
+                                            class="px-2 py-1 text-xs bg-slate-200 text-slate-700 rounded hover:bg-slate-300"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button type="submit" class="px-2 py-1 text-xs bg-emerald-600 text-white rounded hover:bg-emerald-700">
+                                            Update Date
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                         <div>
                             <p class="text-sm text-slate-500">Time</p>
@@ -605,6 +660,87 @@
 
         // Show initial status description
         statusSelect.dispatchEvent(new Event('change'));
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle date form submission
+        const dateForm = document.querySelector('#edit-date-form form');
+        if (dateForm) {
+            dateForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values for confirmation
+                const formData = new FormData(this);
+                const newDate = formData.get('date');
+                const newTime = formData.get('time');
+                const currentDate = document.getElementById('date-display').textContent.trim();
+                
+                // Format date for confirmation
+                const formattedDate = new Date(newDate + 'T00:00:00').toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Show confirmation dialog
+                if (confirm(`Are you sure you want to change the booking date?\n\nFrom: ${currentDate}\nTo: ${formattedDate} at ${newTime}\n\nThis action will be logged.`)) {
+                    const submitButton = this.querySelector('button[type="submit"]');
+                    const originalText = submitButton.textContent;
+                    
+                    // Show loading state
+                    submitButton.textContent = 'Updating...';
+                    submitButton.disabled = true;
+                    
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update the date display
+                            document.getElementById('date-display').textContent = data.new_date;
+                            // Hide the form
+                            document.getElementById('edit-date-form').classList.add('hidden');
+                            // Show success message
+                            showNotification('Date updated successfully', 'success');
+                        } else {
+                            showNotification('Failed to update date', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Failed to update date', 'error');
+                    })
+                    .finally(() => {
+                        // Reset button state
+                        submitButton.textContent = originalText;
+                        submitButton.disabled = false;
+                    });
+                }
+            });
+        }
+        
+        // Notification helper
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'
+            }`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
     });
 </script>
 
