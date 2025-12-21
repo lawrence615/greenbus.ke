@@ -175,6 +175,14 @@
                                 Status
                             </div>
                         </th>
+                        <th class="px-4 py-3 text-left">
+                            <div class="flex items-center gap-2 font-semibold text-slate-700 uppercase text-xs tracking-wider">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Notes
+                            </div>
+                        </th>
                         <th class="px-4 py-3 text-right">
                             <span class="font-semibold text-slate-700 uppercase text-xs tracking-wider">Actions</span>
                         </th>
@@ -233,6 +241,22 @@
                                     {{ $booking->adults }}
                                 </span>
                                 @endif
+                                @if($booking->seniors > 0)
+                                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 text-[10px] font-medium" title="Seniors">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                    {{ $booking->seniors }}
+                                </span>
+                                @endif
+                                @if($booking->youth > 0)
+                                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 text-[10px] font-medium" title="Youth">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                    {{ $booking->youth }}
+                                </span>
+                                @endif
                                 @if($booking->children > 0)
                                 <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 text-[10px] font-medium" title="Children">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -275,6 +299,20 @@
                                 {{ $status?->label() ?? $booking->status }}
                             </span>
                         </td>
+                        <td class="px-4 py-3">
+                            @if($booking->hasNotes())
+                            <div class="flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-700">
+                                    Has notes
+                                </span>
+                            </div>
+                            @else
+                            <span class="text-slate-400 text-xs">No notes</span>
+                            @endif
+                        </td>
                         <td class="px-4 py-3 text-right">
                             <a href="{{ route('console.bookings.show', $booking) }}" onclick="event.stopPropagation()" class="p-1.5 inline-flex text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors duration-150" title="View Details">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -286,7 +324,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-4 py-16 text-center">
+                        <td colspan="7" class="px-4 py-16 text-center">
                             <div class="flex flex-col items-center">
                                 <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
                                     <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
