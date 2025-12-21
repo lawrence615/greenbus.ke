@@ -35,6 +35,7 @@ class StoreRequest extends FormRequest
             'is_featured' => ['boolean'],
             'base_price_senior' => ['required', 'numeric', 'min:0'],
             'base_price_adult' => ['required', 'numeric', 'min:0'],
+            'base_price_youth' => ['nullable', 'numeric', 'min:0'],
             'base_price_child' => ['nullable', 'numeric', 'min:0'],
             'base_price_infant' => ['nullable', 'numeric', 'min:0'],
             'status' => ['required', 'in:draft,published'],
