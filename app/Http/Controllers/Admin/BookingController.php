@@ -78,6 +78,40 @@ class BookingController extends Controller
             ->with('success', 'Booking status updated successfully.');
     }
 
+    public function updateDate(Request $request, Booking $booking)
+    {
+        $request->validate([
+            'date' => 'required|date|after_or_equal:today',
+            'time' => 'required|string',
+        ]);
+
+        $booking->update([
+            'date' => $request->date,
+            'time' => $request->time,
+        ]);
+
+        Log::info('Booking date updated', [
+            'booking_reference' => $booking->reference,
+            'updated_by' => auth()->id(),
+            'old_date' => $booking->getOriginal('date'),
+            'new_date' => $request->date,
+            'old_time' => $booking->getOriginal('time'),
+            'new_time' => $request->time,
+        ]);
+
+        // Return JSON response for AJAX requests
+        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking date updated successfully.',
+                'new_date' => $booking->date->format('l, F j, Y'),
+                'new_time' => $booking->time,
+            ]);
+        }
+
+        return back()->with('success', 'Booking date updated successfully.');
+    }
+
     public function updateNotes(Request $request, Booking $booking)
     {
         $request->validate([
