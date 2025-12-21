@@ -49,7 +49,7 @@
 
                 {{-- Section 1: Tour Details --}}
                 <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <div class="bg-gradient-to-r from-emerald-50 to-teal-50 px-5 py-3 border-b border-slate-100">
+                    <div class="bg-linear-to-r from-emerald-50 to-teal-50 px-5 py-3 border-b border-slate-100">
                         <div class="flex items-center gap-2">
                             <span class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold">1</span>
                             <h2 class="font-semibold text-slate-800">Plan Your Tour</h2>
@@ -91,7 +91,7 @@
 
                 {{-- Section 2: Travellers --}}
                 <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <div class="bg-gradient-to-r from-emerald-50 to-teal-50 px-5 py-3 border-b border-slate-100">
+                    <div class="bg-linear-to-r from-emerald-50 to-teal-50 px-5 py-3 border-b border-slate-100">
                         <div class="flex items-center gap-2">
                             <span class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold">2</span>
                             <h2 class="font-semibold text-slate-800">Number of travellers</h2>
@@ -246,7 +246,7 @@
 
                 {{-- Section 3: Contact Details --}}
                 <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <div class="bg-gradient-to-r from-emerald-50 to-teal-50 px-5 py-3 border-b border-slate-100">
+                    <div class="bg-linear-to-r from-emerald-50 to-teal-50 px-5 py-3 border-b border-slate-100">
                         <div class="flex items-center gap-2">
                             <span class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold">3</span>
                             <h2 class="font-semibold text-slate-800">Your details</h2>
