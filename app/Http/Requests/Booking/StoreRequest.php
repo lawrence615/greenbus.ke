@@ -25,6 +25,7 @@ class StoreRequest extends FormRequest
             'date' => ['required', 'date', 'after_or_equal:today'],
             'time' => ['nullable', 'string', 'max:50'],
             'adults' => ['required', 'integer', 'min:1'],
+            'youth' => ['nullable', 'integer', 'min:0'],
             'children' => ['nullable', 'integer', 'min:0'],
             'infants' => ['nullable', 'integer', 'min:0'],
             'seniors' => ['nullable', 'integer', 'min:0'],
