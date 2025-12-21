@@ -57,6 +57,7 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
     Route::get('/bookings/{booking}', [AdminBookingController::class, 'show'])->name('bookings.show');
     Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
+    Route::patch('/bookings/{booking}/date', [AdminBookingController::class, 'updateDate'])->name('bookings.update-date');
     Route::patch('/bookings/{booking}/notes', [AdminBookingController::class, 'updateNotes'])->name('bookings.update-notes');
 
     Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
