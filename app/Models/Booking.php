@@ -20,6 +20,7 @@ class Booking extends Model
         'date',
         'time',
         'adults',
+        'youth',
         'seniors',
         'children',
         'infants',
