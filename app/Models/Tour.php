@@ -34,6 +34,7 @@ class Tour extends Model
         'is_daily',
         'is_featured',
         'base_price_adult',
+        'base_price_youth',
         'base_price_child',
         'base_price_infant',
         'base_price_senior',
