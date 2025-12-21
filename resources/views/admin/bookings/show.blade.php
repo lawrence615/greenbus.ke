@@ -41,7 +41,7 @@
     <div>
         <a href="{{ route('console.bookings.index') }}" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Back to Bookings
         </a>
@@ -69,7 +69,7 @@
                         {{ $status?->label() ?? $booking->status }}
                     </span>
                 </div>
-                
+
                 <!-- Tour Details Section -->
                 <div class="border-b border-slate-100">
                     <div class="px-6 py-3 bg-slate-50">
@@ -170,19 +170,19 @@
                             <div class="flex items-center justify-between text-xs text-slate-600">
                                 <span>
                                     @php
-                                        $updater = \App\Models\User::find($booking->notes_updated_by);
-                                        $updaterName = $updater ? $updater->name : 'Unknown';
+                                    $updater = \App\Models\User::find($booking->notes_updated_by);
+                                    $updaterName = $updater ? $updater->name : 'Unknown';
                                     @endphp
                                     Last updated by <span class="font-medium text-slate-700">{{ $updaterName }}</span>
                                     @if($booking->notes_updated_at)
-                                        on {{ \Carbon\Carbon::parse($booking->notes_updated_at)->format('M d, Y H:i') }}
+                                    on {{ \Carbon\Carbon::parse($booking->notes_updated_at)->format('M d, Y H:i') }}
                                     @endif
                                 </span>
                                 @if($booking->notes_created_by && $booking->notes_created_at)
                                 <span>
                                     @php
-                                        $creator = \App\Models\User::find($booking->notes_created_by);
-                                        $creatorName = $creator ? $creator->name : 'Unknown';
+                                    $creator = \App\Models\User::find($booking->notes_created_by);
+                                    $creatorName = $creator ? $creator->name : 'Unknown';
                                     @endphp
                                     Created by <span class="font-medium text-slate-700">{{ $creatorName }}</span>
                                 </span>
@@ -195,13 +195,12 @@
                             @csrf
                             @method('PATCH')
                             <div class="relative">
-                                <textarea 
-                                    name="booking_notes" 
+                                <textarea
+                                    name="booking_notes"
                                     id="booking-notes"
-                                    rows="4" 
+                                    rows="4"
                                     class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm text-slate-900 placeholder-slate-400 resize-none"
-                                    placeholder="Add any special planning notes, requirements, or important information for this booking..."
-                                >{{ $booking->notes_content }}</textarea>
+                                    placeholder="Add any special planning notes, requirements, or important information for this booking...">{{ $booking->notes_content }}</textarea>
                                 <div id="save-indicator" class="absolute top-2 right-2 hidden">
                                     <div class="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-medium">
                                         <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -240,31 +239,29 @@
                             </div> -->
                             <h4 class="text-lg font-medium text-slate-900 mb-2">No booking notes yet</h4>
                             <p class="text-sm text-slate-500 mb-6 max-w-md mx-auto">
-                                Add important information about this booking that will help with planning and execution. 
+                                Add important information about this booking that will help with planning and execution.
                                 This could include special requirements, accessibility needs, or specific instructions.
                             </p>
-                            <button 
+                            <button
                                 onclick="document.getElementById('booking-notes-empty').focus()"
-                                class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors duration-200 cursor-pointer"
-                            >
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors duration-200 cursor-pointer">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                                 </svg>
                                 Add Booking Notes
                             </button>
-                            
+
                             <!-- Hidden form that appears when button is clicked -->
                             <form id="booking-notes-form" method="POST" action="{{ route('console.bookings.update-notes', $booking) }}" class="hidden mt-6 space-y-3">
                                 @csrf
                                 @method('PATCH')
                                 <div class="relative">
-                                    <textarea 
-                                        name="booking_notes" 
+                                    <textarea
+                                        name="booking_notes"
                                         id="booking-notes-empty"
-                                        rows="4" 
+                                        rows="4"
                                         class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm text-slate-900 placeholder-slate-400 resize-none"
-                                        placeholder="Add any special planning notes, requirements, or important information for this booking..."
-                                    ></textarea>
+                                        placeholder="Add any special planning notes, requirements, or important information for this booking..."></textarea>
                                     <div id="save-indicator" class="absolute top-2 right-2 hidden">
                                         <div class="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-medium">
                                             <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -286,11 +283,10 @@
                                 <div class="flex items-center justify-between">
                                     <p id="save-status" class="text-xs text-slate-500">Auto-saves as you type</p>
                                     <div class="flex gap-2">
-                                        <button 
+                                        <button
                                             type="button"
                                             onclick="this.form.classList.add('hidden'); document.getElementById('empty-state-content').classList.remove('hidden');"
-                                            class="px-3 py-1.5 bg-slate-200 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-300 transition-colors duration-200"
-                                        >
+                                            class="px-3 py-1.5 bg-slate-200 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-300 transition-colors duration-200">
                                             Cancel
                                         </button>
                                         <button type="submit" class="px-3 py-1.5 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors duration-200 flex items-center gap-1.5">
@@ -306,138 +302,6 @@
                         @endif
                     </div>
                 </div>
-
-                <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    // Handle both existing notes and empty state forms
-                    const notesTextarea = document.getElementById('booking-notes') || document.getElementById('booking-notes-empty');
-                    const emptyStateButton = document.querySelector('button[onclick*="booking-notes-empty"]');
-                    
-                    if (!notesTextarea) return;
-
-                    // Show form when empty state button is clicked
-                    if (emptyStateButton) {
-                        emptyStateButton.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            const emptyForm = document.getElementById('booking-notes-form');
-                            const emptyStateContent = document.querySelector('.text-center.py-8');
-                            
-                            if (emptyForm && emptyStateContent) {
-                                emptyForm.classList.remove('hidden');
-                                // Hide the empty state content but keep the container
-                                const elementsToHide = emptyStateContent.querySelectorAll('h4, p, button:not([type="submit"])');
-                                elementsToHide.forEach(el => el.style.display = 'none');
-                            }
-                            
-                            // Focus the textarea
-                            setTimeout(() => {
-                                notesTextarea.focus();
-                            }, 100);
-                        });
-                    }
-
-                    // Auto-save functionality
-                    let saveTimeout;
-                    let originalContent = notesTextarea.value;
-                    
-                    // Find the form and indicators
-                    const form = notesTextarea.closest('form');
-                    const saveIndicator = form.querySelector('#save-indicator');
-                    const savedIndicator = form.querySelector('#saved-indicator');
-                    const saveStatus = form.querySelector('#save-status');
-
-                    function saveNotes() {
-                        // Show saving indicator
-                        saveIndicator.classList.remove('hidden');
-                        savedIndicator.classList.add('hidden');
-                        saveStatus.textContent = 'Saving...';
-                        
-                        // Create form data
-                        const formData = new FormData(form);
-                        
-                        // Submit via fetch for better UX
-                        fetch(form.action, {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Accept': 'text/html'
-                            }
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                originalContent = notesTextarea.value;
-                                
-                                // Check if notes were deleted (empty content)
-                                if (!notesTextarea.value.trim()) {
-                                    // Reload page to show empty state skeleton
-                                    window.location.reload();
-                                    return;
-                                }
-                                
-                                // Show saved indicator for normal updates
-                                saveIndicator.classList.add('hidden');
-                                savedIndicator.classList.remove('hidden');
-                                saveStatus.textContent = 'Saved';
-                                
-                                // Hide saved indicator after 2 seconds
-                                setTimeout(() => {
-                                    savedIndicator.classList.add('hidden');
-                                    saveStatus.textContent = 'Auto-saves as you type';
-                                }, 2000);
-                            } else {
-                                throw new Error('Save failed');
-                            }
-                        })
-                        .catch(error => {
-                            saveIndicator.classList.add('hidden');
-                            saveStatus.textContent = 'Save failed. Try again.';
-                            console.error('Save error:', error);
-                        });
-                    }
-
-                    // Auto-save with debounce (1.5 seconds after typing stops)
-                    notesTextarea.addEventListener('input', function() {
-                        clearTimeout(saveTimeout);
-                        
-                        // Update status to show changes are pending
-                        if (this.value !== originalContent) {
-                            saveStatus.textContent = 'Changes pending...';
-                        } else {
-                            saveStatus.textContent = 'Auto-saves as you type';
-                        }
-                        
-                        // Set timeout to save
-                        saveTimeout = setTimeout(() => {
-                            if (this.value !== originalContent) {
-                                saveNotes();
-                            }
-                        }, 1500);
-                    });
-
-                    // Handle form submission for manual save
-                    form.addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        clearTimeout(saveTimeout);
-                        saveNotes();
-                    });
-
-                    // Handle cancel button in empty state
-                    const cancelButton = form.querySelector('button[type="button"]');
-                    if (cancelButton) {
-                        cancelButton.addEventListener('click', function() {
-                            // Reset the empty state
-                            const emptyStateContent = form.closest('.text-center.py-8');
-                            if (emptyStateContent) {
-                                form.classList.add('hidden');
-                                const elementsToShow = emptyStateContent.querySelectorAll('h4, p, button:not([type="submit"])');
-                                elementsToShow.forEach(el => el.style.display = '');
-                                notesTextarea.value = '';
-                            }
-                        });
-                    }
-                });
-                </script>
             </div>
 
             <!-- Customer Info -->
@@ -507,7 +371,7 @@
                 <div class="px-6 py-4 border-b border-slate-200">
                     <div>
                         <h2 class="font-semibold text-slate-900">Update Status</h2>
-                        <p class="text-sm text-slate-500 mt-1">Change the booking status to track its progress  </p>
+                        <p class="text-sm text-slate-500 mt-1">Change the booking status to track its progress </p>
                     </div>
                 </div>
                 <div class="p-6">
@@ -525,14 +389,14 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
+
                             <div id="status-info" class="hidden p-3 bg-slate-50 rounded-lg">
                                 <p class="text-sm text-slate-600" id="status-description"></p>
                             </div>
-                            
+
                             <button type="submit" class="w-full px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 cursor-pointer transition-colors duration-200 flex items-center justify-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                 </svg>
                                 Update Status
                             </button>
@@ -551,7 +415,7 @@
                     <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
                         <div class="flex gap-2">
                             <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                             </svg>
                             <div class="text-sm text-amber-800">
                                 <p class="font-medium">Refund Eligibility</p>
@@ -564,21 +428,20 @@
                         <div class="space-y-4">
                             <div>
                                 <label for="reason" class="block text-sm font-medium text-slate-700 mb-1">Refund Reason</label>
-                                <textarea 
-                                    name="reason" 
-                                    id="reason" 
-                                    rows="3" 
+                                <textarea
+                                    name="reason"
+                                    id="reason"
+                                    rows="3"
                                     required
                                     placeholder="Enter the reason for this refund..."
-                                    class="w-full rounded-lg border border-slate-300 text-sm focus:border-emerald-500 focus:ring-emerald-500 placeholder:text-slate-400"
-                                ></textarea>
+                                    class="w-full rounded-lg border border-slate-300 text-sm focus:border-emerald-500 focus:ring-emerald-500 placeholder:text-slate-400"></textarea>
                                 @error('reason')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
                             <button type="submit" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 flex items-center justify-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
                                 </svg>
                                 Process Refund
                             </button>
@@ -595,7 +458,7 @@
                     <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg">
                         <div class="flex gap-2">
                             <svg class="w-5 h-5 text-slate-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <div class="text-sm text-slate-700">
                                 <p class="font-medium">This booking has been refunded</p>
@@ -621,7 +484,7 @@
                     <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
                         <div class="flex gap-2">
                             <svg class="w-5 h-5 text-red-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <div class="text-sm text-red-800">
                                 <p class="font-medium">Not Eligible for Refund</p>
@@ -642,14 +505,14 @@
                 <div class="p-6 space-y-3">
                     <a href="mailto:{{ $booking->customer_email }}" class="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                         Email Customer
                     </a>
                     @if($booking->customer_phone)
                     <a href="tel:{{ $booking->customer_phone }}" class="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
                         Call Customer
                     </a>
@@ -657,7 +520,7 @@
                     @if($booking->payment)
                     <a href="{{ route('console.payments.show', $booking->payment) }}" class="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-600">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                         </svg>
                         View Payment Details
                     </a>
@@ -678,7 +541,7 @@
             <div class="flex items-center gap-3 mb-4">
                 <div class="flex items-center justify-center w-10 h-10 bg-amber-100 rounded-full">
                     <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
                     </svg>
                 </div>
                 <div>
@@ -686,12 +549,12 @@
                     <p class="text-sm text-slate-500">This action will update the booking status</p>
                 </div>
             </div>
-            
+
             <div class="mb-6">
                 <p class="text-sm text-slate-600">Are you sure you want to change the booking status to <span class="font-semibold text-emerald-600" x-text="selectedStatusLabel"></span>?</p>
                 <p class="text-xs text-slate-500 mt-2" x-text="statusDescription"></p>
             </div>
-            
+
             <div class="flex gap-3">
                 <button
                     type="button"
@@ -709,37 +572,171 @@
         </div>
     </div>
 </div>
+@endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusSelect = document.getElementById('status-select');
+        const statusInfo = document.getElementById('status-info');
+        const statusDescription = document.getElementById('status-description');
+
+        const statusDescriptions = {
+            'pending_payment': 'Customer has not yet completed payment for this booking.',
+            'confirmed': 'Booking is confirmed and payment has been received.',
+            'cancelled': 'Booking has been cancelled by customer or administrator.',
+            'completed': 'Tour/service has been successfully completed.',
+            'refunded': 'Payment has been refunded to the customer.',
+            'no_show': 'Customer paid but did not show up for the scheduled tour.',
+            'expired': 'Booking has expired due to non-payment or time limit.'
+        };
+
+        statusSelect.addEventListener('change', function() {
+            const selectedStatus = this.value;
+            const description = statusDescriptions[selectedStatus] || '';
+
+            if (description) {
+                statusDescription.textContent = description;
+                statusInfo.classList.remove('hidden');
+            } else {
+                statusInfo.classList.add('hidden');
+            }
+        });
+
+        // Show initial status description
+        statusSelect.dispatchEvent(new Event('change'));
+    });
+</script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const statusSelect = document.getElementById('status-select');
-    const statusInfo = document.getElementById('status-info');
-    const statusDescription = document.getElementById('status-description');
-    
-    const statusDescriptions = {
-        'pending_payment': 'Customer has not yet completed payment for this booking.',
-        'confirmed': 'Booking is confirmed and payment has been received.',
-        'cancelled': 'Booking has been cancelled by customer or administrator.',
-        'completed': 'Tour/service has been successfully completed.',
-        'refunded': 'Payment has been refunded to the customer.',
-        'no_show': 'Customer paid but did not show up for the scheduled tour.',
-        'expired': 'Booking has expired due to non-payment or time limit.'
-    };
-    
-    statusSelect.addEventListener('change', function() {
-        const selectedStatus = this.value;
-        const description = statusDescriptions[selectedStatus] || '';
-        
-        if (description) {
-            statusDescription.textContent = description;
-            statusInfo.classList.remove('hidden');
-        } else {
-            statusInfo.classList.add('hidden');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle both existing notes and empty state forms
+        const notesTextarea = document.getElementById('booking-notes') || document.getElementById('booking-notes-empty');
+        const emptyStateButton = document.querySelector('button[onclick*="booking-notes-empty"]');
+
+        if (!notesTextarea) return;
+
+        // Show form when empty state button is clicked
+        if (emptyStateButton) {
+            emptyStateButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                const emptyForm = document.getElementById('booking-notes-form');
+                const emptyStateContent = document.querySelector('.text-center.py-8');
+
+                if (emptyForm && emptyStateContent) {
+                    emptyForm.classList.remove('hidden');
+                    // Hide the empty state content but keep the container
+                    const elementsToHide = emptyStateContent.querySelectorAll('h4, p, button:not([type="submit"])');
+                    elementsToHide.forEach(el => el.style.display = 'none');
+                }
+
+                // Focus the textarea
+                setTimeout(() => {
+                    notesTextarea.focus();
+                }, 100);
+            });
+        }
+
+        // Auto-save functionality
+        let saveTimeout;
+        let originalContent = notesTextarea.value;
+
+        // Find the form and indicators
+        const form = notesTextarea.closest('form');
+        const saveIndicator = form.querySelector('#save-indicator');
+        const savedIndicator = form.querySelector('#saved-indicator');
+        const saveStatus = form.querySelector('#save-status');
+
+        function saveNotes() {
+            // Show saving indicator
+            saveIndicator.classList.remove('hidden');
+            savedIndicator.classList.add('hidden');
+            saveStatus.textContent = 'Saving...';
+
+            // Create form data
+            const formData = new FormData(form);
+
+            // Submit via fetch for better UX
+            fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'text/html'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        originalContent = notesTextarea.value;
+
+                        // Check if notes were deleted (empty content)
+                        if (!notesTextarea.value.trim()) {
+                            // Reload page to show empty state skeleton
+                            window.location.reload();
+                            return;
+                        }
+
+                        // Show saved indicator for normal updates
+                        saveIndicator.classList.add('hidden');
+                        savedIndicator.classList.remove('hidden');
+                        saveStatus.textContent = 'Saved';
+
+                        // Hide saved indicator after 2 seconds
+                        setTimeout(() => {
+                            savedIndicator.classList.add('hidden');
+                            saveStatus.textContent = 'Auto-saves as you type';
+                        }, 2000);
+                    } else {
+                        throw new Error('Save failed');
+                    }
+                })
+                .catch(error => {
+                    saveIndicator.classList.add('hidden');
+                    saveStatus.textContent = 'Save failed. Try again.';
+                    console.error('Save error:', error);
+                });
+        }
+
+        // Auto-save with debounce (1.5 seconds after typing stops)
+        notesTextarea.addEventListener('input', function() {
+            clearTimeout(saveTimeout);
+
+            // Update status to show changes are pending
+            if (this.value !== originalContent) {
+                saveStatus.textContent = 'Changes pending...';
+            } else {
+                saveStatus.textContent = 'Auto-saves as you type';
+            }
+
+            // Set timeout to save
+            saveTimeout = setTimeout(() => {
+                if (this.value !== originalContent) {
+                    saveNotes();
+                }
+            }, 1500);
+        });
+
+        // Handle form submission for manual save
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            clearTimeout(saveTimeout);
+            saveNotes();
+        });
+
+        // Handle cancel button in empty state
+        const cancelButton = form.querySelector('button[type="button"]');
+        if (cancelButton) {
+            cancelButton.addEventListener('click', function() {
+                // Reset the empty state
+                const emptyStateContent = form.closest('.text-center.py-8');
+                if (emptyStateContent) {
+                    form.classList.add('hidden');
+                    const elementsToShow = emptyStateContent.querySelectorAll('h4, p, button:not([type="submit"])');
+                    elementsToShow.forEach(el => el.style.display = '');
+                    notesTextarea.value = '';
+                }
+            });
         }
     });
-    
-    // Show initial status description
-    statusSelect.dispatchEvent(new Event('change'));
-});
 </script>
-@endsection
+@endpush
