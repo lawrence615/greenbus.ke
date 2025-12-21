@@ -74,7 +74,43 @@ class BookingController extends Controller
 
         $booking->update(['status' => $request->status]);
 
-        return back()->with('success', 'Booking status updated successfully.');
+        return redirect()->route('console.bookings.show', $booking)
+            ->with('success', 'Booking status updated successfully.');
+    }
+
+    public function updateNotes(Request $request, Booking $booking)
+    {
+        $request->validate([
+            'booking_notes' => 'nullable|string|max:2000',
+        ]);
+
+        if ($request->filled('booking_notes')) {
+            $booking->setNotesWithMetadata($request->booking_notes, auth()->id());
+        } else {
+            $booking->booking_notes = null;
+        }
+
+        $booking->save();
+
+        Log::info('Booking notes updated', [
+            'booking_reference' => $booking->reference,
+            'updated_by' => auth()->id(),
+            'has_content' => $booking->hasNotes(),
+        ]);
+
+        // Return JSON response for AJAX requests
+        if ($request->ajax() || $request->header('X-Requested-With') === 'XMLHttpRequest') {
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking notes updated successfully.',
+                'notes_metadata' => [
+                    'updated_by' => auth()->user()->name ?? 'Unknown',
+                    'updated_at' => $booking->notes_updated_at,
+                ]
+            ]);
+        }
+
+        return back()->with('success', 'Booking notes updated successfully.');
     }
 
     /**
