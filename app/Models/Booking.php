@@ -31,6 +31,7 @@ class Booking extends Model
         'customer_phone',
         'country_of_origin',
         'special_requests',
+        'booking_notes',
         'status',
         'refunded_at',
         'refund_reason',
@@ -39,7 +40,73 @@ class Booking extends Model
     protected $casts = [
         'date' => 'date',
         'refunded_at' => 'datetime',
+        'booking_notes' => 'array',
     ];
+
+    /**
+     * Get the booking notes content
+     */
+    public function getNotesContentAttribute(): ?string
+    {
+        return $this->booking_notes['content'] ?? null;
+    }
+
+    /**
+     * Get the booking notes creator
+     */
+    public function getNotesCreatedByAttribute(): ?int
+    {
+        return $this->booking_notes['created_by'] ?? null;
+    }
+
+    /**
+     * Get the booking notes updater
+     */
+    public function getNotesUpdatedByAttribute(): ?int
+    {
+        return $this->booking_notes['updated_by'] ?? null;
+    }
+
+    /**
+     * Get the booking notes created at timestamp
+     */
+    public function getNotesCreatedAtAttribute(): ?string
+    {
+        return $this->booking_notes['created_at'] ?? null;
+    }
+
+    /**
+     * Get the booking notes updated at timestamp
+     */
+    public function getNotesUpdatedAtAttribute(): ?string
+    {
+        return $this->booking_notes['updated_at'] ?? null;
+    }
+
+    /**
+     * Check if booking has notes
+     */
+    public function hasNotes(): bool
+    {
+        return !empty($this->booking_notes['content']);
+    }
+
+    /**
+     * Set booking notes with metadata
+     */
+    public function setNotesWithMetadata(string $content, ?int $userId = null): void
+    {
+        $now = now()->toIso8601String();
+        $hasExistingNotes = $this->hasNotes();
+
+        $this->booking_notes = [
+            'content' => $content,
+            'created_by' => $hasExistingNotes ? ($this->notes_created_by ?? $userId) : $userId,
+            'created_at' => $hasExistingNotes ? ($this->notes_created_at ?? $now) : $now,
+            'updated_by' => $userId,
+            'updated_at' => $now,
+        ];
+    }
 
     /**
      * Get the tour date and time as a Carbon instance.
