@@ -98,15 +98,14 @@
                         <div>
                             <div class="flex items-center justify-between">
                                 <p class="text-sm text-slate-500">Date</p>
-                                <button 
+                                <button
                                     onclick="document.getElementById('edit-date-form').classList.toggle('hidden')"
-                                    class="text-xs text-emerald-600 hover:text-emerald-700 font-medium cursor-pointer"
-                                >
+                                    class="text-xs text-emerald-600 hover:text-emerald-700 font-medium cursor-pointer">
                                     Edit
                                 </button>
                             </div>
                             <div id="date-display" class="font-medium text-slate-900">{{ $booking->date->format('l, F j, Y') }}</div>
-                            
+
                             <!-- Edit Date Form (Hidden by default) -->
                             <div id="edit-date-form" class="hidden mt-2">
                                 <form method="POST" action="{{ route('console.bookings.update-date', $booking) }}" class="space-y-2">
@@ -115,36 +114,34 @@
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
                                             <label class="block text-xs font-medium text-slate-700 mb-1">Date</label>
-                                            <input 
-                                                type="date" 
-                                                name="date" 
+                                            <input
+                                                type="date"
+                                                name="date"
                                                 value="{{ $booking->date->format('Y-m-d') }}"
                                                 min="{{ now()->format('Y-m-d') }}"
                                                 required
-                                                class="w-full px-2 py-1 text-sm border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                            >
+                                                class="w-full px-2 py-1 text-sm border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                                         </div>
                                         <div>
                                             <label class="block text-xs font-medium text-slate-700 mb-1">Time</label>
-                                            <select 
-                                                name="time" 
+                                            <select
+                                                name="time"
                                                 required
-                                                class="w-full px-2 py-1 text-sm border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                            >
-                                                @foreach(['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'] as $time)
-                                                <option value="{{ $time }}" {{ $booking->time === $time ? 'selected' : '' }}>
-                                                    {{ $time }}
+                                                class="w-full px-2 py-1 text-sm border border-slate-300 rounded focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                                <option value="09:00" {{ $booking->time === '09:00' ? 'selected' : '' }}>
+                                                    09:00
                                                 </option>
-                                                @endforeach
+                                                <option value="15:00" {{ $booking->time === '15:00' ? 'selected' : '' }}>
+                                                    15:00
+                                                </option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="flex gap-2">
-                                        <button 
+                                        <button
                                             type="button"
                                             onclick="document.getElementById('edit-date-form').classList.add('hidden')"
-                                            class="px-2 py-1 text-xs bg-slate-200 text-slate-700 rounded hover:bg-slate-300"
-                                        >
+                                            class="px-2 py-1 text-xs bg-slate-200 text-slate-700 rounded hover:bg-slate-300">
                                             Cancel
                                         </button>
                                         <button type="submit" class="px-2 py-1 text-xs bg-emerald-600 text-white rounded hover:bg-emerald-700">
@@ -626,6 +623,64 @@
             </div>
         </div>
     </div>
+
+    <!-- Date Update Confirmation Modal -->
+    <div
+        x-data="dateConfirmModal()"
+        x-show="isOpen"
+        x-cloak
+        class="fixed inset-0 z-9999 flex items-center justify-center"
+        @keydown.escape.window="hide()">
+        <div class="fixed inset-0 bg-black/50" @click="hide()"></div>
+        <div class="relative bg-white rounded-xl shadow-xl p-6 max-w-md mx-4 z-10">
+            <!-- Loading State -->
+            <div x-show="isLoading" x-transition:enter="transition-opacity duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="text-center py-8">
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-emerald-100 rounded-full mb-4">
+                    <svg class="w-6 h-6 text-emerald-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-slate-900 mb-2">Updating Booking Date</h3>
+                <p class="text-sm text-slate-500">Please wait while we update the booking...</p>
+            </div>
+
+            <!-- Confirmation State -->
+            <div x-show="!isLoading" x-transition:enter="transition-opacity duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="flex items-center justify-center w-10 h-10 bg-amber-100 rounded-full">
+                        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-900">Change Booking Date</h3>
+                        <p class="text-sm text-slate-500">This action will update the booking date and time</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <div class="p-3 bg-slate-50 rounded-lg">
+                        <div class="text-sm">
+                            <div class="font-medium text-slate-700 mb-1">From:</div>
+                            <div class="text-slate-600 mb-3" x-text="currentDate"></div>
+                            <div class="font-medium text-slate-700 mb-1">To:</div>
+                            <div class="text-slate-600" x-text="newDate + ' at ' + newTime"></div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-3">This action will be logged.</p>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button type="button" @click="hide()" class="flex-1 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500">
+                        Cancel
+                    </button>
+                    <button type="button" @click="confirmUpdate()" class="flex-1 px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                        Confirm Change
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -670,13 +725,13 @@
         if (dateForm) {
             dateForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 // Get form values for confirmation
                 const formData = new FormData(this);
                 const newDate = formData.get('date');
                 const newTime = formData.get('time');
                 const currentDate = document.getElementById('date-display').textContent.trim();
-                
+
                 // Format date for confirmation
                 const formattedDate = new Date(newDate + 'T00:00:00').toLocaleDateString('en-US', {
                     weekday: 'long',
@@ -684,52 +739,38 @@
                     month: 'long',
                     day: 'numeric'
                 });
-                
-                // Show confirmation dialog
-                if (confirm(`Are you sure you want to change the booking date?\n\nFrom: ${currentDate}\nTo: ${formattedDate} at ${newTime}\n\nThis action will be logged.`)) {
-                    const submitButton = this.querySelector('button[type="submit"]');
-                    const originalText = submitButton.textContent;
-                    
-                    // Show loading state
-                    submitButton.textContent = 'Updating...';
-                    submitButton.disabled = true;
-                    
-                    fetch(this.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Update the date display
-                            document.getElementById('date-display').textContent = data.new_date;
-                            // Hide the form
-                            document.getElementById('edit-date-form').classList.add('hidden');
-                            // Show success message
-                            showNotification('Date updated successfully', 'success');
-                        } else {
-                            showNotification('Failed to update date', 'error');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        showNotification('Failed to update date', 'error');
-                    })
-                    .finally(() => {
-                        // Reset button state
-                        submitButton.textContent = originalText;
-                        submitButton.disabled = false;
-                    });
+
+                // Show Alpine.js modal using Alpine.store
+                if (typeof Alpine !== 'undefined') {
+                    const modalStore = Alpine.store('dateConfirmModal');
+                    if (modalStore) {
+                        modalStore.show(currentDate, formattedDate, newTime, this);
+                    }
                 }
             });
         }
-        
+
         // Notification helper
         function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'
+            }`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    });
+</script>
+
+<script>
+    // Define Alpine.js store for date confirmation modal
+    document.addEventListener('alpine:init', () => {
+        // Global notification function
+        window.showNotification = function(message, type) {
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${
                 type === 'success' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'
@@ -740,7 +781,92 @@
             setTimeout(() => {
                 notification.remove();
             }, 3000);
-        }
+        };
+
+        Alpine.store('dateConfirmModal', {
+            isOpen: false,
+            isLoading: false,
+            currentDate: '',
+            newDate: '',
+            newTime: '',
+            formToSubmit: null,
+            
+            show(currentDate, newDate, newTime, formToSubmit) {
+                this.currentDate = currentDate;
+                this.newDate = newDate;
+                this.newTime = newTime;
+                this.formToSubmit = formToSubmit;
+                this.isOpen = true;
+                this.isLoading = false;
+            },
+            
+            hide() {
+                this.isOpen = false;
+                this.isLoading = false;
+            },
+            
+            confirmUpdate() {
+                if (this.formToSubmit) {
+                    // Show loading state
+                    this.isLoading = true;
+
+                    fetch(this.formToSubmit.action, {
+                        method: 'POST',
+                        body: new FormData(this.formToSubmit),
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Show success message
+                            window.showNotification('Date updated successfully', 'success');
+                            // Keep loading state visible for a moment, then refresh page
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1500);
+                        } else {
+                            // Hide loading state and show error
+                            this.isLoading = false;
+                            window.showNotification('Failed to update date', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Hide loading state and show error
+                        this.isLoading = false;
+                        window.showNotification('Failed to update date', 'error');
+                    });
+                }
+            }
+        });
+
+        // Define Alpine.js data function for the modal
+        Alpine.data('dateConfirmModal', () => ({
+            get isOpen() {
+                return Alpine.store('dateConfirmModal').isOpen;
+            },
+            get isLoading() {
+                return Alpine.store('dateConfirmModal').isLoading;
+            },
+            get currentDate() {
+                return Alpine.store('dateConfirmModal').currentDate;
+            },
+            get newDate() {
+                return Alpine.store('dateConfirmModal').newDate;
+            },
+            get newTime() {
+                return Alpine.store('dateConfirmModal').newTime;
+            },
+            hide() {
+                Alpine.store('dateConfirmModal').hide();
+            },
+            confirmUpdate() {
+                Alpine.store('dateConfirmModal').confirmUpdate();
+            }
+        }));
     });
 </script>
 
