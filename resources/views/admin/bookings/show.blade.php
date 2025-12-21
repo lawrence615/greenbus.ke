@@ -69,50 +69,375 @@
                         {{ $status?->label() ?? $booking->status }}
                     </span>
                 </div>
-                <div class="p-6 grid grid-cols-2 gap-6">
-                    <div>
-                        <p class="text-sm text-slate-500">Tour</p>
-                        @if($booking->tour)
-                        <a href="{{ route('console.tours.show', $booking->tour) }}" class="font-medium text-emerald-600 hover:text-emerald-700 hover:underline">
-                            {{ Str::limit($booking->tour->title, 120) }}
-                        </a>
+                
+                <!-- Tour Details Section -->
+                <div class="border-b border-slate-100">
+                    <div class="px-6 py-3 bg-slate-50">
+                        <h3 class="text-sm font-medium text-slate-700 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                            </svg>
+                            Tour Details
+                        </h3>
+                    </div>
+                    <div class="p-6 grid grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm text-slate-500">Tour</p>
+                            @if($booking->tour)
+                            <a href="{{ route('console.tours.show', $booking->tour) }}" class="font-medium text-emerald-600 hover:text-emerald-700 hover:underline">
+                                {{ Str::limit($booking->tour->title, 120) }}
+                            </a>
+                            @else
+                            <p class="font-medium text-slate-900">Tour not available</p>
+                            @endif
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Location</p>
+                            <p class="font-medium text-slate-900">{{ $booking->location->name ?? 'N/A' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Date</p>
+                            <p class="font-medium text-slate-900">{{ $booking->date->format('l, F j, Y') }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Time</p>
+                            <p class="font-medium text-slate-900">{{ $booking->time }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guest & Pricing Section -->
+                <div class="border-b border-slate-100">
+                    <div class="px-6 py-3 bg-slate-50">
+                        <h3 class="text-sm font-medium text-slate-700 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            Guests & Pricing
+                        </h3>
+                    </div>
+                    <div class="p-6 grid grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm text-slate-500">Guests</p>
+                            <p class="font-medium text-slate-900">
+                                {{ $booking->adults }} Adults, {{ $booking->seniors }} Senior, {{ $booking->youth }} Youth, {{ $booking->children }} Children, {{ $booking->infants }} Infants
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-slate-500">Total Amount</p>
+                            <p class="font-medium text-slate-900">{{ $booking->currency }} {{ number_format($booking->total_amount) }}</p>
+                        </div>
+                        <div class="col-span-2">
+                            <p class="text-sm text-slate-500">Country of Origin</p>
+                            <p class="font-medium text-slate-900">{{ $booking->country_of_origin ?? 'Not specified' }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Special Requests Section -->
+                @if($booking->special_requests)
+                <div class="border-b border-slate-100">
+                    <div class="px-6 py-3 bg-slate-50">
+                        <h3 class="text-sm font-medium text-slate-700 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
+                            </svg>
+                            Special Requests
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="font-medium text-slate-900 bg-amber-50 p-3 rounded-lg border border-amber-200">{{ $booking->special_requests }}</p>
+                    </div>
+                </div>
+                @endif
+
+                <!-- Booking Notes Section -->
+                <div>
+                    <div class="px-6 py-3 bg-slate-50">
+                        <h3 class="text-sm font-medium text-slate-700 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Notes on Booking
+                            <span class="text-xs text-slate-500 font-normal">Additional planning information</span>
+                        </h3>
+                    </div>
+                    <div class="p-6">
+                        @if($booking->hasNotes())
+                        <!-- Notes Metadata -->
+                        @if($booking->notes_updated_by)
+                        <div class="mb-3 p-2 bg-slate-50 rounded-lg border border-slate-200">
+                            <div class="flex items-center justify-between text-xs text-slate-600">
+                                <span>
+                                    @php
+                                        $updater = \App\Models\User::find($booking->notes_updated_by);
+                                        $updaterName = $updater ? $updater->name : 'Unknown';
+                                    @endphp
+                                    Last updated by <span class="font-medium text-slate-700">{{ $updaterName }}</span>
+                                    @if($booking->notes_updated_at)
+                                        on {{ \Carbon\Carbon::parse($booking->notes_updated_at)->format('M d, Y H:i') }}
+                                    @endif
+                                </span>
+                                @if($booking->notes_created_by && $booking->notes_created_at)
+                                <span>
+                                    @php
+                                        $creator = \App\Models\User::find($booking->notes_created_by);
+                                        $creatorName = $creator ? $creator->name : 'Unknown';
+                                    @endphp
+                                    Created by <span class="font-medium text-slate-700">{{ $creatorName }}</span>
+                                </span>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+                        <!-- Notes Form -->
+                        <form id="booking-notes-form" method="POST" action="{{ route('console.bookings.update-notes', $booking) }}" class="space-y-3">
+                            @csrf
+                            @method('PATCH')
+                            <div class="relative">
+                                <textarea 
+                                    name="booking_notes" 
+                                    id="booking-notes"
+                                    rows="4" 
+                                    class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm text-slate-900 placeholder-slate-400 resize-none"
+                                    placeholder="Add any special planning notes, requirements, or important information for this booking..."
+                                >{{ $booking->notes_content }}</textarea>
+                                <div id="save-indicator" class="absolute top-2 right-2 hidden">
+                                    <div class="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-medium">
+                                        <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        Saving...
+                                    </div>
+                                </div>
+                                <div id="saved-indicator" class="absolute top-2 right-2 hidden">
+                                    <div class="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-medium">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Saved
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <p id="save-status" class="text-xs text-slate-500">Auto-saves as you type</p>
+                                <button type="submit" class="px-3 py-1.5 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors duration-200 flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Save Notes
+                                </button>
+                            </div>
+                        </form>
                         @else
-                        <p class="font-medium text-slate-900">Tour not available</p>
+                        <!-- Empty State Skeleton -->
+                        <div class="text-center py-8">
+                            <!-- <div class="mx-auto w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div> -->
+                            <h4 class="text-lg font-medium text-slate-900 mb-2">No booking notes yet</h4>
+                            <p class="text-sm text-slate-500 mb-6 max-w-md mx-auto">
+                                Add important information about this booking that will help with planning and execution. 
+                                This could include special requirements, accessibility needs, or specific instructions.
+                            </p>
+                            <button 
+                                onclick="document.getElementById('booking-notes-empty').focus()"
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors duration-200 cursor-pointer"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Add Booking Notes
+                            </button>
+                            
+                            <!-- Hidden form that appears when button is clicked -->
+                            <form id="booking-notes-form" method="POST" action="{{ route('console.bookings.update-notes', $booking) }}" class="hidden mt-6 space-y-3">
+                                @csrf
+                                @method('PATCH')
+                                <div class="relative">
+                                    <textarea 
+                                        name="booking_notes" 
+                                        id="booking-notes-empty"
+                                        rows="4" 
+                                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm text-slate-900 placeholder-slate-400 resize-none"
+                                        placeholder="Add any special planning notes, requirements, or important information for this booking..."
+                                    ></textarea>
+                                    <div id="save-indicator" class="absolute top-2 right-2 hidden">
+                                        <div class="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-medium">
+                                            <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Saving...
+                                        </div>
+                                    </div>
+                                    <div id="saved-indicator" class="absolute top-2 right-2 hidden">
+                                        <div class="flex items-center gap-1.5 px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-medium">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            Saved
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p id="save-status" class="text-xs text-slate-500">Auto-saves as you type</p>
+                                    <div class="flex gap-2">
+                                        <button 
+                                            type="button"
+                                            onclick="this.form.classList.add('hidden'); document.getElementById('empty-state-content').classList.remove('hidden');"
+                                            class="px-3 py-1.5 bg-slate-200 text-slate-700 text-sm font-medium rounded-lg hover:bg-slate-300 transition-colors duration-200"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button type="submit" class="px-3 py-1.5 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors duration-200 flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            Save Notes
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                         @endif
                     </div>
-                    <div>
-                        <p class="text-sm text-slate-500">Location</p>
-                        <p class="font-medium text-slate-900">{{ $booking->location->name ?? 'N/A' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-slate-500">Date</p>
-                        <p class="font-medium text-slate-900">{{ $booking->date->format('l, F j, Y') }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-slate-500">Time</p>
-                        <p class="font-medium text-slate-900">{{ $booking->time }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-slate-500">Guests</p>
-                        <p class="font-medium text-slate-900">
-                            {{ $booking->adults }} Adults, {{ $booking->seniors }} Senior, {{ $booking->children }} Children, {{ $booking->infants }} Infants
-                        </p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-slate-500">Total Amount</p>
-                        <p class="font-medium text-slate-900">{{ $booking->currency }} {{ number_format($booking->total_amount) }}</p>
-                    </div>
-                    <div class="col-span-2">
-                        <p class="text-sm text-slate-500">Country of Origin</p>
-                        <p class="font-medium text-slate-900">{{ $booking->country_of_origin ?? 'Not specified' }}</p>
-                    </div>
-                    @if($booking->special_requests)
-                    <div class="col-span-2">
-                        <p class="text-sm text-slate-500">Special Requests</p>
-                        <p class="font-medium text-slate-900">{{ $booking->special_requests }}</p>
-                    </div>
-                    @endif
                 </div>
+
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Handle both existing notes and empty state forms
+                    const notesTextarea = document.getElementById('booking-notes') || document.getElementById('booking-notes-empty');
+                    const emptyStateButton = document.querySelector('button[onclick*="booking-notes-empty"]');
+                    
+                    if (!notesTextarea) return;
+
+                    // Show form when empty state button is clicked
+                    if (emptyStateButton) {
+                        emptyStateButton.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const emptyForm = document.getElementById('booking-notes-form');
+                            const emptyStateContent = document.querySelector('.text-center.py-8');
+                            
+                            if (emptyForm && emptyStateContent) {
+                                emptyForm.classList.remove('hidden');
+                                // Hide the empty state content but keep the container
+                                const elementsToHide = emptyStateContent.querySelectorAll('h4, p, button:not([type="submit"])');
+                                elementsToHide.forEach(el => el.style.display = 'none');
+                            }
+                            
+                            // Focus the textarea
+                            setTimeout(() => {
+                                notesTextarea.focus();
+                            }, 100);
+                        });
+                    }
+
+                    // Auto-save functionality
+                    let saveTimeout;
+                    let originalContent = notesTextarea.value;
+                    
+                    // Find the form and indicators
+                    const form = notesTextarea.closest('form');
+                    const saveIndicator = form.querySelector('#save-indicator');
+                    const savedIndicator = form.querySelector('#saved-indicator');
+                    const saveStatus = form.querySelector('#save-status');
+
+                    function saveNotes() {
+                        // Show saving indicator
+                        saveIndicator.classList.remove('hidden');
+                        savedIndicator.classList.add('hidden');
+                        saveStatus.textContent = 'Saving...';
+                        
+                        // Create form data
+                        const formData = new FormData(form);
+                        
+                        // Submit via fetch for better UX
+                        fetch(form.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'text/html'
+                            }
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                originalContent = notesTextarea.value;
+                                
+                                // Check if notes were deleted (empty content)
+                                if (!notesTextarea.value.trim()) {
+                                    // Reload page to show empty state skeleton
+                                    window.location.reload();
+                                    return;
+                                }
+                                
+                                // Show saved indicator for normal updates
+                                saveIndicator.classList.add('hidden');
+                                savedIndicator.classList.remove('hidden');
+                                saveStatus.textContent = 'Saved';
+                                
+                                // Hide saved indicator after 2 seconds
+                                setTimeout(() => {
+                                    savedIndicator.classList.add('hidden');
+                                    saveStatus.textContent = 'Auto-saves as you type';
+                                }, 2000);
+                            } else {
+                                throw new Error('Save failed');
+                            }
+                        })
+                        .catch(error => {
+                            saveIndicator.classList.add('hidden');
+                            saveStatus.textContent = 'Save failed. Try again.';
+                            console.error('Save error:', error);
+                        });
+                    }
+
+                    // Auto-save with debounce (1.5 seconds after typing stops)
+                    notesTextarea.addEventListener('input', function() {
+                        clearTimeout(saveTimeout);
+                        
+                        // Update status to show changes are pending
+                        if (this.value !== originalContent) {
+                            saveStatus.textContent = 'Changes pending...';
+                        } else {
+                            saveStatus.textContent = 'Auto-saves as you type';
+                        }
+                        
+                        // Set timeout to save
+                        saveTimeout = setTimeout(() => {
+                            if (this.value !== originalContent) {
+                                saveNotes();
+                            }
+                        }, 1500);
+                    });
+
+                    // Handle form submission for manual save
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        clearTimeout(saveTimeout);
+                        saveNotes();
+                    });
+
+                    // Handle cancel button in empty state
+                    const cancelButton = form.querySelector('button[type="button"]');
+                    if (cancelButton) {
+                        cancelButton.addEventListener('click', function() {
+                            // Reset the empty state
+                            const emptyStateContent = form.closest('.text-center.py-8');
+                            if (emptyStateContent) {
+                                form.classList.add('hidden');
+                                const elementsToShow = emptyStateContent.querySelectorAll('h4, p, button:not([type="submit"])');
+                                elementsToShow.forEach(el => el.style.display = '');
+                                notesTextarea.value = '';
+                            }
+                        });
+                    }
+                });
+                </script>
             </div>
 
             <!-- Customer Info -->
