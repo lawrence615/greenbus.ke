@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('customer_phone')->nullable();
             $table->string('country_of_origin')->nullable();
             $table->text('special_requests')->nullable();
+            $table->json('booking_notes')->nullable();
             $table->string('status')->default('pending_payment');
             $table->timestamp('refunded_at')->nullable();
             $table->text('refund_reason')->nullable();
