@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('time')->nullable();
             $table->unsignedInteger('adults')->default(0);
             $table->unsignedInteger('seniors')->default(0);
+            $table->unsignedInteger('youth')->default(0);
             $table->unsignedInteger('children')->default(0);
             $table->unsignedInteger('infants')->default(0);
             $table->unsignedInteger('total_amount');
