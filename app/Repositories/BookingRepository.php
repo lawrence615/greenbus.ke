@@ -38,12 +38,16 @@ class BookingRepository implements BookingRepositoryInterface
         }
 
         $adults = (int) ($data['adults'] ?? 0);
+        $youth = (int) ($data['youth'] ?? 0);
         $seniors = (int) ($data['seniors'] ?? 0);
         $children = (int) ($data['children'] ?? 0);
         $infants = (int) ($data['infants'] ?? 0);
 
         $total = $adults * $tour->base_price_adult
-            + $children * (int) ($tour->base_price_child ?? 0);
+            + $youth * (int) ($tour->base_price_youth ?? $tour->base_price_child ?? 0)
+            + $seniors * (int) ($tour->base_price_senior ?? $tour->base_price_adult)
+            + $children * (int) ($tour->base_price_child ?? 0)
+            + $infants * (int) ($tour->base_price_infant ?? 0);
 
         $booking = Booking::create([
             'tour_id' => $tour->id,
@@ -52,6 +56,7 @@ class BookingRepository implements BookingRepositoryInterface
             'date' => $data['date'],
             'time' => $data['time'] ?? null,
             'adults' => $adults,
+            'youth' => $youth,
             'seniors' => $seniors,
             'children' => $children,
             'infants' => $infants,
