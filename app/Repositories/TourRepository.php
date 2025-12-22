@@ -35,7 +35,7 @@ class TourRepository implements TourRepositoryInterface
         return $tour->load(['images', 'category', 'itineraryItems']);
     }
 
-    public function adminIndex(array $filters = [], int $perPage = 15): LengthAwarePaginator
+    public function adminIndex(array $filters = [], int $perPage = 10): LengthAwarePaginator
     {
         $query = Tour::with(['location', 'category', 'images'])->latest();
 
