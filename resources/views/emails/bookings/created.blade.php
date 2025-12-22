@@ -2,153 +2,193 @@
 @php($location = $booking->location)
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Your Greenbus booking – {{ $booking->reference }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - {{ $tour->title }}</title>
 </head>
+<body style="margin:0; padding:0; background-color:#f3f4f6; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 
-<body style="margin:0;padding:0;background-color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a;">
-    <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background-color:#f8fafc;padding:24px 0;">
-        <tr>
-            <td align="center">
-                <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="max-width:640px;background-color:#ffffff;border-radius:16px;border:1px solid #e2e8f0;overflow:hidden;">
-                    <tr>
-                        <td style="padding:24px 24px 16px 24px;border-bottom:1px solid #e2e8f0;">
-                            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-                                <tr>
-                                    <td style="vertical-align:middle;">
-                                        <!-- <div style="display:inline-flex;align-items:center;gap:8px;">
-                                        <img src="{{ asset('images/logo.png') }}" alt="Greenbus Location Tours" style="width:32px;height:32px;display:block;">
-                                        <div>
-                                            <div style="font-weight:600;font-size:15px;">Greenbus Location Tours</div>
-                                            @if($location)
-                                                <div style="font-size:11px;color:#047857;">{{ $location->name }}</div>
-                                            @endif
-                                        </div>
-                                    </div> -->
+<!-- Full-width wrapper -->
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;">
+    <tr>
+        <td align="center">
 
-                                        <div style="display:inline-flex;align-items:center;gap:8px;">
-                                            <img
-                                                src="{{ asset('images/logo.png') }}"
-                                                alt="Greenbus Location Tours"
-                                                style="width:32px;height:32px;display:block;margin-top:2px;">
-                                            <div>
-                                                <div style="font-weight:600;font-size:15px;">Greenbus Location Tours</div>
-                                                @if($location)
-                                                <div style="font-size:11px;color:#047857;">{{ $location->name }}</div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td style="text-align:right;vertical-align:middle;">
-                                        <div style="font-size:11px;color:#6b7280;">Booking reference</div>
-                                        <div style="font-weight:600;font-size:14px;">{{ $booking->reference }}</div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+            <!-- Emerald Header -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#059669;">
+                <tr>
+                    <td height="79" align="center" valign="middle" style="padding:0 24px;">
+                        <img src="{{ asset('images/logo.png') }}"
+                             alt="Greenbus Location Tours"
+                             height="28"
+                             style="display:block;">
+                    </td>
+                </tr>
+            </table>
 
-                    <tr>
-                        <td style="padding:24px 24px 8px 24px;">
-                            <h1 style="margin:0 0 8px 0;font-size:18px;font-weight:600;">Your booking is confirmed</h1>
-                            <p style="margin:0 0 12px 0;font-size:14px;color:#4b5563;">Thank you for booking with Greenbus. Please keep this email and the attached ticket – you can show either on your phone on the day of your tour.</p>
-                        </td>
-                    </tr>
+            <!-- Content Card -->
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; margin-top:-40px; margin-bottom:22px; border-radius:8px; overflow:hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                <tr>
+                    <td style="padding:24px;">
 
-                    <tr>
-                        <td style="padding:0 24px 16px 24px;">
-                            <div style="border-radius:12px;border:1px solid #e2e8f0;padding:16px;">
-                                <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
-                                    <tr>
-                                        <td style="vertical-align:top;padding-right:12px;">
-                                            <div style="font-size:12px;color:#6b7280;margin-bottom:4px;">Tour</div>
-                                            <div style="font-size:14px;font-weight:600;">{{ $tour->title ?? 'Nairobi location tour' }}</div>
-                                            @if($location)
-                                            <div style="font-size:12px;color:#6b7280;margin-top:2px;">{{ $location->name }}</div>
-                                            @endif
-                                        </td>
-                                        <td style="vertical-align:top;padding-left:12px;text-align:right;">
-                                            <div style="font-size:12px;color:#6b7280;margin-bottom:4px;">Date</div>
-                                            <div style="font-size:14px;font-weight:500;">{{ optional($booking->date)->format('D, j M Y') }}</div>
-                                            @if($booking->time)
-                                            <div style="font-size:12px;color:#6b7280;margin-top:2px;">Start time: {{ $booking->time }}</div>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
+                        <!-- Title -->
+                        <h2 style="margin:0 0 16px 0; font-size:20px; color:#111827; font-weight: 600;">
+                            Booking Confirmed!
+                        </h2>
+                        <p style="margin:0 0 24px 0; font-size:14px; color:#6b7280;">
+                            Thank you for booking with {{ config('app.name', 'Greenbus Location Tours') }}. Your tour is confirmed and we're excited to see you!
+                        </p>
 
-                    <tr>
-                        <td style="padding:0 24px 16px 24px;">
-                            <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="font-size:13px;color:#4b5563;">
-                                <tr>
-                                    <td style="padding:8px 0;font-size:12px;color:#6b7280;">Lead guest</td>
-                                    <td style="padding:8px 0;text-align:right;font-weight:500;">{{ $booking->customer_name }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding:4px 0;font-size:12px;color:#6b7280;">Guests</td>
-                                    <td style="padding:4px 0;text-align:right;">
-                                        {{ $booking->adults }} adult{{ $booking->adults == 1 ? '' : 's' }}
-                                        @if($booking->children)
-                                        · {{ $booking->children }} child{{ $booking->children == 1 ? '' : 'ren' }}
+                        <!-- Tour Info -->
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
+                            <tr>
+                                <td width="72" valign="top">
+                                    @if($tour->image)
+                                    <img src="{{ Storage::url($tour->image) }}" 
+                                         width="64" 
+                                         height="64" 
+                                         style="border-radius:6px; display:block; object-fit: cover;"
+                                         alt="{{ $tour->title }}">
+                                    @else
+                                    <div style="width:64px; height:64px; border-radius:6px; background-color:#e5e7eb; display:flex; align-items:center; justify-content:center;">
+                                        <svg width="24" height="24" fill="none" stroke="#9ca3af" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    @endif
+                                </td>
+                                <td valign="top" style="padding-left:12px;">
+                                    <strong style="color:#111827; font-size:14px; font-weight: 600;">
+                                        {{ $location->name }}: {{ $tour->title }}
+                                    </strong><br>
+                                    @if($tour->category)
+                                    <span style="color:#6b7280; font-size:13px;">
+                                        {{ $tour->category->name }}
+                                    </span>
+                                    @endif
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Booking Details -->
+                        <table width="100%" cellpadding="6" cellspacing="0" style="font-size:14px; color:#374151; margin-bottom:16px;">
+                            <tr>
+                                <td style="padding:4px 0; font-size:13px; color:#6b7280;">Booking reference</td>
+                                <td align="right" style="padding:4px 0; color:#2563eb; font-weight: 600;">
+                                    {{ $booking->reference }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0; font-size:13px; color:#6b7280;">Date</td>
+                                <td align="right" style="padding:4px 0;">
+                                    {{ optional($booking->date)->format('M j, Y') }}
+                                    @if($booking->time)
+                                    , {{ $booking->time }}
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0; font-size:13px; color:#6b7280;">Participants</td>
+                                <td align="right" style="padding:4px 0;">
+                                    {{ $booking->adults }} {{ Str::plural('adult', $booking->adults) }}
+                                    @if($booking->seniors)
+                                    · {{ $booking->seniors }} {{ Str::plural('senior', $booking->seniors) }}
+                                    @endif
+                                    @if($booking->youth)
+                                    · {{ $booking->youth }} {{ Str::plural('youth', $booking->youth) }}
+                                    @endif
+                                    @if($booking->children)
+                                    · {{ $booking->children }} {{ Str::plural('child', $booking->children) }}
+                                    @endif
+                                    @if($booking->infants)
+                                    · {{ $booking->infants }} {{ Str::plural('infant', $booking->infants) }}
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px 0; font-size:13px; color:#6b7280;">Total amount</td>
+                                <td align="right" style="padding:4px 0; font-weight: 600;">
+                                    {{ number_format($booking->total_amount, 0) }} {{ $booking->currency }}
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Meeting Point Info -->
+                        @if($tour->meeting_point)
+                        <table width="100%" cellpadding="12" cellspacing="0" style="background-color:#f9fafb; border-radius:6px; margin:16px 0; border: 1px solid #e5e7eb;">
+                            <tr>
+                                <td style="color:#111827; font-size:14px; line-height: 1.5;">
+                                    <strong style="font-weight: 600; color: #374151;">Meeting Point:</strong><br>
+                                    {{ $tour->meeting_point }}
+                                </td>
+                            </tr>
+                        </table>
+                        @endif
+
+                        <!-- Important Info -->
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;">
+                            <tr>
+                                <td>
+                                    <h3 style="margin:0 0 12px 0; font-size:16px; color:#111827; font-weight: 600;">Important Information</h3>
+                                    <ul style="margin:0; padding-left:16px; color:#374151; font-size:14px; line-height:1.5;">
+                                        <li style="margin-bottom:8px;">Arrive 10–15 minutes before departure at the agreed meeting point</li>
+                                        <li style="margin-bottom:8px;">Have this confirmation email ready on your phone</li>
+                                        @if($booking->customer_phone)
+                                        <li style="margin-bottom:8px;">We may contact you on {{ $booking->customer_phone }} if needed</li>
                                         @endif
-                                        @if($booking->infants)
-                                        · {{ $booking->infants }} infant{{ $booking->infants == 1 ? '' : 's' }}
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="padding:4px 0;font-size:12px;color:#6b7280;">Total amount</td>
-                                    <td style="padding:4px 0;text-align:right;font-weight:600;">{{ number_format($booking->total_amount, 0) }} {{ $booking->currency }}</td>
-                                </tr>
-                                @if($booking->country_of_origin)
-                                <tr>
-                                    <td style="padding:4px 0;font-size:12px;color:#6b7280;">Country of Origin</td>
-                                    <td style="padding:4px 0;text-align:right;">{{ $booking->country_of_origin }}</td>
-                                </tr>
-                                @endif
-                                @if($booking->special_requests)
-                                <tr>
-                                    <td style="padding:4px 0;font-size:12px;color:#6b7280;vertical-align:top;">Notes</td>
-                                    <td style="padding:4px 0;text-align:right;white-space:pre-line;">{{ $booking->special_requests }}</td>
-                                </tr>
-                                @endif
-                            </table>
-                        </td>
-                    </tr>
+                                        <li>Free cancellation up to 24 hours before departure</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
 
-                    <tr>
-                        <td style="padding:0 24px 20px 24px;">
-                            <div style="border-radius:12px;background-color:#ecfdf3;padding:14px 16px;font-size:12px;color:#166534;">
-                                <strong style="display:block;margin-bottom:4px;">On the day of your tour</strong>
-                                <ul style="margin:0;padding-left:16px;">
-                                    <li>Arrive at the meeting point 10–15 minutes before departure.</li>
-                                    <li>Show this email or the attached PDF ticket to your guide.</li>
-                                    <li>Have your phone reachable on {{ $booking->customer_phone ?: 'the number you provided' }} in case we need to contact you.</li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
+                        <!-- Primary CTA -->
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">
+                            <tr>
+                                <td align="center">
+                                    <a href="{{ route('tours.show', [$location, $tour]) }}"
+                                       style="background-color:#2563eb; color:#ffffff; text-decoration:none;
+                                              padding:12px 24px; border-radius:6px; font-weight:600;
+                                              display:inline-block; font-size:14px;">
+                                        View Tour Details
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
 
-                    <tr>
-                        <td style="padding:0 24px 20px 24px;font-size:11px;color:#6b7280;">
-                            If you need to change or cancel your booking, reply to this email at least 24 hours before your tour time.
-                        </td>
-                    </tr>
+                        <!-- Helper Text -->
+                        <p style="font-size:12px; color:#6b7280; margin:16px 0; text-align:center;">
+                            Need help? Contact us with your booking reference: {{ $booking->reference }}
+                        </p>
 
-                    <tr>
-                        <td style="padding:12px 24px 20px 24px;border-top:1px solid #e2e8f0;font-size:11px;color:#9ca3af;text-align:center;">
-                            &copy; {{ date('Y') }} Greenbus Location Tours. Licensed local operator in Nairobi.
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Footer -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#1f2937;">
+                <tr>
+                    <td align="center" style="padding:24px; color:#d1d5db; font-size:12px;">
+                        <p style="margin:0 0 8px 0;">
+                            <a href="{{ route('home') }}" style="color: #d1d5db; text-decoration: none;">{{ config('app.name', 'Greenbus Location Tours') }}</a>
+                            · 
+                            <a href="{{ route('tours.index', $location) }}" style="color: #d1d5db; text-decoration: none;">More Tours</a>
+                            · 
+                            <a href="{{ route('contact') }}" style="color: #d1d5db; text-decoration: none;">Contact us</a>
+                        </p>
+                        <p style="max-width:600px; line-height:1.5; margin:0 0 8px 0;">
+                            This booking confirmation serves as your ticket. Please present it at the meeting point.
+                        </p>
+                        <p style="margin:16px 0 0 0;">
+                            © {{ date('Y') }} {{ config('app.name', 'Greenbus Location Tours') }}
+                        </p>
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+
 </body>
-
 </html>
