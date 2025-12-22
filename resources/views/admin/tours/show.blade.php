@@ -230,12 +230,16 @@
                 <h2 class="font-semibold text-slate-900 mb-4">Pricing</h2>
                 <dl class="space-y-3">
                     <div class="flex justify-between">
+                        <dt class="text-slate-600">Adult</dt>
+                        <dd class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_adult) }}</dd>
+                    </div>
+                    <div class="flex justify-between">
                         <dt class="text-slate-600">Senior</dt>
                         <dd class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_senior) }}</dd>
                     </div>
                     <div class="flex justify-between">
-                        <dt class="text-slate-600">Adult</dt>
-                        <dd class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_adult) }}</dd>
+                        <dt class="text-slate-600">Youth</dt>
+                        <dd class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_youth) }}</dd>
                     </div>
                     <div class="flex justify-between">
                         <dt class="text-slate-600">Child</dt>
