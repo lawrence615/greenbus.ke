@@ -50,6 +50,7 @@ function formatDurationByCategory($tour) {
     showConfirmModal: false,
     selectedTour: null,
     selectedAction: '',
+    showTourDropdown: false,
     openModal: function(tour, action) {
         this.selectedTour = tour;
         this.selectedAction = action;
@@ -66,12 +67,54 @@ function formatDurationByCategory($tour) {
         <div>
             <p class="text-sm text-slate-500">Manage your tour listings</p>
         </div>
-        <a href="{{ route('console.tours.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Add Tour
-        </a>
+        <!-- Tour Type Dropdown -->
+        <div class="relative" x-data="{ isOpen: false }">
+            <button 
+                @click="isOpen = !isOpen"
+                @click.away="isOpen = false"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Add Tour
+                <svg class="w-4 h-4 transition-transform" :class="isOpen ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+            
+            <!-- Dropdown Menu -->
+            <div x-show="isOpen" 
+                 x-transition:enter="transition ease-out duration-100"
+                 x-transition:enter-start="transform opacity-0 scale-95"
+                 x-transition:enter-end="transform opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-75"
+                 x-transition:leave-start="transform opacity-100 scale-100"
+                 x-transition:leave-end="transform opacity-0 scale-95"
+                 class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-slate-200 z-10">
+                <div class="py-1">
+                    <a href="{{ route('console.tours.create') }}" 
+                       class="flex items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <div>
+                            <div class="font-medium">Standard Tour</div>
+                            <div class="text-slate-500">Pre-defined tour packages</div>
+                        </div>
+                    </a>
+                    <a href="{{ route('console.tours.bespoke.create') }}" 
+                       class="flex items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
+                        <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
+                        <div>
+                            <div class="font-medium">Bespoke Tour</div>
+                            <div class="text-slate-500">Custom, personalized experiences</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Filters -->
