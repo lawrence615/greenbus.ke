@@ -17,7 +17,7 @@
             <!-- Emerald Header -->
             <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#059669;">
                 <tr>
-                    <td height="79" align="center" valign="middle" style="padding:0 24px;">
+                    <td height="100" align="center" valign="middle" style="padding:0 24px;">
                         <img src="{{ asset('images/logo.png') }}"
                              alt="Greenbus Location Tours"
                              height="28"
@@ -27,7 +27,7 @@
             </table>
 
             <!-- Content Card -->
-            <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; margin-top:-40px; margin-bottom:22px; border-radius:8px; overflow:hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; margin-top:-56px; margin-bottom:22px; border-radius:8px; overflow:hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
                 <tr>
                     <td style="padding:24px;">
 
