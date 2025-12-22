@@ -23,6 +23,12 @@
         .table { width:100%;border-collapse:collapse;margin-top:8px; }
         .table th, .table td { padding:4px 0;font-size:11px;text-align:left; }
         .table th { color:#6b7280;font-weight:500;border-bottom:1px solid #e5e7eb; }
+        .table td { text-align:right; }
+        .table th:first-child, .table td:first-child { text-align:left; }
+        .tour-info { display: flex; gap: 12px; align-items: flex-start; }
+        .tour-image { width: 64px; height: 64px; border-radius: 6px; object-fit: cover; }
+        .tour-details { flex: 1; }
+        .message-box { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; margin: 16px 0; }
     </style>
 </head>
 <body>
@@ -50,20 +56,27 @@
             <p class="muted">Please show this ticket or your confirmation email to the guide when boarding the bus.</p>
         </div>
 
-        <div class="mt-3 row">
-            <div class="col">
-                <div class="label">Tour</div>
-                <div class="value">{{ $tour->title ?? 'Nairobi location tour' }}</div>
-                @if($location)
-                    <div class="muted mt-1">{{ $location->name }}</div>
-                @endif
-            </div>
-            <div class="col" style="text-align:right;">
-                <div class="label">Date & time</div>
-                <div class="value">{{ optional($booking->date)->format('D, j M Y') }}</div>
-                @if($booking->time)
-                    <div class="muted mt-1">Start: {{ $booking->time }}</div>
-                @endif
+        <div class="mt-3">
+            <div class="tour-info">
+                <div>
+                    @if($tour->image)
+                    <img src="{{ Storage::url($tour->image) }}" class="tour-image" alt="{{ $tour->title }}">
+                    @else
+                    <div style="width:64px; height:64px; border-radius:6px; background-color:#e5e7eb; display:flex; align-items:center; justify-content:center;">
+                        <svg width="24" height="24" fill="none" stroke="#9ca3af" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    @endif
+                </div>
+                <div class="tour-details">
+                    <div style="font-weight: 600; font-size: 14px; color: #111827;">
+                        {{ $location->name }}: {{ $tour->title }}
+                    </div>
+                    @if($tour->category)
+                    <div class="muted" style="margin-top: 2px;">{{ $tour->category->name }}</div>
+                    @endif
+                </div>
             </div>
         </div>
 
@@ -76,33 +89,42 @@
                 <tr>
                     <th>Guests</th>
                     <td style="text-align:right;">
-                        {{ $booking->adults }} adult{{ $booking->adults == 1 ? '' : 's' }}
+                        {{ $booking->adults }} {{ Str::plural('adult', $booking->adults) }}
+                        @if($booking->seniors)
+                            · {{ $booking->seniors }} {{ Str::plural('senior', $booking->seniors) }}
+                        @endif
+                        @if($booking->youth)
+                            · {{ $booking->youth }} {{ Str::plural('youth', $booking->youth) }}
+                        @endif
                         @if($booking->children)
-                            · {{ $booking->children }} child{{ $booking->children == 1 ? '' : 'ren' }}
+                            · {{ $booking->children }} {{ Str::plural('child', $booking->children) }}
                         @endif
                         @if($booking->infants)
-                            · {{ $booking->infants }} infant{{ $booking->infants == 1 ? '' : 's' }}
+                            · {{ $booking->infants }} {{ Str::plural('infant', $booking->infants) }}
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td style="text-align:right;">{{ optional($booking->date)->format('D, j M Y') }}
+                        @if($booking->time)
+                            , {{ $booking->time }}
                         @endif
                     </td>
                 </tr>
                 <tr>
                     <th>Total amount</th>
-                    <td style="text-align:right;">{{ number_format($booking->total_amount, 0) }} {{ $booking->currency }}</td>
+                    <td style="text-align:right; font-weight: 600;">{{ number_format($booking->total_amount, 0) }} {{ $booking->currency }}</td>
                 </tr>
-                @if($booking->country_of_origin)
-                    <tr>
-                        <th>Country of Origin</th>
-                        <td style="text-align:right;">{{ $booking->country_of_origin }}</td>
-                    </tr>
-                @endif
-                @if($booking->special_requests)
-                    <tr>
-                        <th>Notes</th>
-                        <td style="text-align:right;white-space:pre-line;">{{ $booking->special_requests }}</td>
-                    </tr>
-                @endif
             </table>
         </div>
+
+        @if($tour->meeting_point)
+        <div class="message-box">
+            <div style="font-weight: 600; color: #374151; margin-bottom: 4px;">Meeting Point:</div>
+            <div style="font-size: 14px; line-height: 1.5;">{{ $tour->meeting_point }}</div>
+        </div>
+        @endif
 
         <div class="mt-4">
             <div class="label">On the day of your tour</div>
