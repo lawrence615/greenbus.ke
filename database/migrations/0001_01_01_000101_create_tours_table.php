@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('tours', function (Blueprint $table) {
             $table->id();
             $table->foreignId('location_id')->constrained()->cascadeOnDelete();
+            $table->enum('tour_type', ['standard', 'bespoke', 'other'])->default('standard');
             $table->string('code', 10)->unique()->nullable();
             $table->string('title');
             $table->string('slug')->unique();
