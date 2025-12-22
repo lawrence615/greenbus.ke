@@ -19,7 +19,7 @@
                 <!-- Emerald Header -->
                 <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#059669;">
                     <tr>
-                        <td height="79" align="center" valign="middle" style="padding:0 24px;">
+                        <td height="120" align="center" valign="middle" style="padding:0 24px;">
                             <img src="{{ asset('images/logo.png') }}"
                                 alt="Greenbus Location Tours"
                                 height="28"
