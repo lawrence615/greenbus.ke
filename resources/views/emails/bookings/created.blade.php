@@ -36,7 +36,8 @@
                 </table>
 
                 <!-- Content Card -->
-                <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; margin-top:-40px; margin-bottom:22px; border-radius:8px; overflow:hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
+                <table width="600" cellpadding="0" cellspacing="0"
+                    style="background-color:#ffffff; border-radius:8px;">
                     <tr>
                         <td style="padding:24px;">
 
