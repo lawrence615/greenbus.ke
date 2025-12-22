@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('tours', function (Blueprint $table) {
-            $table->enum('tour_type', ['standard', 'bespoke', 'other'])->default('standard')->after('status');
+            $table->enum('tour_type', ['standard', 'bespoke', 'other'])->default('standard')->after('tour_category_id');
         });
     }
 
