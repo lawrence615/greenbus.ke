@@ -174,7 +174,7 @@
                             · 
                             <a href="{{ route('tours.index', $location) }}" style="color: #d1d5db; text-decoration: none;">More Tours</a>
                             · 
-                            <a href="{{ route('contact') }}" style="color: #d1d5db; text-decoration: none;">Contact us</a>
+                            <a href="{{ route('home') }}#contact" style="color: #d1d5db; text-decoration: none;">Contact us</a>
                         </p>
                         <p style="max-width:600px; line-height:1.5; margin:0 0 8px 0;">
                             This booking confirmation serves as your ticket. Please present it at the meeting point.
