@@ -68,8 +68,8 @@
         <div class="flex items-center justify-between relative">
             <!-- Step Connectors -->
             <div class="absolute left-0 top-5 w-full h-0.5 bg-slate-200 -z-10"></div>
-            <div class="absolute left-0 top-5 h-0.5 bg-linear-to-r from-indigo-500 to-indigo-600 transition-all duration-500 step-connector" 
-                 :style="`width: ${(currentStep - 1) / 4 * 100}%`"></div>
+            <div class="absolute left-2 top-5 h-0.5 bg-linear-to-r from-indigo-500 to-indigo-600 transition-all duration-500 step-connector" 
+                 :style="`width: ${(currentStep - 1) / 4 * 98}%`"></div>
             
             <!-- Step 1: Basic Info -->
             <div class="flex flex-col items-center relative">
@@ -834,7 +834,7 @@
 
         <!-- Navigation Buttons -->
         <div class="flex items-center justify-between bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-            <button type="button" @click="previousStep()" x-show="currentStep > 1" class="inline-flex items-center gap-2 px-4 py-2.5 text-slate-700 bg-white border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors">
+            <button type="button" @click="previousStep()" x-show="currentStep > 1" class="inline-flex items-center gap-2 px-4 py-2.5 text-slate-700 bg-white border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
@@ -842,14 +842,14 @@
             </button>
             <div x-show="currentStep === 1" class="w-4"></div>
             
-            <button type="button" @click="nextStep()" x-show="currentStep < 5" class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+            <button type="button" @click="nextStep()" x-show="currentStep < 5" class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors cursor-pointer">
                 Next
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
             </button>
             
-            <button type="submit" x-show="currentStep === 5" class="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors">
+            <button type="submit" x-show="currentStep === 5" class="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
