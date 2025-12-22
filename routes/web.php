@@ -72,6 +72,10 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::delete('/tours/{tour:slug}', [AdminTourController::class, 'destroy'])->name('tours.destroy');
     Route::patch('/tours/{tour:slug}/toggle-status', [AdminTourController::class, 'toggleStatus'])->name('tours.toggle-status');
 
+    // Bespoke tour routes
+    Route::get('/tours/bespoke/create', [AdminTourController::class, 'createBespoke'])->name('tours.bespoke.create');
+    Route::post('/tours/bespoke', [AdminTourController::class, 'storeBespoke'])->name('tours.bespoke.store');
+
     // Tour itinerary management
     Route::get('/tours/{tour:slug}/itinerary', [TourItineraryController::class, 'index'])->name('tours.itinerary.index');
     Route::get('/tours/{tour:slug}/itinerary/create', [TourItineraryController::class, 'create'])->name('tours.itinerary.create');
