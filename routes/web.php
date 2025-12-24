@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
+use App\Http\Controllers\Admin\Tour\BespokeController;
 use App\Http\Controllers\Admin\TourItineraryController;
 use App\Http\Controllers\Admin\TourMultimediaController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
@@ -73,8 +74,8 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::patch('/tours/{tour:slug}/toggle-status', [AdminTourController::class, 'toggleStatus'])->name('tours.toggle-status');
 
     // Bespoke tour routes
-    Route::get('/tours/bespoke/create', [AdminTourController::class, 'createBespoke'])->name('tours.bespoke.create');
-    Route::post('/tours/bespoke', [AdminTourController::class, 'storeBespoke'])->name('tours.bespoke.store');
+    Route::get('/tours/bespoke/create', [BespokeController::class, 'create'])->name('tours.bespoke.create');
+    Route::post('/tours/bespoke/store', [BespokeController::class, 'store'])->name('tours.bespoke.store');
 
     // Tour itinerary management
     Route::get('/tours/{tour:slug}/itinerary', [TourItineraryController::class, 'index'])->name('tours.itinerary.index');
