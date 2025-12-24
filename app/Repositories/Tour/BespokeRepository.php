@@ -25,6 +25,13 @@ class BespokeRepository implements BespokeRepositoryInterface
         return Tour::create($data);
     }
 
+    public function findBySlug(string $slug): ?Tour
+    {
+        return Tour::with(['location', 'category', 'images'])
+            ->where('slug', $slug)
+            ->first();
+    }
+
     public function update(Tour $tour, array $data): Tour
     {
         if (isset($data['title']) && $data['title'] !== $tour->title) {
