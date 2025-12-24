@@ -55,6 +55,23 @@ class BespokeController extends Controller
             ->with('success', 'Bespoke tour created successfully.');
     }
 
+    public function show(Tour $tour)
+    {
+        $tour = $this->bespokeRepository->findBySlug($tour->slug);
+
+        if (!$tour) {
+            abort(404);
+        }
+
+        if (($tour->tour_type ?? 'standard') !== 'bespoke') {
+            return redirect()
+                ->route('console.tours.show', $tour)
+                ->with('warning', 'This tour is not a bespoke tour.');
+        }
+
+        return view('admin.tours.bespoke.show', compact('tour'));
+    }
+
     public function edit(Tour $tour)
     {
         if (($tour->tour_type ?? 'standard') !== 'bespoke') {
