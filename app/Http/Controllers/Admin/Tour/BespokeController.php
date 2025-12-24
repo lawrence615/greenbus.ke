@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Tour;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Tour\Bespoke\StoreRequest;
+use App\Http\Requests\Tour\Bespoke\UpdateRequest;
 use App\Interfaces\LocationRepositoryInterface;
 use App\Interfaces\Tour\BespokeRepositoryInterface;
 use App\Models\Tour;
@@ -49,16 +49,42 @@ class BespokeController extends Controller
 
             $tour = $this->bespokeRepository->store($tourData);
         });
+
+        return redirect()
+            ->route('console.tours.show', $tour->fresh())
+            ->with('success', 'Bespoke tour created successfully.');
     }
 
     public function edit(Tour $tour)
     {
-        throw new \Exception('Not implemented');
+        if (($tour->tour_type ?? 'standard') !== 'bespoke') {
+            return redirect()
+                ->route('console.tours.edit', $tour)
+                ->with('warning', 'This tour is not a bespoke tour.');
+        }
+
+        $locations = $this->locationRepository->getAll();
+
+        return view('admin.tours.bespoke.edit', compact('tour', 'locations'));
     }
 
-    public function update(Request $request, Tour $tour)
+    public function update(UpdateRequest $request, Tour $tour)
     {
-        throw new \Exception('Not implemented');
+        if (($tour->tour_type ?? 'standard') !== 'bespoke') {
+            return redirect()
+                ->route('console.tours.edit', $tour)
+                ->with('warning', 'This tour is not a bespoke tour.');
+        }
+
+        $validated = $request->validated();
+
+        DB::transaction(function () use ($validated, $tour) {
+            $this->bespokeRepository->update($tour, $validated);
+        });
+
+        return redirect()
+            ->route('console.tours.show', $tour->fresh())
+            ->with('success', 'Bespoke tour updated successfully.');
     }
 
     public function destroy(Tour $tour)
