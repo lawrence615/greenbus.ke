@@ -147,7 +147,7 @@ function formatDurationByCategory($tour) {
                         Location
                     </label>
                     <select name="location_id" class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none cursor-pointer">
-                        <option value="">All Cities</option>
+                        <option value="">All Locations</option>
                         @foreach($locations as $location)
                         <option value="{{ $location->id }}" {{ request('location_id') == $location->id ? 'selected' : '' }}>
                             {{ $location->name }}
@@ -233,6 +233,14 @@ function formatDurationByCategory($tour) {
                                 Location
                             </div>
                         </th>
+                        <th class="px-4 py-3 text-left hidden lg:table-cell">
+                            <div class="flex items-center gap-2 font-semibold text-slate-700 uppercase text-xs tracking-wider">
+                                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.519 4.674c.3.921-.755 1.688-1.539 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.539-1.118l1.519-4.674a1 1 0 00-.363-1.118L2.98 10.101c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                                </svg>
+                                Tour Type
+                            </div>
+                        </th>
                         <th class="px-4 py-3 text-left hidden xl:table-cell">
                             <div class="flex items-center gap-2 font-semibold text-slate-700 uppercase text-xs tracking-wider">
                                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -311,6 +319,14 @@ function formatDurationByCategory($tour) {
                                 </span>
                             </div>
                         </td>
+                        <td class="px-4 py-3 hidden lg:table-cell">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ring-1 ring-inset
+                                {{ ($tour->tour_type ?? 'standard') === 'standard' ? 'bg-blue-50 text-blue-700 ring-blue-600/20' : '' }}
+                                {{ ($tour->tour_type ?? 'standard') === 'bespoke' ? 'bg-purple-50 text-purple-700 ring-purple-600/20' : '' }}
+                                {{ ($tour->tour_type ?? 'standard') === 'other' ? 'bg-slate-100 text-slate-700 ring-slate-600/20' : '' }}">
+                                {{ ucfirst($tour->tour_type ?? 'standard') }}
+                            </span>
+                        </td>
                         <td class="px-4 py-3 hidden xl:table-cell">
                             <div class="flex flex-col">
                                 <span class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_adult) }}</span>
@@ -358,7 +374,7 @@ function formatDurationByCategory($tour) {
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-4 py-16 text-center">
+                        <td colspan="6" class="px-4 py-16 text-center">
                             <div class="flex flex-col items-center">
                                 <div class="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
                                     <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
