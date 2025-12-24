@@ -27,7 +27,17 @@ class BespokeRepository implements BespokeRepositoryInterface
 
     public function update(Tour $tour, array $data): Tour
     {
+        if (isset($data['title']) && $data['title'] !== $tour->title) {
+            $data['slug'] = Str::slug($data['title']);
+
+            $originalSlug = $data['slug'];
+            $counter = 1;
+            while (Tour::where('slug', $data['slug'])->where('id', '!=', $tour->id)->exists()) {
+                $data['slug'] = $originalSlug . '-' . $counter++;
+            }
+        }
+
         $tour->update($data);
-        return $tour;
+        return $tour->fresh();
     }
 }
