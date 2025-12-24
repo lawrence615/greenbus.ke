@@ -76,6 +76,7 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     // Bespoke tour routes
     Route::get('/tours/bespoke/create', [BespokeController::class, 'create'])->name('tours.bespoke.create');
     Route::post('/tours/bespoke/store', [BespokeController::class, 'store'])->name('tours.bespoke.store');
+    Route::get('/tours/bespoke/{tour:slug}', [BespokeController::class, 'show'])->name('tours.bespoke.show');
     Route::get('/tours/bespoke/{tour:slug}/edit', [BespokeController::class, 'edit'])->name('tours.bespoke.edit');
     Route::put('/tours/bespoke/{tour:slug}', [BespokeController::class, 'update'])->name('tours.bespoke.update');
 
