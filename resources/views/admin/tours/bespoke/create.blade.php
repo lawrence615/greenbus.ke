@@ -108,7 +108,7 @@
             <div class="mt-6">
                 <label class="block text-sm font-medium text-slate-700 mb-2">Description *</label>
                 <div id="description_editor" class="bg-white rounded-lg border border-slate-300"></div>
-                <input type="hidden" name="description" id="description" value="{{ old('description') }}">
+                <input type="hidden" name="description" id="description" x-model="form.description" value="{{ old('description') }}">
                 <p x-show="errors.description" class="mt-1 text-sm text-red-600" x-text="errors.description"></p>
                 @error('description')
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -227,7 +227,7 @@
 
                 // Sync Quill content with Alpine.js data
                 this.quillEditor.on('text-change', () => {
-                    this.form.description_editor = this.quillEditor.root.innerHTML;
+                    this.form.description = this.quillEditor.root.innerHTML;
                 });
             },
 
