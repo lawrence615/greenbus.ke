@@ -18,7 +18,11 @@ use App\Interfaces\TourCategoryRepositoryInterface;
 use App\Repositories\TourCategoryRepository;
 use App\Interfaces\UserRepositoryInterface;
 use App\Interfaces\Tour\BespokeRepositoryInterface;
+use App\Interfaces\Tour\ItineraryRepositoryInterface;
+use App\Interfaces\Tour\PricingRepositoryInterface;
 use App\Repositories\Tour\BespokeRepository;
+use App\Repositories\Tour\ItineraryRepository;
+use App\Repositories\Tour\PricingRepository;
 use App\Repositories\UserRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -35,6 +39,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(FaqRepositoryInterface::class, FaqRepository::class);
         $this->app->bind(TourCategoryRepositoryInterface::class, TourCategoryRepository::class);
         $this->app->bind(BespokeRepositoryInterface::class, BespokeRepository::class);
+        $this->app->bind(ItineraryRepositoryInterface::class, ItineraryRepository::class);
+        $this->app->bind(PricingRepositoryInterface::class, PricingRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
