@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Events\BookingCreated;
 use App\Events\PaymentSucceeded;
+use App\Interfaces\Tour\MultimediaRepositoryInterface;
 use App\Listeners\NotifyAdminsOfBookingPayment;
 use App\Listeners\NotifyAdminsOfNewBooking;
 use App\Listeners\SendBookingConfirmationOnPayment;
 use App\Models\Location;
+use App\Repositories\Tour\MultimediaRepository;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
@@ -20,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(MultimediaRepositoryInterface::class, MultimediaRepository::class);
     }
 
     /**
