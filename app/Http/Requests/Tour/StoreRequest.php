@@ -47,7 +47,6 @@ class StoreRequest extends FormRequest
             'itinerary.*.duration_unit' => ['nullable', 'string', 'in:minutes,hours'],
             'images' => ['nullable', 'array', 'max:10'],
             'images.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:5120'],
-            'cover_image_index' => ['nullable', 'integer', 'min:0'],
         ];
     }
 
