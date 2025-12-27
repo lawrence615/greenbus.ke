@@ -14,7 +14,6 @@ use App\Interfaces\LocationRepositoryInterface;
 use App\Interfaces\TourCategoryRepositoryInterface;
 use App\Interfaces\TourRepositoryInterface;
 use App\Models\Tour;
-use App\Services\TourImageService;
 
 class TourController extends Controller
 {
@@ -22,7 +21,6 @@ class TourController extends Controller
         protected TourRepositoryInterface $tourRepository,
         protected LocationRepositoryInterface $cityRepository,
         protected TourCategoryRepositoryInterface $categoryRepository,
-        protected TourImageService $imageService
     ) {}
 
     public function index(Request $request)
@@ -59,8 +57,7 @@ class TourController extends Controller
             }
             $itinerary = $validated['itinerary'] ?? [];
             $images = $validated['images'] ?? [];
-            $coverIndex = $validated['cover_image_index'] ?? 0;
-            unset($validated['itinerary'], $validated['images'], $validated['cover_image_index']);
+            unset($validated['itinerary'], $validated['images']);
 
             $tour = $this->tourRepository->store($validated);
 
@@ -76,11 +73,6 @@ class TourController extends Controller
                         'sort_order' => $index,
                     ]);
                 }
-            }
-
-            // Upload images
-            if (!empty($images)) {
-                $this->imageService->uploadImages($tour, $images, $coverIndex);
             }
         });
 
@@ -134,21 +126,6 @@ class TourController extends Controller
                     ]);
                 }
             }
-
-            // Delete selected images
-            if (!empty($deleteImages)) {
-                $this->imageService->deleteImages($tour, $deleteImages);
-            }
-
-            // Upload new images
-            if (!empty($images)) {
-                $this->imageService->uploadImages($tour, $images);
-            }
-
-            // Set cover image
-            if ($coverImageId) {
-                $this->imageService->setCoverImage($tour, $coverImageId);
-            }
         });
 
         return redirect()
@@ -158,9 +135,6 @@ class TourController extends Controller
 
     public function destroy(Tour $tour)
     {
-        // Delete all images from storage
-        $this->imageService->deleteAllImages($tour);
-
         $this->tourRepository->delete($tour);
 
         return redirect()
