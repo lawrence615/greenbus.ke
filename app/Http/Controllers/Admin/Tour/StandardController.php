@@ -3,49 +3,111 @@
 namespace App\Http\Controllers\Admin\Tour;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Exception;
 
 use App\Http\Controllers\Controller;
+use App\Interfaces\Tour\StandardRepositoryInterface;
+use App\Interfaces\Tour\CategoryRepositoryInterface;
+use App\Interfaces\LocationRepositoryInterface;
+use App\Http\Requests\Tour\StoreRequest;
+use App\Http\Requests\Tour\UpdateRequest;
 use App\Models\Tour;
 
 class StandardController extends Controller
 {
-    public function __construct()
-    {
-        throw new \Exception('Not implemented');
-    }
+    public function __construct(
+        private readonly StandardRepositoryInterface $standardRepository,
+        private readonly CategoryRepositoryInterface $categoryRepository,
+        private readonly LocationRepositoryInterface $locationRepository,
+    ) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        throw new \Exception('Not implemented');
+        $filters = $request->only(['search', 'location_id', 'status', 'category_id']);
+        $tours = $this->standardRepository->index($filters);
+        $locations = $this->locationRepository->getAll();
+        $categories = $this->categoryRepository->getAll();
+
+        return view('admin.tours.index', compact('tours', 'locations', 'categories'));
     }
 
     public function create()
     {
-        throw new \Exception('Not implemented');
+        try {
+            $locations = $this->locationRepository->getAll();
+            $categories = $this->categoryRepository->getAll();
+
+            return view('admin.tours.create', compact('locations', 'categories'));
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Unable to load the create tour page: ' . $e->getMessage());
+        }
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        throw new \Exception('Not implemented');
+        try {
+            $validated = $request->validated();
+
+            $tour = null;
+            DB::transaction(function () use ($validated, &$tour) {
+                $tour = $this->standardRepository->store($validated);
+            });
+
+            return redirect()
+                ->route('console.tours.show', $tour)
+                ->with('success', 'Tour created successfully. You can now add itinerary and images.');
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Unable to save the tour: ' . $e->getMessage());
+        }
+    }
+
+    public function show(Tour $tour)
+    {
+        $tour = $this->standardRepository->find($tour->id);
+
+        if (!$tour) {
+            abort(404);
+        }
+
+        return view('admin.tours.show', compact('tour'));
     }
 
     public function edit(Tour $tour)
     {
-        throw new \Exception('Not implemented');
+        try {
+            $tour = $this->standardRepository->find($tour->id);
+            $locations = $this->locationRepository->getAll();
+            $categories = $this->categoryRepository->getAll();
+
+            return view('admin.tours.edit', compact('tour', 'locations', 'categories'));
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Unable to load the edit tour page: ' . $e->getMessage());
+        }
     }
 
-    public function update(Request $request, Tour $tour)
+    public function update(UpdateRequest $request, Tour $tour)
     {
-        throw new \Exception('Not implemented');
-    }
+        try {
+            $validated = $request->validated();
 
-    public function destroy(Tour $tour)
-    {
-        throw new \Exception('Not implemented');
-    }
+            DB::transaction(function () use ($validated, $tour) {
+                $this->standardRepository->update($tour, $validated);
+            });
 
-    public function toggleStatus(Tour $tour)
-    {
-        throw new \Exception('Not implemented');
+            return redirect()
+                ->route('console.tours.show', $tour->fresh())
+                ->with('success', 'Tour updated successfully.');
+        } catch (Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Unable to update tour details: ' . $e->getMessage());
+        }
     }
 }
