@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\View\View;
 
+use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Models\Tour;
 use App\Interfaces\TourRepositoryInterface;
