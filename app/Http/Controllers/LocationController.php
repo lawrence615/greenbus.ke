@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Location;
 use Illuminate\View\View;
+
+use App\Http\Controllers\Controller;
+use App\Models\Location;
 
 class LocationController extends Controller
 {
