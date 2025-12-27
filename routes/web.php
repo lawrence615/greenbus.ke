@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\TourController as AdminTourController;
 use App\Http\Controllers\Admin\Tour\BespokeController as AdminBespokeController;
 use App\Http\Controllers\Admin\Tour\ItineraryController as AdminItineraryController;
 use App\Http\Controllers\Admin\Tour\MultimediaController as AdminMultimediaController;
+use App\Http\Controllers\Admin\Tour\PricingController as AdminPricingController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 
@@ -105,6 +106,11 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::put('/tours/{tour:slug}/multimedia', [AdminMultimediaController::class, 'update'])->name('tours.multimedia.update');
     Route::delete('/tours/{tour:slug}/multimedia', [AdminMultimediaController::class, 'destroy'])->name('tours.multimedia.destroy');
     Route::post('/tours/{tour:slug}/multimedia/set-cover', [AdminMultimediaController::class, 'setCover'])->name('tours.multimedia.set-cover');
+
+    // Tour pricing management
+    Route::get('/tours/{tour:slug}/pricing/create', [AdminPricingController::class, 'create'])->name('tours.pricing.create');
+    Route::post('/tours/{tour:slug}/pricing/store', [AdminPricingController::class, 'store'])->name('tours.pricing.store');
+    Route::delete('/tours/{tour:slug}/pricing/{tourPricing}', [AdminPricingController::class, 'destroy'])->name('tours.pricing.destroy');
 
     // Testimonials management
     Route::get('/testimonials', [AdminTestimonialController::class, 'index'])->name('testimonials.index');
