@@ -10,19 +10,19 @@ use App\Models\Tour;
 interface StandardRepositoryInterface
 {
     /**
-     * Get all tours for location
+     * Get all tours for admin
      */
-    public function index(Location $location, int $perPage = 12, ?string $search = null);
-
-    /**
-     * Find a tour by ID with relationships
-     */
-    public function get(Location $location, Tour $tour);
+    public function index(array $filters = [], int $perPage = 15): LengthAwarePaginator;
 
     /**
      * Find a tour by ID with relationships
      */
     public function find(int $id): ?Tour;
+
+    /**
+     * Find a tour by slug with relationships
+     */
+    public function findBySlug(string $slug): ?Tour;
 
     /**
      * Create a new tour
@@ -33,14 +33,4 @@ interface StandardRepositoryInterface
      * Update an existing tour
      */
     public function update(Tour $tour, array $data): Tour;
-
-    /**
-     * Delete a tour
-     */
-    public function delete(Tour $tour): void;
-
-    /**
-     * Toggle tour status
-     */
-    public function toggleStatus(Tour $tour): Tour;
 }
