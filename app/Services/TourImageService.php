@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Tour;
-use App\Models\TourImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -13,81 +11,23 @@ class TourImageService
     protected string $disk = 'do';
     protected string $basePath = 'greenbus/images';
 
-    /**
-     * Upload images for a tour.
-     */
-    public function uploadImages(Tour $tour, array $images, ?int $coverIndex = null): void
+    public function store(UploadedFile $image, string $tourCode, string $tourTitle): string
     {
-        $existingCount = $tour->images()->count();
-
-        foreach ($images as $index => $image) {
-            if (!$image instanceof UploadedFile) {
-                continue;
-            }
-
-            $path = $this->storeImage($image, $tour);
-            $isCover = $coverIndex !== null && $index === $coverIndex;
-
-            // If this is the cover, unset any existing cover
-            if ($isCover) {
-                $tour->images()->update(['is_cover' => false]);
-            }
-
-            $tour->images()->create([
-                'path' => $path,
-                'is_cover' => $isCover,
-                'sort_order' => $existingCount + $index,
-            ]);
-        }
-    }
-
-    /**
-     * Store a single image and return the path.
-     */
-    protected function storeImage(UploadedFile $image, Tour $tour): string
-    {
-        $filename = Str::slug($tour->title) . '-' . Str::random(8) . '.' . $image->getClientOriginalExtension();
-        $path = "{$this->basePath}/{$tour->code}/{$filename}";
+        $filename = Str::slug($tourTitle) . '-' . Str::random(8) . '.' . $image->getClientOriginalExtension();
+        $path = "{$this->basePath}/{$tourCode}/{$filename}";
 
         Storage::disk($this->disk)->put($path, file_get_contents($image), 'public');
 
         return $path;
     }
 
-    /**
-     * Set a specific image as the cover.
-     */
-    public function setCoverImage(Tour $tour, int $imageId): void
+    public function delete(string $path): void
     {
-        $tour->images()->update(['is_cover' => false]);
-        $tour->images()->where('id', $imageId)->update(['is_cover' => true]);
+        Storage::disk($this->disk)->delete($path);
     }
 
-    /**
-     * Delete specific images.
-     */
-    public function deleteImages(Tour $tour, array $imageIds): void
+    public function deleteTourDirectory(string $tourCode): void
     {
-        $images = $tour->images()->whereIn('id', $imageIds)->get();
-
-        foreach ($images as $image) {
-            Storage::disk($this->disk)->delete($image->path);
-            $image->delete();
-        }
-    }
-
-    /**
-     * Delete all images for a tour.
-     */
-    public function deleteAllImages(Tour $tour): void
-    {
-        foreach ($tour->images as $image) {
-            Storage::disk($this->disk)->delete($image->path);
-        }
-
-        $tour->images()->delete();
-
-        // Also delete the tour's directory
-        Storage::disk($this->disk)->deleteDirectory("{$this->basePath}/{$tour->code}");
+        Storage::disk($this->disk)->deleteDirectory("{$this->basePath}/{$tourCode}");
     }
 }
