@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\FaqRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+
+use App\Http\Controllers\Controller;
+use App\Interfaces\FaqRepositoryInterface;
 
 class FaqController extends Controller
 {
