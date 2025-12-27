@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
+use App\Http\Controllers\Controller;
 use App\Enums\BookingStatus;
 use App\Interfaces\BookingRepositoryInterface;
 use App\Models\Booking;
