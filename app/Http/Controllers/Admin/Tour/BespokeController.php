@@ -2,25 +2,29 @@
 
 namespace App\Http\Controllers\Admin\Tour;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Tour\Bespoke\StoreRequest;
-use App\Http\Requests\Tour\Bespoke\UpdateRequest;
 use App\Interfaces\LocationRepositoryInterface;
 use App\Interfaces\Tour\BespokeRepositoryInterface;
+use App\Http\Requests\Tour\Bespoke\StoreRequest;
 use App\Models\Tour;
+use App\Http\Requests\Tour\Bespoke\UpdateRequest;
 
 class BespokeController extends Controller
 {
     public function __construct(
+        private readonly BespokeRepositoryInterface $bespokeRepository,
         private readonly LocationRepositoryInterface $locationRepository,
-        private readonly BespokeRepositoryInterface $bespokeRepository
     ) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        throw new \Exception('Not implemented');
+        $filters = $request->only(['search', 'location_id', 'status', 'category_id']);
+        $tours = $this->bespokeRepository->index($filters);
+
+        return view('admin.tours.index', compact('tours'));
     }
 
     public function create()
@@ -100,12 +104,7 @@ class BespokeController extends Controller
         });
 
         return redirect()
-            ->route('console.tours.show', $tour->fresh())
+            ->route('console.tours.bespoke.show', $tour->fresh())
             ->with('success', 'Bespoke tour updated successfully.');
-    }
-
-    public function destroy(Tour $tour)
-    {
-        throw new \Exception('Not implemented');
     }
 }
