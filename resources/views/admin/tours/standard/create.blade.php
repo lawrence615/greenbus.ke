@@ -155,7 +155,7 @@
         </div>
     </div>
 
-    <form method="POST" action="{{ route('console.tours.store') }}" @submit="console.log('🔥 Form submit detected!'); handleFormSubmit($event)" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('console.tours.standard.store') }}" @submit="console.log('🔥 Form submit detected!'); handleFormSubmit($event)" enctype="multipart/form-data">
         @csrf
         
         <!-- General Error Messages -->
