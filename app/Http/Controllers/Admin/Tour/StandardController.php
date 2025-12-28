@@ -74,7 +74,7 @@ class StandardController extends Controller
             abort(404);
         }
 
-        return view('admin.tours.show', compact('tour'));
+        return view('admin.tours.standard.show', compact('tour'));
     }
 
     public function edit(Tour $tour)
