@@ -29,7 +29,7 @@ class StandardController extends Controller
         $locations = $this->locationRepository->getAll();
         $categories = $this->categoryRepository->getAll();
 
-        return view('admin.tours.index', compact('tours', 'locations', 'categories'));
+        return view('admin.tours.standard.index', compact('tours', 'locations', 'categories'));
     }
 
     public function create()
@@ -38,7 +38,7 @@ class StandardController extends Controller
             $locations = $this->locationRepository->getAll();
             $categories = $this->categoryRepository->getAll();
 
-            return view('admin.tours.create', compact('locations', 'categories'));
+            return view('admin.tours.standard.create', compact('locations', 'categories'));
         } catch (Exception $e) {
             return redirect()
                 ->back()
@@ -57,7 +57,7 @@ class StandardController extends Controller
             });
 
             return redirect()
-                ->route('console.tours.show', $tour)
+                ->route('console.tours.standard.show', $tour)
                 ->with('success', 'Tour created successfully. You can now add itinerary and images.');
         } catch (Exception $e) {
             return redirect()
@@ -84,7 +84,7 @@ class StandardController extends Controller
             $locations = $this->locationRepository->getAll();
             $categories = $this->categoryRepository->getAll();
 
-            return view('admin.tours.edit', compact('tour', 'locations', 'categories'));
+            return view('admin.tours.standard.edit', compact('tour', 'locations', 'categories'));
         } catch (Exception $e) {
             return redirect()
                 ->back()
@@ -102,7 +102,7 @@ class StandardController extends Controller
             });
 
             return redirect()
-                ->route('console.tours.show', $tour->fresh())
+                ->route('console.tours.standard.show', $tour->fresh())
                 ->with('success', 'Tour updated successfully.');
         } catch (Exception $e) {
             return redirect()
