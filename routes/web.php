@@ -15,7 +15,8 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Admin\TourController as AdminTourController;
+use App\Http\Controllers\Admin\Tour\MainController as AdminMainController;
+use App\Http\Controllers\Admin\Tour\StandardController as AdminStandardController;
 use App\Http\Controllers\Admin\Tour\BespokeController as AdminBespokeController;
 use App\Http\Controllers\Admin\Tour\ItineraryController as AdminItineraryController;
 use App\Http\Controllers\Admin\Tour\MultimediaController as AdminMultimediaController;
@@ -81,14 +82,17 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/{payment}', [AdminPaymentController::class, 'show'])->name('payments.show');
 
-    Route::get('/tours', [AdminTourController::class, 'index'])->name('tours.index');
-    Route::get('/tours/create', [AdminTourController::class, 'create'])->name('tours.create');
-    Route::post('/tours', [AdminTourController::class, 'store'])->name('tours.store');
-    Route::get('/tours/{tour:slug}', [AdminTourController::class, 'show'])->name('tours.show');
-    Route::get('/tours/{tour:slug}/edit', [AdminTourController::class, 'edit'])->name('tours.edit');
-    Route::put('/tours/{tour:slug}', [AdminTourController::class, 'update'])->name('tours.update');
-    Route::delete('/tours/{tour:slug}', [AdminTourController::class, 'destroy'])->name('tours.destroy');
-    Route::patch('/tours/{tour:slug}/toggle-status', [AdminTourController::class, 'toggleStatus'])->name('tours.toggle-status');
+    // Main tour routes
+    Route::get('/tours', [AdminMainController::class, 'index'])->name('tours.index');
+    Route::delete('/tours/{tour:slug}', [AdminMainController::class, 'destroy'])->name('tours.destroy');
+    Route::patch('/tours/{tour:slug}/toggle-status', [AdminMainController::class, 'toggleStatus'])->name('tours.toggle-status');
+
+    // Standard tour routes
+    Route::get('/tours/standard/create', [AdminStandardController::class, 'create'])->name('tours.standard.create');
+    Route::post('/tours/standard/store', [AdminStandardController::class, 'store'])->name('tours.standard.store');
+    Route::get('/tours/standard/{tour:slug}', [AdminStandardController::class, 'show'])->name('tours.standard.show');
+    Route::get('/tours/standard/{tour:slug}/edit', [AdminStandardController::class, 'edit'])->name('tours.standard.edit');
+    Route::put('/tours/standard/{tour:slug}', [AdminStandardController::class, 'update'])->name('tours.standard.update');
 
     // Bespoke tour routes
     Route::get('/tours/bespoke/create', [AdminBespokeController::class, 'create'])->name('tours.bespoke.create');
