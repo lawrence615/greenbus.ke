@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\Tour\MultimediaController as AdminMultimediaContr
 use App\Http\Controllers\Admin\Tour\PricingController as AdminPricingController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
+use App\Http\Controllers\ShareController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -37,9 +38,14 @@ Route::post('/invite/{token}', [InviteController::class, 'accept'])->name('invit
 // Booking routes
 Route::get('/book/{location:slug}/{tour:slug}', [BookingController::class, 'create'])->name('bookings.create');
 Route::post('/book/{location:slug}/{tour:slug}', [BookingController::class, 'store'])->name('bookings.store');
+Route::post('/share/book', [BookingController::class, 'storeShare'])->name('bookings.store.share');
 Route::get('/booking/{booking}/success', [BookingController::class, 'success'])->name('bookings.success');
 Route::get('/booking/{booking}/cancelled', [BookingController::class, 'cancel'])->name('bookings.cancel');
 Route::get('/booking/{booking}/retry', [BookingController::class, 'retryPayment'])->name('bookings.retry');
+
+// Share routes (for bespoke tours)
+Route::get('/share/{shareToken}', [ShareController::class, 'showTour'])->name('share.tour');
+Route::get('/share/{shareToken}/book', [ShareController::class, 'bookTour'])->name('share.book');
 
 // Public FAQs
 Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
@@ -90,6 +96,7 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::get('/tours/bespoke/{tour:slug}', [AdminBespokeController::class, 'show'])->name('tours.bespoke.show');
     Route::get('/tours/bespoke/{tour:slug}/edit', [AdminBespokeController::class, 'edit'])->name('tours.bespoke.edit');
     Route::put('/tours/bespoke/{tour:slug}', [AdminBespokeController::class, 'update'])->name('tours.bespoke.update');
+    Route::post('/tours/bespoke/{tour}/share', [AdminBespokeController::class, 'generateShareLink'])->name('tours.bespoke.share');
 
     // Tour itinerary management
     Route::get('/tours/{tour:slug}/itinerary', [AdminItineraryController::class, 'index'])->name('tours.itinerary.index');
