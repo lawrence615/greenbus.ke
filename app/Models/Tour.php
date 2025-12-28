@@ -50,7 +50,6 @@ class Tour extends Model
 
     protected $casts = [
         'starts_at_time' => 'datetime',
-        'cut_off_time' => 'datetime',
         'shared_at' => 'datetime',
         'expires_at' => 'datetime',
         'is_daily' => 'boolean',
