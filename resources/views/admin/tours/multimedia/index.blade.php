@@ -209,8 +209,8 @@
                     <!-- Upload Button -->
                     <div x-show="previews.length > 0" class="flex justify-end">
                         <button type="submit" 
-                                :disabled="isUploading"
-                                :class="isUploading ? 'bg-emerald-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700'"
+                                :disabled="isUploading || previews.length < 1"
+                                :class="isUploading || previews.length < 1 ? 'bg-emerald-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700'"
                                 class="px-4 py-2 text-white text-sm font-medium rounded-lg transition-colors">
                             <template x-if="!isUploading">
                                 <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -223,7 +223,7 @@
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                             </template>
-                            <span x-text="isUploading ? 'Uploading...' : 'Upload Images'"></span>
+                            <span x-text="isUploading ? 'Uploading...' : previews.length < 1 ? 'Upload Images' : 'Upload Images'"></span>
                         </button>
                     </div>
                 </form>
@@ -259,12 +259,24 @@ function imageEditor() {
 
         handleFiles(fileList) {
             const newFiles = Array.from(fileList).filter(file => {
+                // Check if file already exists
+                const isDuplicate = this.files.some(existingFile => 
+                    existingFile.name === file.name && 
+                    existingFile.size === file.size && 
+                    existingFile.type === file.type
+                );
+                
+                if (isDuplicate) {
+                    toastr.warning(`${file.name} has already been added`);
+                    return false;
+                }
+                
                 if (!file.type.match(/^image\/(jpeg|png|jpg|webp)$/)) {
-                    alert(`${file.name} is not a supported image format`);
+                    toastr.error(`${file.name} is not a supported image format`);
                     return false;
                 }
                 if (file.size > this.maxSize) {
-                    alert(`${file.name} is too large (max 5MB)`);
+                    toastr.error(`${file.name} is too large (max 5MB)`);
                     return false;
                 }
                 return true;
@@ -279,10 +291,28 @@ function imageEditor() {
                         name: file.name
                     });
                 };
+                reader.onerror = () => {
+                    toastr.error(`Failed to read ${file.name}`);
+                    // Remove the file from the array if reading failed
+                    const fileIndex = this.files.indexOf(file);
+                    if (fileIndex > -1) {
+                        this.files.splice(fileIndex, 1);
+                    }
+                };
                 reader.readAsDataURL(file);
             });
 
             this.updateFileInput();
+            
+            // Show success feedback for added files
+            if (newFiles.length > 0) {
+                const fileNames = newFiles.map(f => f.name).join(', ');
+                if (newFiles.length === 1) {
+                    toastr.success(`${newFiles[0].name} added successfully`);
+                } else {
+                    toastr.success(`${newFiles.length} images added successfully`);
+                }
+            }
         },
 
         removeNewImage(index) {
@@ -314,13 +344,15 @@ function imageEditor() {
                 if (!data.success) {
                     // Revert if failed
                     this.coverImageId = this.originalCoverId;
-                    alert('Failed to set cover image. Please try again.');
+                    toastr.error('Failed to set cover image. Please try again.');
+                } else {
+                    toastr.success('Cover image updated successfully!');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 // Revert if failed
                 this.coverImageId = this.originalCoverId;
-                alert('Failed to set cover image. Please try again.');
+                toastr.error('Failed to set cover image. Please try again.');
             }
         },
 
