@@ -13,6 +13,7 @@ use App\Models\Location;
 use App\Models\Tour;
 use App\Services\Payment\PaymentService;
 use App\Http\Requests\Booking\StoreRequest;
+use App\Http\Requests\Booking\ShareStoreRequest;
 
 class BookingController extends Controller
 {
@@ -124,6 +125,44 @@ class BookingController extends Controller
             return redirect()
                 ->route('bookings.cancel', ['booking' => $booking->reference])
                 ->with('error', 'Failed to initiate payment: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Store a booking from a share link.
+     */
+    public function storeShare(ShareStoreRequest $request): RedirectResponse
+    {
+        try {
+            $validated = $request->validated();
+            
+            // Verify the share token and get the tour
+            $tour = Tour::where('share_token', $validated['share_token'])
+                ->where('id', $validated['tour_id'])
+                ->firstOrFail();
+
+            // Check if the share link is still valid
+            if (!$tour->isShareLinkValid()) {
+                return back()->with('error', 'This share link has expired or is no longer valid.');
+            }
+
+            // Use a dummy location since share bookings don't need location routing
+            $location = $tour->location;
+
+            // Create booking with pending_payment status
+            $booking = $this->bookingRepository->store($location, $tour, $validated);
+
+            // Initiate payment and redirect to payment provider
+            $successUrl = route('bookings.success', ['booking' => $booking->reference]);
+            $cancelUrl = route('share.book', ['shareToken' => $validated['share_token']]);
+
+            $result = $this->paymentService->initiatePayment($booking, $successUrl, $cancelUrl);
+
+            return redirect()->away($result['checkout_url']);
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Unable to create booking: ' . $e->getMessage());
         }
     }
 }
