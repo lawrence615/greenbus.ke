@@ -92,7 +92,7 @@ function formatDurationByCategory($tour) {
                  x-transition:leave-end="transform opacity-0 scale-95"
                  class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-slate-200 z-10">
                 <div class="py-1">
-                    <a href="{{ route('console.tours.create') }}" 
+                    <a href="{{ route('console.tours.standard.create') }}" 
                        class="flex items-center px-4 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-slate-900">
                         <svg class="w-4 h-4 mr-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -287,7 +287,7 @@ function formatDurationByCategory($tour) {
                                         {{ $tour->code }}
                                     </span>
                                     <!-- Clickable Tour Title -->
-                                    <a href="{{ ($tour->tour_type ?? 'standard') === 'bespoke' ? route('console.tours.bespoke.show', $tour) : route('console.tours.show', $tour) }}" class="block font-semibold text-slate-900 hover:text-emerald-600 transition-colors truncate max-w-[200px] lg:max-w-[350px]" title="{{ $tour->title }}">
+                                    <a href="{{ ($tour->tour_type ?? 'standard') === 'bespoke' ? route('console.tours.bespoke.show', $tour) : route('console.tours.standard.show', $tour) }}" class="block font-semibold text-slate-900 hover:text-emerald-600 transition-colors truncate max-w-[200px] lg:max-w-[350px]" title="{{ $tour->title }}">
                                         {{ $tour->title }}
                                     </a>
                                     <!-- Mobile: Show location & price inline -->
@@ -342,13 +342,13 @@ function formatDurationByCategory($tour) {
                         </td>
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-0.5">
-                                <a href="{{ ($tour->tour_type ?? 'standard') === 'bespoke' ? route('console.tours.bespoke.show', $tour) : route('console.tours.show', $tour) }}" class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors duration-150" title="View">
+                                <a href="{{ ($tour->tour_type ?? 'standard') === 'bespoke' ? route('console.tours.bespoke.show', $tour) : route('console.tours.standard.show', $tour) }}" class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors duration-150" title="View">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                     </svg>
                                 </a>
-                                <a href="{{ ($tour->tour_type ?? 'standard') === 'bespoke' ? route('console.tours.bespoke.edit', $tour) : route('console.tours.edit', $tour) }}" class="p-1.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors duration-150" title="Edit">
+                                <a href="{{ ($tour->tour_type ?? 'standard') === 'bespoke' ? route('console.tours.bespoke.edit', $tour) : route('console.tours.standard.edit', $tour) }}" class="p-1.5 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors duration-150" title="Edit">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                     </svg>

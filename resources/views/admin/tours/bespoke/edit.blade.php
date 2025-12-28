@@ -29,7 +29,7 @@
             <h1 class="text-2xl font-semibold text-slate-900">Edit Bespoke Tour</h1>
             <p class="text-sm text-slate-500">Update your bespoke tour details</p>
         </div>
-        <a href="{{ route('console.tours.show', $tour) }}" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">
+        <a href="{{ route('console.tours.bespoke.show', $tour) }}" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
@@ -113,7 +113,7 @@
         </div>
 
         <div class="flex items-center justify-end gap-4">
-            <a href="{{ route('console.tours.show', $tour) }}" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">
+            <a href="{{ route('console.tours.bespoke.show', $tour) }}" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">
                 Cancel
             </a>
             <button

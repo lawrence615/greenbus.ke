@@ -29,7 +29,7 @@
                             <svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            <a href="{{ route('console.tours.show', $tour) }}" class="ml-1 text-slate-500 hover:text-slate-700 md:ml-2">
+                            <a href="{{ $tour->admin_show_route }}" class="ml-1 text-slate-500 hover:text-slate-700 md:ml-2">
                                 {{ $tour->title }}
                             </a>
                         </div>
@@ -46,7 +46,7 @@
             </nav>
         </div>
         <div class="flex space-x-3">
-            <a href="{{ route('console.tours.show', $tour) }}" class="inline-flex items-center px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50">
+            <a href="{{ $tour->admin_show_route }}" class="inline-flex items-center px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
