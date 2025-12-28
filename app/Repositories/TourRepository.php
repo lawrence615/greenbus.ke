@@ -14,6 +14,7 @@ class TourRepository implements TourRepositoryInterface
     {
         $query = $location->tours()
             ->where('status', 'published')
+            ->where('tour_type', '!=', 'bespoke')
             ->with(['images', 'category']);
 
         if ($search) {
@@ -28,7 +29,7 @@ class TourRepository implements TourRepositoryInterface
 
     public function get(Location $location, Tour $tour)
     {
-        if ($tour->location_id !== $location->id || $tour->status !== 'published') {
+        if ($tour->location_id !== $location->id || $tour->status !== 'published' || $tour->tour_type === 'bespoke') {
             abort(404);
         }
 
