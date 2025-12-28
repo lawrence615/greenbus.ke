@@ -10,19 +10,23 @@ use App\Interfaces\TourRepositoryInterface;
 use App\Repositories\TourRepository;
 use App\Interfaces\BookingRepositoryInterface;
 use App\Repositories\BookingRepository;
+use App\Interfaces\Tour\CategoryRepositoryInterface;
+use App\Repositories\Tour\CategoryRepository;
+use App\Interfaces\Tour\ItineraryRepositoryInterface;
+use App\Repositories\Tour\ItineraryRepository;
+use App\Interfaces\Tour\MainRepositoryInterface;
+use App\Repositories\Tour\MainRepository;
+use App\Interfaces\Tour\StandardRepositoryInterface;
+use App\Repositories\Tour\StandardRepository;
+use App\Interfaces\Tour\BespokeRepositoryInterface;
+use App\Repositories\Tour\BespokeRepository;
+use App\Interfaces\Tour\PricingRepositoryInterface;
+use App\Repositories\Tour\PricingRepository;
 use App\Interfaces\TestimonialRepositoryInterface;
 use App\Repositories\TestimonialRepository;
 use App\Interfaces\FaqRepositoryInterface;
 use App\Repositories\FaqRepository;
-use App\Interfaces\TourCategoryRepositoryInterface;
-use App\Repositories\TourCategoryRepository;
 use App\Interfaces\UserRepositoryInterface;
-use App\Interfaces\Tour\BespokeRepositoryInterface;
-use App\Interfaces\Tour\ItineraryRepositoryInterface;
-use App\Interfaces\Tour\PricingRepositoryInterface;
-use App\Repositories\Tour\BespokeRepository;
-use App\Repositories\Tour\ItineraryRepository;
-use App\Repositories\Tour\PricingRepository;
 use App\Repositories\UserRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -35,12 +39,14 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(LocationRepositoryInterface::class, LocationRepository::class);
         $this->app->bind(TourRepositoryInterface::class, TourRepository::class);
         $this->app->bind(BookingRepositoryInterface::class, BookingRepository::class);
+        $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
+        $this->app->bind(ItineraryRepositoryInterface::class, ItineraryRepository::class);
+        $this->app->bind(MainRepositoryInterface::class, MainRepository::class);
+        $this->app->bind(StandardRepositoryInterface::class, StandardRepository::class);
+        $this->app->bind(BespokeRepositoryInterface::class, BespokeRepository::class);
+        $this->app->bind(PricingRepositoryInterface::class, PricingRepository::class);
         $this->app->bind(TestimonialRepositoryInterface::class, TestimonialRepository::class);
         $this->app->bind(FaqRepositoryInterface::class, FaqRepository::class);
-        $this->app->bind(TourCategoryRepositoryInterface::class, TourCategoryRepository::class);
-        $this->app->bind(BespokeRepositoryInterface::class, BespokeRepository::class);
-        $this->app->bind(ItineraryRepositoryInterface::class, ItineraryRepository::class);
-        $this->app->bind(PricingRepositoryInterface::class, PricingRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 
