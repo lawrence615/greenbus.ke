@@ -28,7 +28,7 @@
 @endpush
 
 @section('content')
-<div x-data="{ pricing: pricingModal(), publish: publishModal(), deletePricing: deletePricingModal() }" class="space-y-6">
+<div x-data="{ pricing: pricingModal(), publish: publishModal(), deletePricing: deletePricingModal(), shareLink: shareLinkManager() }" class="space-y-6">
     <div class="flex items-center justify-between">
         <a href="{{ route('console.tours.index') }}" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -72,6 +72,22 @@
                 </svg>
                 Manage Images
             </a>
+
+            @if($tour->share_token && $tour->isShareLinkValid())
+                <button type="button" @click="shareLink.copyShareUrl('{{ $tour->share_url }}')" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                    Copy Share Link
+                </button>
+            @else
+                <button type="button" @click="shareLink.generateShareLink({{ $tour->id }})" class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+                    </svg>
+                    Generate Share Link
+                </button>
+            @endif
         </div>
     </div>
 
@@ -509,6 +525,44 @@
                     }
                 } catch (error) {
                     alert('Unable to delete pricing. Please try again.');
+                }
+            },
+        }));
+
+        Alpine.data('shareLinkManager', () => ({
+            async generateShareLink(tourId) {
+                try {
+                    const response = await axios.post(`/console/tours/bespoke/${tourId}/share`, {}, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                        },
+                    });
+                    if (response.data.success) {
+                        window.location.reload();
+                    } else {
+                        alert(response.data.message || 'Failed to generate share link.');
+                    }
+                } catch (error) {
+                    alert('Unable to generate share link. Please try again.');
+                }
+            },
+            async copyShareUrl(url) {
+                try {
+                    await navigator.clipboard.writeText(url);
+                    // Show a temporary success message
+                    const button = event.target.closest('button');
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Copied!';
+                    button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    button.classList.add('bg-green-700');
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('bg-green-700');
+                        button.classList.add('bg-green-600', 'hover:bg-green-700');
+                    }, 2000);
+                } catch (error) {
+                    alert('Failed to copy link. Please copy manually: ' + url);
                 }
             },
         }));
