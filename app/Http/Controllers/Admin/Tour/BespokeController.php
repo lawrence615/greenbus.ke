@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Tour;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\JsonResponse;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\LocationRepositoryInterface;
@@ -55,7 +56,7 @@ class BespokeController extends Controller
         });
 
         return redirect()
-            ->route('console.tours.show', $tour->fresh())
+            ->route('console.tours.show', $tour)
             ->with('success', 'Bespoke tour created successfully.');
     }
 
@@ -104,7 +105,36 @@ class BespokeController extends Controller
         });
 
         return redirect()
-            ->route('console.tours.bespoke.show', $tour->fresh())
+            ->route('console.tours.bespoke.show', $tour)
             ->with('success', 'Bespoke tour updated successfully.');
+    }
+
+    /**
+     * Generate a share link for the bespoke tour
+     */
+    public function generateShareLink(Request $request, Tour $tour): JsonResponse
+    {
+        if (($tour->tour_type ?? 'standard') !== 'bespoke') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Share links are only available for bespoke tours.'
+            ], 403);
+        }
+
+        try {
+            $tour->markAsReadyToShare();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Share link generated successfully.',
+                'share_url' => $tour->share_url,
+                'expires_at' => $tour->expires_at->format('Y-m-d H:i:s')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate share link: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
