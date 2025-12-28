@@ -292,4 +292,14 @@ class Tour extends Model
     {
         return $this->share_token ? route('share.tour', $this->share_token) : '';
     }
+
+    /**
+     * Get the correct admin show route based on tour type
+     */
+    public function getAdminShowRouteAttribute(): string
+    {
+        return $this->tour_type === 'bespoke' 
+            ? route('console.tours.bespoke.show', $this)
+            : route('console.tours.standard.show', $this);
+    }
 }
