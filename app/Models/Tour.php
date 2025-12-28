@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 use App\Models\Location;
 use App\Models\TourImage;
 use App\Models\Booking;
@@ -41,6 +42,19 @@ class Tour extends Model
         'base_price_infant',
         'base_price_senior',
         'status',
+        'share_token',
+        'share_status',
+        'shared_at',
+        'expires_at',
+    ];
+
+    protected $casts = [
+        'starts_at_time' => 'datetime',
+        'cut_off_time' => 'datetime',
+        'shared_at' => 'datetime',
+        'expires_at' => 'datetime',
+        'is_daily' => 'boolean',
+        'is_featured' => 'boolean',
     ];
 
     protected static function booted(): void
@@ -226,5 +240,56 @@ class Tour extends Model
         }
 
         return $stats;
+    }
+
+    /**
+     * Generate a unique share token for the tour
+     */
+    public function generateShareToken(): string
+    {
+        do {
+            $token = Str::random(32);
+        } while (static::where('share_token', $token)->exists());
+
+        return $token;
+    }
+
+    /**
+     * Mark the tour as ready to share and generate a share token
+     */
+    public function markAsReadyToShare(): void
+    {
+        $this->share_token = $this->generateShareToken();
+        $this->share_status = 'ready';
+        $this->expires_at = now()->addDays(7); // Expires in 7 days
+        $this->save();
+    }
+
+    /**
+     * Mark the tour as shared with a client
+     */
+    public function markAsShared(): void
+    {
+        $this->share_status = 'shared';
+        $this->shared_at = now();
+        $this->save();
+    }
+
+    /**
+     * Check if the share link is valid
+     */
+    public function isShareLinkValid(): bool
+    {
+        return $this->share_token && 
+               in_array($this->share_status, ['ready', 'shared']) &&
+               (!$this->expires_at || $this->expires_at->isFuture());
+    }
+
+    /**
+     * Get the share URL for this tour
+     */
+    public function getShareUrlAttribute(): string
+    {
+        return $this->share_token ? route('share.tour', $this->share_token) : '';
     }
 }
