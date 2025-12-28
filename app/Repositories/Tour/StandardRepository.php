@@ -43,7 +43,7 @@ class StandardRepository implements StandardRepositoryInterface
     {
         return Tour::with(['location', 'category', 'images', 'itineraryItems'])
             ->where('tour_type', 'standard')
-            ->firstOrFail($id);
+            ->find($id);
     }
 
     public function findBySlug(string $slug): ?Tour
