@@ -25,7 +25,7 @@ class BespokeController extends Controller
         $filters = $request->only(['search', 'location_id', 'status', 'category_id']);
         $tours = $this->bespokeRepository->index($filters);
 
-        return view('admin.tours.index', compact('tours'));
+        return view('admin.tours.bespoke.index', compact('tours'));
     }
 
     public function create()
@@ -56,7 +56,7 @@ class BespokeController extends Controller
         });
 
         return redirect()
-            ->route('console.tours.show', $tour)
+            ->route('console.tours.bespoke.show', $tour)
             ->with('success', 'Bespoke tour created successfully.');
     }
 
