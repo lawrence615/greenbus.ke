@@ -33,6 +33,7 @@ class Tour extends Model
         'no_of_people',
         'meeting_point',
         'starts_at_time',
+        'starts_at_time',
         'cut_off_time',
         'is_daily',
         'is_featured',
@@ -49,7 +50,6 @@ class Tour extends Model
     ];
 
     protected $casts = [
-        'starts_at_time' => 'datetime',
         'shared_at' => 'datetime',
         'expires_at' => 'datetime',
         'is_daily' => 'boolean',
