@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\Tour\BespokeController as AdminBespokeController;
 use App\Http\Controllers\Admin\Tour\ItineraryController as AdminItineraryController;
 use App\Http\Controllers\Admin\Tour\MultimediaController as AdminMultimediaController;
 use App\Http\Controllers\Admin\Tour\PricingController as AdminPricingController;
+use App\Http\Controllers\Admin\Tour\TrashController as AdminTrashController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\ShareController;
@@ -53,8 +54,7 @@ Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
 
 // Redirect old dashboard route
 Route::middleware('auth')->get('/dashboard', function () {
-    $user = auth()->user();
-    $hasRole = $user->hasRole(['admin', 'manager']);
+    $hasRole = auth()->user()->hasRole(['admin', 'manager']);
     
     if ($hasRole) {
         return redirect()->route('console.dashboard');
@@ -122,6 +122,11 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::get('/tours/{tour:slug}/pricing/create', [AdminPricingController::class, 'create'])->name('tours.pricing.create');
     Route::post('/tours/{tour:slug}/pricing/store', [AdminPricingController::class, 'store'])->name('tours.pricing.store');
     Route::delete('/tours/{tour:slug}/pricing/{tourPricing}', [AdminPricingController::class, 'destroy'])->name('tours.pricing.destroy');
+
+    // Tour trash management
+    Route::get('/tours/trash', [AdminTrashController::class, 'index'])->name('tours.trash.index');
+    Route::post('/tours/trash/{tour}/restore', [AdminTrashController::class, 'restore'])->name('tours.trash.restore');
+    Route::delete('/tours/trash/{tour}', [AdminTrashController::class, 'destroy'])->name('tours.trash.destroy');
 
     // Testimonials management
     Route::get('/testimonials', [AdminTestimonialController::class, 'index'])->name('testimonials.index');
