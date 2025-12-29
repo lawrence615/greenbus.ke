@@ -30,6 +30,21 @@ interface MainRepositoryInterface
     public function delete(Tour $tour): void;
 
     /**
+     * Get only trashed tours
+     */
+    public function trashed(array $filters = [], int $perPage = 10): LengthAwarePaginator;
+
+    /**
+     * Restore a soft deleted tour
+     */
+    public function restore(Tour $tour): void;
+
+    /**
+     * Permanently delete a tour
+     */
+    public function forceDelete(Tour $tour): void;
+
+    /**
      * Toggle tour status
      */
     public function toggleStatus(Tour $tour): Tour;

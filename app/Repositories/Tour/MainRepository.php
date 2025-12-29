@@ -77,6 +77,50 @@ class MainRepository implements MainRepositoryInterface
     }
 
     /**
+     * Get only trashed tours
+     */
+    public function trashed(array $filters = [], int $perPage = 10): LengthAwarePaginator
+    {
+        $query = Tour::onlyTrashed()
+            ->with(['location', 'category', 'images'])
+            ->latest('deleted_at');
+
+        if (!empty($filters['search'])) {
+            $search = $filters['search'];
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                    ->orWhere('short_description', 'like', "%{$search}%");
+            });
+        }
+
+        if (!empty($filters['location_id'])) {
+            $query->where('location_id', $filters['location_id']);
+        }
+
+        if (!empty($filters['category_id'])) {
+            $query->where('tour_category_id', $filters['category_id']);
+        }
+
+        return $query->paginate($perPage)->withQueryString();
+    }
+
+    /**
+     * Restore a soft deleted tour
+     */
+    public function restore(Tour $tour): void
+    {
+        $tour->restore();
+    }
+
+    /**
+     * Permanently delete a tour
+     */
+    public function forceDelete(Tour $tour): void
+    {
+        $tour->forceDelete();
+    }
+
+    /**
      * Toggle tour status
      */
     public function toggleStatus(Tour $tour): Tour
