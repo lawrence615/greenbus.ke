@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Faq\StoreRequest;
-use App\Http\Requests\Faq\UpdateRequest;
-use App\Interfaces\FaqRepositoryInterface;
-use App\Interfaces\TourCategoryRepositoryInterface;
-use App\Models\Faq;
 use Illuminate\Http\Request;
+
+use App\Http\Controllers\Controller;
+use App\Interfaces\FaqRepositoryInterface;
+use App\Interfaces\Tour\CategoryRepositoryInterface as TourCategoryRepositoryInterface;
+use App\Http\Requests\Faq\StoreRequest;
+use App\Models\Faq;
+use App\Http\Requests\Faq\UpdateRequest;
 
 class FaqController extends Controller
 {
