@@ -84,7 +84,7 @@
                         <div>
                             <p class="text-sm text-slate-500">Tour</p>
                             @if($booking->tour)
-                            <a href="{{ route('console.tours.show', $booking->tour) }}" class="font-medium text-emerald-600 hover:text-emerald-700 hover:underline">
+                            <a href="{{ $booking->tour->admin_show_route }}" class="font-medium text-emerald-600 hover:text-emerald-700 hover:underline">
                                 {{ Str::limit($booking->tour->title, 120) }}
                             </a>
                             @else
