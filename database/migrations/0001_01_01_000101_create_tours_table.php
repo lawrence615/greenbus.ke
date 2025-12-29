@@ -40,6 +40,7 @@ return new class extends Migration
             $table->timestamp('shared_at')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
