@@ -209,7 +209,7 @@
                     @if($tour->starts_at_time)
                     <div>
                         <dt class="text-sm text-slate-500">Start Time</dt>
-                        <dd class="font-medium text-slate-900">{{ $tour->starts_at_time }}</dd>
+                        <dd class="font-medium text-slate-900">{{ \Carbon\Carbon::parse($tour->starts_at_time)->format('g:i A') }}</dd>
                     </div>
                     @endif
                     @if($tour->meeting_point)
