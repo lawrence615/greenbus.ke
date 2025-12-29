@@ -71,7 +71,7 @@ class BookingPaidNotification extends Notification implements ShouldQueue
             'booking_reference' => $this->booking->reference,
             'payment_id' => $this->payment->id,
             'customer_name' => $this->booking->customer_name,
-            'tour_name' => $this->booking->tour->name,
+            'tour_name' => $this->booking->tour->title,
             'amount' => $this->payment->amount,
             'message' => "Booking {$this->booking->reference} paid - USD " . number_format($this->payment->amount),
         ];

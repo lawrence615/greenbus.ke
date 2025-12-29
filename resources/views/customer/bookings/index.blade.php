@@ -55,7 +55,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-semibold text-slate-900">{{ $booking->tour->name ?? 'N/A' }}</h3>
+                                <h3 class="font-semibold text-slate-900">{{ $booking->tour->title ?? 'N/A' }}</h3>
                                 <p class="text-sm text-slate-500">{{ $booking->location->name ?? 'N/A' }}</p>
                                 <div class="mt-2 flex flex-wrap items-center gap-3 text-sm">
                                     <span class="flex items-center gap-1 text-slate-600">

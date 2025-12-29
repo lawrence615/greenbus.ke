@@ -85,7 +85,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="font-medium text-slate-900">{{ $booking->customer_name }}</p>
-                            <p class="text-sm text-slate-500">{{ $booking->tour->name ?? 'Tour Unavailable' }}</p>
+                            <p class="text-sm text-slate-500">{{ $booking->tour->title ?? 'Tour Unavailable' }}</p>
                         </div>
                         <div class="text-right">
                             <p class="text-sm font-medium text-slate-900">{{ $booking->reference }}</p>

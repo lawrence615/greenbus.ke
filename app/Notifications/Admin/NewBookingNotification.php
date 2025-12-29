@@ -64,7 +64,7 @@ class NewBookingNotification extends Notification implements ShouldQueue
             'booking_id' => $this->booking->id,
             'booking_reference' => $this->booking->reference,
             'customer_name' => $this->booking->customer_name,
-            'tour_name' => $this->booking->tour->name,
+            'tour_name' => $this->booking->tour->title,
             'total_amount' => $this->booking->total_amount,
             'message' => "New booking {$this->booking->reference} created by {$this->booking->customer_name}",
         ];

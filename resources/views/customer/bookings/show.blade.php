@@ -22,7 +22,7 @@
             <div class="bg-white rounded-xl shadow-sm border border-slate-200">
                 <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
                     <div>
-                        <h2 class="font-semibold text-slate-900">{{ $booking->tour->name ?? 'Tour' }}</h2>
+                        <h2 class="font-semibold text-slate-900">{{ $booking->tour->title ?? 'Tour' }}</h2>
                         <p class="text-sm text-slate-500">{{ $booking->location->name ?? 'N/A' }}</p>
                     </div>
                     @php $status = \App\Enums\BookingStatus::tryFrom($booking->status) @endphp
