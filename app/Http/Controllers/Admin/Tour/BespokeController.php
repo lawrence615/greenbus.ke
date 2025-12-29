@@ -70,7 +70,7 @@ class BespokeController extends Controller
 
         if (($tour->tour_type ?? 'standard') !== 'bespoke') {
             return redirect()
-                ->route('console.tours.show', $tour)
+                ->route('console.tours.standard.show', $tour)
                 ->with('warning', 'This tour is not a bespoke tour.');
         }
 
