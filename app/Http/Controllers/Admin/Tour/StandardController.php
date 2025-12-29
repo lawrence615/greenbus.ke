@@ -10,8 +10,8 @@ use App\Http\Controllers\Controller;
 use App\Interfaces\Tour\StandardRepositoryInterface;
 use App\Interfaces\Tour\CategoryRepositoryInterface;
 use App\Interfaces\LocationRepositoryInterface;
-use App\Http\Requests\Tour\StoreRequest;
-use App\Http\Requests\Tour\UpdateRequest;
+use App\Http\Requests\Tour\Standard\StoreRequest;
+use App\Http\Requests\Tour\Standard\UpdateRequest;
 use App\Models\Tour;
 
 class StandardController extends Controller
