@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Tour;
+namespace App\Http\Requests\Tour\Standard;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
@@ -33,8 +33,8 @@ class StoreRequest extends FormRequest
             'no_of_people' => ['required_if:group_size_type,custom', 'integer', 'min:1', 'max:100'],
             'is_daily' => ['boolean'],
             'is_featured' => ['boolean'],
-            'base_price_senior' => ['required', 'numeric', 'min:0'],
             'base_price_adult' => ['required', 'numeric', 'min:0'],
+            'base_price_senior' => ['required', 'numeric', 'min:0'],
             'base_price_youth' => ['nullable', 'numeric', 'min:0'],
             'base_price_child' => ['nullable', 'numeric', 'min:0'],
             'base_price_infant' => ['nullable', 'numeric', 'min:0'],
@@ -65,26 +65,26 @@ class StoreRequest extends FormRequest
             Log::info('No files detected');
         }
         Log::info('=== END PRE-VALIDATION LOG ===');
-        
+
         // Filter out empty image values before validation
         $images = $this->input('images', []);
         if (is_array($images)) {
-            $filteredImages = array_filter($images, function($image) {
+            $filteredImages = array_filter($images, function ($image) {
                 // Filter out null, empty, undefined, and "[object File]" strings
-                return $image !== null && 
-                       $image !== '' && 
-                       $image !== 'undefined' && 
-                       $image !== '[object File]' &&
-                       $image !== '[object HTMLInputElement]';
+                return $image !== null &&
+                    $image !== '' &&
+                    $image !== 'undefined' &&
+                    $image !== '[object File]' &&
+                    $image !== '[object HTMLInputElement]';
             });
             $this->merge(['images' => array_values($filteredImages)]);
         }
-        
+
         $this->merge([
             'is_daily' => $this->boolean('is_daily'),
             'is_featured' => $this->boolean('is_featured'),
         ]);
-        
+
         // Map group_size_type to no_of_people for non-custom options
         if ($this->filled('group_size_type') && $this->input('group_size_type') !== 'custom') {
             $this->merge([
