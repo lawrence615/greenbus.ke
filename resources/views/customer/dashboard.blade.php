@@ -67,7 +67,7 @@
             <a href="{{ route('customer.bookings.show', $booking) }}" class="block px-6 py-4 hover:bg-slate-50 transition-colors">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="font-medium text-slate-900">{{ $booking->tour->name }}</p>
+                        <p class="font-medium text-slate-900">{{ $booking->tour->name ?? 'Tour Unavailable' }}</p>
                         <p class="text-sm text-slate-500">{{ $booking->location->name ?? 'N/A' }}</p>
                     </div>
                     <div class="text-right">
