@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use App\Models\Location;
 use App\Models\TourImage;
@@ -16,6 +17,7 @@ use App\Models\Testimonial;
 
 class Tour extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'location_id',
         'tour_category_id',
