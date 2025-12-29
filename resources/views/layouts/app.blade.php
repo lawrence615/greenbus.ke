@@ -376,7 +376,7 @@
                     <li>Free cancellation up to 24 hours before departure.</li>
                 </ul>
                 <div class="pt-1 text-xs text-slate-500">
-                    Powered by <a href="https://happytribe.ke/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-700">Happy Tribe Travel</a>.
+                    Powered by <a href="https://happytribe.ke/" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors duration-200">Happy Tribe Travel</a>.
                 </div>
             </div>
         </div>
@@ -485,7 +485,7 @@
                         <li>Free cancellation up to 24 hours before departure.</li>
                     </ul>
                     <div class="pt-1 text-xs text-slate-500">
-                        Powered by <a href="https://happytribe.ke/" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-700">Happy Tribe Travel</a>.
+                        Powered by <a href="https://happytribe.ke/" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors duration-200">Happy Tribe Travel</a>.
                     </div>
                 </div>
             </div>
