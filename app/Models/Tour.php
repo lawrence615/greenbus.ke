@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Models\Location;
 use App\Models\TourImage;
@@ -76,19 +78,71 @@ class Tour extends Model
         $location = Location::find($locationId);
         $locationCode = $location?->code ?? 'LOC';
         
-        // Get the last tour number for this location
-        $lastTour = static::where('location_id', $locationId)
-            ->whereNotNull('code')
-            ->orderByRaw("CAST(SUBSTRING_INDEX(code, '-', -1) AS UNSIGNED) DESC")
-            ->first();
+        $maxRetries = 5;
+        $retryCount = 0;
         
-        if ($lastTour && preg_match('/-(\d+)$/', $lastTour->code, $matches)) {
-            $nextNumber = (int) $matches[1] + 1;
-        } else {
-            $nextNumber = 1;
+        while ($retryCount < $maxRetries) {
+            try {
+                // Start a database transaction to prevent race conditions
+                return DB::transaction(function () use ($locationId, $locationCode) {
+                    // Find all existing numeric codes (across all locations) with a lock
+                    $existingCodes = static::withTrashed() // Include soft-deleted records
+                        ->whereNotNull('code')
+                        ->where('code', 'like', $locationCode . '-%')
+                        ->lockForUpdate() // Prevent other transactions from reading these rows
+                        ->pluck('code')
+                        ->toArray();
+                    
+                    // Extract all numeric suffixes
+                    $existingNumbers = [];
+                    foreach ($existingCodes as $code) {
+                        if (preg_match('/-(\d+)$/', $code, $matches)) {
+                            $existingNumbers[] = (int) $matches[1];
+                        }
+                    }
+                    
+                    // Start from 1 and find the first available number
+                    $nextNumber = 1;
+                    while (in_array($nextNumber, $existingNumbers)) {
+                        $nextNumber++;
+                    }
+                    
+                    $newCode = $locationCode . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+                    
+                    // Final double-check to ensure uniqueness (including soft-deleted)
+                    if (static::withTrashed()->where('code', $newCode)->exists()) {
+                        throw new \Exception('Code still exists after generation');
+                    }
+                    
+                    // Log for debugging
+                    Log::info("Generated tour code: {$newCode} for location {$locationId}. Existing codes: " . implode(', ', $existingCodes));
+                    
+                    return $newCode;
+                });
+                
+            } catch (\Exception $e) {
+                $retryCount++;
+                Log::warning("Tour code generation attempt {$retryCount} failed: " . $e->getMessage());
+                
+                if ($retryCount >= $maxRetries) {
+                    // Fallback: use a timestamp-based approach
+                    $timestamp = now()->format('His');
+                    $fallbackCode = $locationCode . '-' . $timestamp;
+                    
+                    if (!static::where('code', $fallbackCode)->exists()) {
+                        Log::info("Using fallback tour code: {$fallbackCode}");
+                        return $fallbackCode;
+                    }
+                    
+                    throw new \Exception("Unable to generate unique tour code after {$maxRetries} attempts");
+                }
+                
+                // Wait a random amount of time before retrying (to avoid synchronized retries)
+                usleep(rand(100000, 500000)); // 100-500ms delay
+            }
         }
         
-        return $locationCode . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
+        throw new \Exception("Unable to generate unique tour code after {$maxRetries} attempts");
     }
 
     public function location(): BelongsTo
