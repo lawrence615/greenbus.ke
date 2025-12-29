@@ -173,7 +173,7 @@ class Booking extends Model
 
     public function tour(): BelongsTo
     {
-        return $this->belongsTo(Tour::class);
+        return $this->belongsTo(Tour::class)->withTrashed();
     }
 
     public function location(): BelongsTo
