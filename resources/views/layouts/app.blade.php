@@ -340,19 +340,30 @@
                         <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
                             <span class="text-[11px]">@</span>
                         </span>
-                        <span>Happytribetravel@gmail.com</span>
+                        <a href="mailto:Happytribetravel@gmail.com" class="text-slate-600 hover:text-emerald-600 transition-colors duration-200 hover:underline">
+                            Happytribetravel@gmail.com
+                        </a>
                     </li>
                     <li class="flex items-start gap-2">
                         <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
                             <span class="text-[11px]">📞</span>
                         </span>
-                        <span>+254 726 455 000</span>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+                            <a href="https://wa.me/254726455000?text=Hi%20Happy%20Tribe%20Travel,%20I'm%20interested%20in%20your%20tours" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-emerald-600 transition-colors duration-200 hover:underline">
+                                +254 726 455 000
+                            </a>
+                        </div>
                     </li>
                     <li class="flex items-start gap-2">
                         <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
                             <span class="text-[11px]">📍</span>
                         </span>
-                        <span>Lotus Plaza, Parklands Nairobi</span>
+                        <a href="https://maps.google.com/?q=Lotus+Plaza,Parklands+Nairobi" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-emerald-600 transition-colors duration-200 hover:underline inline-flex items-center gap-1">
+                            <span>Lotus Plaza, Parklands Nairobi</span>
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                        </a>
                     </li>
                 </ul>
                 <div class="flex items-center gap-3 pt-2">
@@ -448,19 +459,30 @@
                             <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
                                 <span class="text-[11px]">@</span>
                             </span>
-                            <span>Happytribetravel@gmail.com</span>
+                            <a href="mailto:Happytribetravel@gmail.com" class="text-slate-600 hover:text-emerald-600 transition-colors duration-200 hover:underline">
+                                Happytribetravel@gmail.com
+                            </a>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
                                 <span class="text-[11px]">📞</span>
                             </span>
-                            <span>+254 726 455 000</span>
+                            <div class="flex flex-col gap-1">
+                                <a href="https://wa.me/254726455000?text=Hi%20Happy%20Tribe%20Travel,%20I'm%20interested%20in%20your%20tours" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-emerald-600 transition-colors duration-200 hover:underline">
+                                    +254 726 455 000
+                                </a>
+                            </div>
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-50 text-emerald-700">
                                 <span class="text-[11px]">📍</span>
                             </span>
-                            <span>Lotus Plaza, Parklands Nairobi</span>
+                            <a href="https://maps.google.com/?q=Lotus+Plaza,Parklands+Nairobi" target="_blank" rel="noopener noreferrer" class="text-slate-600 hover:text-emerald-600 transition-colors duration-200 hover:underline inline-flex items-center gap-1">
+                                <span>Lotus Plaza, Parklands Nairobi</span>
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
+                            </a>
                         </li>
                     </ul>
                     <div class="flex items-center gap-3 pt-2">
