@@ -129,7 +129,7 @@ class Tour extends Model
                     $timestamp = now()->format('His');
                     $fallbackCode = $locationCode . '-' . $timestamp;
                     
-                    if (!static::where('code', $fallbackCode)->exists()) {
+                    if (!static::withTrashed()->where('code', $fallbackCode)->exists()) {
                         Log::info("Using fallback tour code: {$fallbackCode}");
                         return $fallbackCode;
                     }
