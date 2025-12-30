@@ -28,7 +28,12 @@
 @endpush
 
 @section('content')
-<div x-data="{ pricing: pricingModal(), publish: publishModal(), deletePricing: deletePricingModal(), shareLink: shareLinkManager() }" class="space-y-6">
+<div x-data="{ 
+    pricing: pricingModal(), 
+    publish: publishModal(), 
+    deletePricing: deletePricingModal(), 
+    shareLink: shareLinkManager() 
+}" class="space-y-6">
     <div class="flex items-center justify-between">
         <a href="{{ route('console.tours.index') }}" class="inline-flex items-center gap-2 text-sm text-slate-600 hover:text-slate-900">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,7 +45,7 @@
         <div class="flex items-center gap-2">
             <button
                 type="button"
-                @click="publish.openModal(@json($tour), '{{ $tour->status === 'published' ? 'draft' : 'publish' }}')"
+                @click="publish.openModal({{ $tour->toJson() }}, '{{ $tour->status === 'published' ? 'draft' : 'publish' }}')"
                 class="inline-flex items-center gap-2 px-4 py-2 {{ $tour->status === 'published' ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200' : 'bg-blue-100 text-blue-700 hover:bg-blue-200' }} rounded-lg text-sm font-medium cursor-pointer">
                 {{ $tour->status === 'published' ? 'Unpublish' : 'Publish' }}
             </button>
@@ -420,7 +425,7 @@
                     class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer">
                     Cancel
                 </button>
-                <form method="POST" :action="`/console/tours/${publish.selectedTour.slug}/toggle-status`"
+                <form method="POST" :action="`/console/tours/{{ $tour->slug }}/toggle-status`"
                     @submit="$event.preventDefault(); window.showLoading('Toggling tour status...', 'Updating Tour'); $el.submit();">
                     @csrf
                     @method('PATCH')
