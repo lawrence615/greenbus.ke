@@ -10,7 +10,13 @@
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
+    
+    <!-- Alpine Plugins -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Alpine Core -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
     <style>
         [x-cloak] {
             display: none !important;
@@ -376,7 +382,7 @@
                     <li>Free cancellation up to 24 hours before departure.</li>
                 </ul>
                 <div class="pt-1 text-xs text-slate-500">
-                    Powered by <a href="https://happytribe.ke/" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors duration-200">Happy Tribe Travel</a>.
+                    Powered by <a href="https://happytribe.ke/" target="_blank" rel="noopener noreferrer" class="font-semibold text-[#ffc107] hover:text-yellow-600 transition-colors duration-200">Happy Tribe Travel</a>
                 </div>
             </div>
         </div>
@@ -485,7 +491,7 @@
                         <li>Free cancellation up to 24 hours before departure.</li>
                     </ul>
                     <div class="pt-1 text-xs text-slate-500">
-                        Powered by <a href="https://happytribe.ke/" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-600 hover:text-emerald-700 transition-colors duration-200">Happy Tribe Travel</a>.
+                        Powered by <a href="https://happytribe.ke/" target="_blank" rel="noopener noreferrer" class="font-semibold text-[#ffc107] hover:text-yellow-600 transition-colors duration-200">Happy Tribe Travel</a>
                     </div>
                 </div>
             </div>
@@ -541,18 +547,18 @@
             </div>
         </div>
     </footer>
-</body>
-@stack('scripts')
-<script>
-    @if(session('success'))
-    window.__flashSuccess = @json(session('success'));
-    @endif
-    @if(session('error'))
-    window.__flashError = @json(session('error'));
-    @endif
-    @if(session('status'))
-    window.__flashInfo = @json(session('status'));
-    @endif
-</script>
 
-</html>
+    <script>
+        @if(session('success'))
+        window.__flashSuccess = @json(session('success'));
+        @endif
+        @if(session('error'))
+        window.__flashError = @json(session('error'));
+        @endif
+        @if(session('status'))
+        window.__flashInfo = @json(session('status'));
+        @endif
+    </script>
+
+    @stack('scripts')
+</body>
