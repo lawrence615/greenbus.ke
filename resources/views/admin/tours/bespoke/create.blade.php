@@ -23,7 +23,7 @@
 @endpush
 
 @section('content')
-<div x-data="bespokeTourForm()" class="space-y-6">
+<div class="space-y-6">
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
@@ -39,7 +39,7 @@
     </div>
 
     <!-- Form -->
-    <form method="POST" action="{{ route('console.tours.bespoke.store') }}" x-ref="form" class="space-y-6">
+    <form x-data="bespokeTourForm()" method="POST" action="{{ route('console.tours.bespoke.store') }}" class="space-y-6">
         @csrf
 
         <!-- Basic Information -->
@@ -54,10 +54,8 @@
                         type="text"
                         name="title"
                         value="{{ old('title') }}"
-                        x-model="form.title"
                         class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                         placeholder="Enter tour title">
-                    <p x-show="errors.title" class="mt-1 text-sm text-red-600" x-text="errors.title"></p>
                     @error('title')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -67,18 +65,16 @@
                     <label class="block text-sm font-medium text-slate-700 mb-2">Location *</label>
                     <select
                         name="location_id"
-                        value="{{ old('location_id') }}"
-                        x-model="form.location_id"
-                        class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                        class="w-full px-3 py-2 h-[43px] border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        @change="updateLocation($event.target.value)">
                         <option value="">Select a location</option>
                         @foreach($locations as $location)
-                        <option value="{{ $location->id }}">{{ $location->name }}</option>
+                        <option value="{{ $location->id }}" {{ old('location_id') == $location->id ? 'selected' : '' }}>{{ $location->name }}</option>
                         @endforeach
                     </select>
-                    <p x-show="errors.location_id" class="mt-1 text-sm text-red-600" x-text="errors.location_id"></p>
                     @error('location_id')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror   
+                    @enderror
                 </div>
 
                 <div class="col-span-12 lg:col-span-4">
@@ -91,14 +87,15 @@
                             :class="locationCodePrefix() ? 'rounded-l-lg' : ''"></span>
                         <input
                             type="text"
-                            x-model="form.code_suffix"
+                            name="code_suffix"
+                            value="{{ old('code_suffix') }}"
                             class="w-full px-3 py-2 border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                             :class="locationCodePrefix() ? 'rounded-r-lg' : 'rounded-lg'"
                             placeholder="e.g., 001"
+                            @input="updateCodeSuffix($event.target.value)"
                             :maxlength="maxCodeSuffixLength()">
-                        <input type="hidden" name="code" x-model="form.code">
+                        <input type="hidden" name="code" value="{{ old('code') }}">
                     </div>
-                    <p x-show="errors.code" class="mt-1 text-sm text-red-600" x-text="errors.code"></p>
                     @error('code')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -108,34 +105,34 @@
             <div class="mt-6">
                 <label class="block text-sm font-medium text-slate-700 mb-2">Description *</label>
                 <div id="description_editor" class="bg-white rounded-lg border border-slate-300"></div>
-                <input type="hidden" name="description" id="description" x-model="form.description" value="{{ old('description') }}">
-                <p x-show="errors.description" class="mt-1 text-sm text-red-600" x-text="errors.description"></p>
+                <input type="hidden" name="description" id="description" value="{{ old('description') }}">
                 @error('description')
                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
-        </div>
 
-        <!-- Actions -->
-        <div class="flex items-center justify-end gap-4">
-            <a href="{{ route('console.tours.index') }}" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">
-                Cancel
-            </a>
-            <button
-                type="button"
-                @click="submitForm()"
-                :disabled="isSubmitting"
-                class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
-                <span x-show="!isSubmitting">Create Bespoke Tour</span>
-                <span x-show="isSubmitting">Creating...</span>
-            </button>
+            <!-- Actions -->
+            <div class="flex items-center justify-end gap-4 mt-6">
+                <a href="{{ route('console.tours.index') }}" class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50">
+                    Cancel
+                </a>
+                <button
+                    type="submit"
+                    class="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 cursor-pointer">
+                    Create Bespoke Tour
+                </button>
+            </div>
         </div>
     </form>
 </div>
 @endsection
 
 @push('scripts')
-<script type="application/json" id="location_codes">{!! json_encode($locations->pluck('code', 'id')) !!}</script>
+<script type="application/json" id="location_codes">
+    {
+        !!json_encode($locations->pluck('code', 'id')) !!
+    }
+</script>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 <script>
     function bespokeTourForm() {
@@ -148,11 +145,21 @@
                 code_suffix: '',
                 description: ''
             },
-            errors: {},
-            isSubmitting: false,
-            quillEditor: null,
+
+            updateLocation(locationId) {
+                console.log('updateLocation:', locationId);
+                this.form.location_id = locationId;
+                this.syncCombinedCode();
+            },
+
+            updateCodeSuffix(suffix) {
+                console.log('updateCodeSuffix:', suffix);
+                this.form.code_suffix = suffix;
+                this.syncCombinedCode();
+            },
 
             locationCodePrefix() {
+                console.log('locationCodePrefix');
                 const id = this.form.location_id;
                 const code = (this.locationCodes && id) ? (this.locationCodes[id] || '') : '';
                 return code ? (code + '-') : '';
@@ -190,6 +197,7 @@
             },
 
             syncCombinedCode() {
+                console.log('syncCombinedCode');
                 const prefix = this.locationCodePrefix();
                 const suffix = (this.form.code_suffix || '').trim();
                 this.form.code = (prefix && suffix) ? (prefix + suffix) : '';
@@ -229,54 +237,6 @@
                 this.quillEditor.on('text-change', () => {
                     this.form.description = this.quillEditor.root.innerHTML;
                 });
-            },
-
-            submitForm() {
-                this.isSubmitting = true;
-                this.errors = {};
-
-                // Ensure description is synced from Quill
-                if (this.quillEditor) {
-                    this.form.description = this.quillEditor.root.innerHTML;
-                }
-
-                // Basic validation
-                if (!this.form.title.trim()) {
-                    this.errors.title = 'Title is required';
-                }
-                if (this.form.title.length > 60) {
-                    this.errors.title = 'Title must not exceed 60 characters.';
-                }
-
-                if (!this.form.location_id) {
-                    this.errors.location_id = 'Select a location';
-                }
-                if (!this.form.code_suffix.trim()) {
-                    this.errors.code = 'Tour code is required';
-                }
-
-                if (!this.form.description.trim() || this.form.description === '<p><br></p>') {
-                    this.errors.description = 'Description is required';
-                }
-                if (this.form.description.length > 65535) {
-                    this.errors.description = 'Description has exceeded the maximum allowed length.';
-                }
-
-                if (Object.keys(this.errors).length > 0) {
-                    this.isSubmitting = false;
-                    return;
-                }
-
-                this.syncCombinedCode();
-
-                if (!this.form.code.trim()) {
-                    this.errors.code = 'Tour code is required';
-                    this.isSubmitting = false;
-                    return;
-                }
-
-                // Submit form
-                this.$refs.form.submit();
             }
         };
     }
