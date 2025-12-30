@@ -39,7 +39,7 @@
     </div>
 
     <!-- Form -->
-    <form x-data="bespokeTourForm()" method="POST" action="{{ route('console.tours.bespoke.store') }}" class="space-y-6">
+    <form x-data="bespokeTourForm()" method="POST" action="{{ route('console.tours.bespoke.store') }}" class="space-y-6" x-init="init(@json(old()))">
         @csrf
 
         <!-- Basic Information -->
@@ -129,9 +129,7 @@
 
 @push('scripts')
 <script type="application/json" id="location_codes">
-    {
-        !!json_encode($locations->pluck('code', 'id')) !!
-    }
+{!! json_encode($locations->pluck('code', 'id')) !!}
 </script>
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 <script>
@@ -147,21 +145,21 @@
             },
 
             updateLocation(locationId) {
-                console.log('updateLocation:', locationId);
+                console.log('updateLocation called with:', locationId);
                 this.form.location_id = locationId;
                 this.syncCombinedCode();
             },
 
             updateCodeSuffix(suffix) {
-                console.log('updateCodeSuffix:', suffix);
+                console.log('updateCodeSuffix called with:', suffix);
                 this.form.code_suffix = suffix;
                 this.syncCombinedCode();
             },
 
             locationCodePrefix() {
-                console.log('locationCodePrefix');
                 const id = this.form.location_id;
                 const code = (this.locationCodes && id) ? (this.locationCodes[id] || '') : '';
+                console.log('locationCodePrefix: id=', id, 'code=', code, 'locationCodes=', this.locationCodes);
                 return code ? (code + '-') : '';
             },
 
@@ -172,14 +170,23 @@
                 return remaining > 0 ? remaining : 0;
             },
 
-            init() {
+            init(oldData) {
                 const locationCodesEl = document.getElementById('location_codes');
                 if (locationCodesEl) {
                     try {
                         this.locationCodes = JSON.parse(locationCodesEl.textContent || '{}');
+                        console.log('Location codes loaded:', this.locationCodes);
                     } catch (e) {
+                        console.error('Error parsing location codes:', e);
                         this.locationCodes = {};
                     }
+                }
+
+                // Initialize with old data if exists
+                if (oldData && oldData.location_id) {
+                    console.log('Initializing with old location:', oldData.location_id);
+                    this.form.location_id = oldData.location_id;
+                    this.updateLocation(oldData.location_id);
                 }
 
                 // Initialize Quill editor after component is mounted with delay
@@ -197,7 +204,6 @@
             },
 
             syncCombinedCode() {
-                console.log('syncCombinedCode');
                 const prefix = this.locationCodePrefix();
                 const suffix = (this.form.code_suffix || '').trim();
                 this.form.code = (prefix && suffix) ? (prefix + suffix) : '';
