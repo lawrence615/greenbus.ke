@@ -62,7 +62,7 @@
 
                     <!-- The bus Tour CTA Button -->
                     <div class="absolute bottom-2 right-4 z-10">
-                        <a href="/nairobi/tours/nai-nami-storytelling-tour" class="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-linear-to-r from-yellow-400 to-orange-500 text-slate-900 text-sm sm:text-base font-bold shadow-xl shadow-orange-500/50 hover:from-yellow-500 hover:to-orange-600 transform hover:scale-105 transition-all duration-200 backdrop-blur-sm bg-white/90 border-2 border-white">
+                        <a href="/nairobi/tours/nai-nami-storytelling-tour" class="inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-linear-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-900 text-sm sm:text-base font-bold shadow-xl shadow-amber-500/50 hover:from-amber-500 hover:via-amber-600 hover:to-amber-700 transform hover:scale-105 transition-all duration-200 backdrop-blur-sm bg-white/90 border-2 border-white">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>
