@@ -171,6 +171,13 @@
             },
 
             init(oldData) {
+                // Prevent double initialization
+                if (this.initialized) {
+                    console.log('Already initialized, skipping...');
+                    return;
+                }
+                this.initialized = true;
+
                 const locationCodesEl = document.getElementById('location_codes');
                 if (locationCodesEl) {
                     try {
@@ -182,12 +189,35 @@
                     }
                 }
 
-                // Initialize with old data if exists
-                if (oldData && oldData.location_id) {
-                    console.log('Initializing with old location:', oldData.location_id);
-                    this.form.location_id = oldData.location_id;
-                    this.updateLocation(oldData.location_id);
+                // Read initial values from DOM (for old data)
+                const locationInput = document.querySelector('select[name="location_id"]');
+                const codeSuffixInput = document.querySelector('input[name="code_suffix"]');
+                
+                if (locationInput && locationInput.value) {
+                    this.form.location_id = locationInput.value;
+                    console.log('Read location_id from DOM:', locationInput.value);
                 }
+                
+                if (codeSuffixInput && codeSuffixInput.value) {
+                    this.form.code_suffix = codeSuffixInput.value;
+                    console.log('Read code_suffix from DOM:', codeSuffixInput.value);
+                }
+
+                // Also use oldData if provided
+                if (oldData) {
+                    console.log('Initializing with old data:', oldData);
+                    if (oldData.location_id) {
+                        this.form.location_id = oldData.location_id;
+                    }
+                    if (oldData.code_suffix) {
+                        this.form.code_suffix = oldData.code_suffix;
+                    }
+                }
+
+                // Trigger code combination after setting values
+                setTimeout(() => {
+                    this.syncCombinedCode();
+                }, 50);
 
                 // Initialize Quill editor after component is mounted with delay
                 setTimeout(() => {
@@ -220,9 +250,19 @@
             initQuillEditor() {
                 // Clear any existing content and destroy previous instance
                 const container = document.getElementById('description_editor');
-                if (container) {
-                    container.innerHTML = '';
+                if (!container) {
+                    console.error('Description editor container not found');
+                    return;
                 }
+
+                // Check if Quill is already initialized on this container
+                if (container.querySelector('.ql-toolbar')) {
+                    console.log('Quill already initialized, skipping...');
+                    return;
+                }
+
+                // Clear container content
+                container.innerHTML = '';
 
                 // Destroy existing Quill instance if it exists
                 if (this.quillEditor) {
@@ -248,9 +288,10 @@
                 });
 
                 // Initialize with old data if exists
-                const oldDescription = document.querySelector('input[name="description"]').value;
-                if (oldDescription) {
-                    this.quillEditor.root.innerHTML = oldDescription;
+                const descInput = document.querySelector('input[name="description"]');
+                if (descInput && descInput.value) {
+                    this.quillEditor.root.innerHTML = descInput.value;
+                    console.log('Quill initialized with old description:', descInput.value);
                 }
 
                 // Sync Quill content with hidden input on text change
@@ -259,7 +300,6 @@
                     this.form.description = content;
                     
                     // Update the hidden input
-                    const descInput = document.querySelector('input[name="description"]');
                     if (descInput) {
                         descInput.value = content;
                     }
