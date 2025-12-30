@@ -206,7 +206,15 @@
             syncCombinedCode() {
                 const prefix = this.locationCodePrefix();
                 const suffix = (this.form.code_suffix || '').trim();
-                this.form.code = (prefix && suffix) ? (prefix + suffix) : '';
+                const combinedCode = (prefix && suffix) ? (prefix + suffix) : '';
+                this.form.code = combinedCode;
+                
+                // Update the hidden input
+                const codeInput = document.querySelector('input[name="code"]');
+                if (codeInput) {
+                    codeInput.value = combinedCode;
+                }
+                console.log('syncCombinedCode: prefix=', prefix, 'suffix=', suffix, 'combined=', combinedCode);
             },
 
             initQuillEditor() {
@@ -239,9 +247,23 @@
                     }
                 });
 
-                // Sync Quill content with Alpine.js data
+                // Initialize with old data if exists
+                const oldDescription = document.querySelector('input[name="description"]').value;
+                if (oldDescription) {
+                    this.quillEditor.root.innerHTML = oldDescription;
+                }
+
+                // Sync Quill content with hidden input on text change
                 this.quillEditor.on('text-change', () => {
-                    this.form.description = this.quillEditor.root.innerHTML;
+                    const content = this.quillEditor.root.innerHTML;
+                    this.form.description = content;
+                    
+                    // Update the hidden input
+                    const descInput = document.querySelector('input[name="description"]');
+                    if (descInput) {
+                        descInput.value = content;
+                    }
+                    console.log('Description updated:', content);
                 });
             }
         };
