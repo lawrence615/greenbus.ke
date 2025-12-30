@@ -39,7 +39,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'title.required' => 'Tour title is required.',
-            'title.max' => 'Tour title must not exceed 255 characters.',
+            'title.max' => 'Tour title must not exceed 60 characters.',
             'location_id.required' => 'Location is required.',
             'location_id.exists' => 'Selected location is invalid.',
             'code.required' => 'Tour code is required.',
