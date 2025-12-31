@@ -22,6 +22,8 @@ use App\Interfaces\Tour\BespokeRepositoryInterface;
 use App\Repositories\Tour\BespokeRepository;
 use App\Interfaces\Tour\PricingRepositoryInterface;
 use App\Repositories\Tour\PricingRepository;
+use App\Interfaces\Tour\ShareRepositoryInterface;
+use App\Repositories\Tour\ShareRepository;
 use App\Interfaces\TestimonialRepositoryInterface;
 use App\Repositories\TestimonialRepository;
 use App\Interfaces\FaqRepositoryInterface;
@@ -45,6 +47,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(StandardRepositoryInterface::class, StandardRepository::class);
         $this->app->bind(BespokeRepositoryInterface::class, BespokeRepository::class);
         $this->app->bind(PricingRepositoryInterface::class, PricingRepository::class);
+        $this->app->bind(ShareRepositoryInterface::class, ShareRepository::class);
         $this->app->bind(TestimonialRepositoryInterface::class, TestimonialRepository::class);
         $this->app->bind(FaqRepositoryInterface::class, FaqRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
