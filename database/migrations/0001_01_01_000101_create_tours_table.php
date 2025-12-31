@@ -35,10 +35,6 @@ return new class extends Migration
             $table->decimal('base_price_child', 10, 2)->nullable();
             $table->decimal('base_price_infant', 10, 2)->nullable();
             $table->string('status')->default('draft');
-            $table->string('share_token')->nullable()->unique();
-            $table->enum('share_status', ['draft', 'ready', 'shared', 'expired'])->default('draft');
-            $table->timestamp('shared_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
