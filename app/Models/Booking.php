@@ -24,6 +24,7 @@ class Booking extends Model
         'seniors',
         'children',
         'infants',
+        'individuals',
         'total_amount',
         'currency',
         'customer_name',
@@ -180,6 +181,38 @@ class Booking extends Model
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class);
+    }
+
+    /**
+     * Get the total number of participants (group + individual).
+     */
+    public function getTotalParticipantsAttribute(): int
+    {
+        return $this->adults + $this->youth + $this->seniors + $this->children + $this->infants + $this->individuals;
+    }
+
+    /**
+     * Get the total number of group participants.
+     */
+    public function getGroupParticipantsAttribute(): int
+    {
+        return $this->adults + $this->youth + $this->seniors + $this->children + $this->infants;
+    }
+
+    /**
+     * Check if this booking uses individual pricing.
+     */
+    public function isIndividualPricing(): bool
+    {
+        return $this->individuals > 0 && $this->getGroupParticipantsAttribute() === 0;
+    }
+
+    /**
+     * Check if this booking uses group pricing.
+     */
+    public function isGroupPricing(): bool
+    {
+        return $this->getGroupParticipantsAttribute() > 0;
     }
 
     public function payment(): HasOne
