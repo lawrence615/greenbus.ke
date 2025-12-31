@@ -573,7 +573,8 @@
                         this.closeModal();
                         window.location.reload();
                     } else {
-                        alert(response.data.message || 'Failed to delete pricing.');
+                        // alert(response.data.message || 'Failed to delete pricing.');
+                        toastr.error(response.data.message || 'Failed to delete pricing.');
                     }
                 } catch (error) {
                     alert('Unable to delete pricing. Please try again.');
@@ -590,13 +591,42 @@
                             'Accept': 'application/json',
                         },
                     });
+                    console.log(response.data);
                     if (response.data.success) {
-                        window.location.reload();
+                        // Show success message with share URL and copy button
+                        const shareUrl = response.data.share_url;
+                        const expiresAt = response.data.expires_at;
+                        
+                        toastr.success(`
+                            <div class="flex flex-col space-y-2">
+                                <div class="font-semibold">${response.data.message}</div>
+                                <div class="text-xs opacity-90">Expires: ${expiresAt}</div>
+                                <div class="flex items-center space-x-2">
+                                    <input type="text" 
+                                           value="${shareUrl}" 
+                                           readonly 
+                                           class="flex-1 px-2 py-1 text-xs bg-white/20 border border-white/30 rounded"
+                                           onclick="this.select()">
+                                    <button onclick="navigator.clipboard.writeText('${shareUrl}'); toastr.info('Link copied to clipboard!')" 
+                                            class="px-2 py-1 text-xs bg-white/30 hover:bg-white/40 rounded transition-colors">
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                        `, '', {
+                            timeOut: 10000,
+                            extendedTimeOut: 5000,
+                            closeButton: true,
+                            progressBar: true,
+                            tapToDismiss: false
+                        });
                     } else {
-                        alert(response.data.message || 'Failed to generate share link.');
+                        // alert(response.data.message || 'Failed to generate share link.');
+                        toastr.error(response.data.message || 'Failed to generate share link.');
                     }
                 } catch (error) {
-                    alert('Unable to generate share link. Please try again.');
+                    // alert('Unable to generate share link. Please try again.');
+                    toastr.error('Unable to generate share link. Please try again.');
                 }
             },
             async copyShareUrl(url) {
