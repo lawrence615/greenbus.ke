@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedInteger('youth')->default(0);
             $table->unsignedInteger('children')->default(0);
             $table->unsignedInteger('infants')->default(0);
+            $table->unsignedInteger('individuals')->default(0);
             $table->unsignedInteger('total_amount');
             $table->string('currency', 10)->default('USD');
             $table->string('customer_name');
