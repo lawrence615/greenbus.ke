@@ -37,17 +37,43 @@ class BookingRepository implements BookingRepositoryInterface
             abort(404);
         }
 
-        $adults = (int) ($data['adults'] ?? 0);
-        $youth = (int) ($data['youth'] ?? 0);
-        $seniors = (int) ($data['seniors'] ?? 0);
-        $children = (int) ($data['children'] ?? 0);
-        $infants = (int) ($data['infants'] ?? 0);
+        // Get pricing data from tour_pricings table
+        $pricings = $tour->pricings()->pluck('price', 'person_type')->toArray();
+        
+        // Check if we have individual pricing or group pricing
+        $hasIndividualPricing = isset($pricings['individual']);
+        $hasGroupPricing = !empty(array_intersect(['adult', 'senior', 'youth', 'child', 'infant'], array_keys($pricings)));
 
-        $total = $adults * $tour->base_price_adult
-            + $youth * (int) ($tour->base_price_youth ?? $tour->base_price_child ?? 0)
-            + $seniors * (int) ($tour->base_price_senior ?? $tour->base_price_adult)
-            + $children * (int) ($tour->base_price_child ?? 0)
-            + $infants * (int) ($tour->base_price_infant ?? 0);
+        $total = 0;
+
+        if ($hasIndividualPricing && !$hasGroupPricing) {
+            // Individual pricing only
+            $individuals = (int) ($data['individuals'] ?? 0);
+            $total = $individuals * $pricings['individual'];
+            
+            // Set all group counts to 0 for individual pricing
+            $adults = 0;
+            $youth = 0;
+            $seniors = 0;
+            $children = 0;
+            $infants = 0;
+        } else {
+            // Group pricing (or both available - use group pricing)
+            $adults = (int) ($data['adults'] ?? 0);
+            $youth = (int) ($data['youth'] ?? 0);
+            $seniors = (int) ($data['seniors'] ?? 0);
+            $children = (int) ($data['children'] ?? 0);
+            $infants = (int) ($data['infants'] ?? 0);
+
+            $total = $adults * ($pricings['adult'] ?? 0)
+                + $youth * ($pricings['youth'] ?? 0)
+                + $seniors * ($pricings['senior'] ?? 0)
+                + $children * ($pricings['child'] ?? 0)
+                + $infants * ($pricings['infant'] ?? 0);
+            
+            // Set individuals to 0 for group pricing
+            $individuals = 0;
+        }
 
         $booking = Booking::create([
             'tour_id' => $tour->id,
@@ -60,6 +86,7 @@ class BookingRepository implements BookingRepositoryInterface
             'seniors' => $seniors,
             'children' => $children,
             'infants' => $infants,
+            'individuals' => $individuals,
             'total_amount' => $total,
             'currency' => 'USD',
             'customer_name' => $data['customer_name'],
