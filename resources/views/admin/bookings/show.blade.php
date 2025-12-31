@@ -171,9 +171,14 @@
                     <div class="p-6 grid grid-cols-2 gap-6">
                         <div>
                             <p class="text-sm text-slate-500">Guests</p>
+                            @if($booking->isGroupPricing())
                             <p class="font-medium text-slate-900">
                                 {{ $booking->adults }} Adults, {{ $booking->seniors }} Senior, {{ $booking->youth }} Youth, {{ $booking->children }} Children, {{ $booking->infants }} Infants
                             </p>
+                            @endif
+                            @if($booking->isIndividualPricing())
+                            <p class="font-medium text-slate-900">{{ $booking->individuals }} Individual</p>
+                            @endif
                         </div>
                         <div>
                             <p class="text-sm text-slate-500">Total Amount</p>
@@ -657,7 +662,7 @@
                         <p class="text-sm text-slate-500">This action will update the booking date and time</p>
                     </div>
                 </div>
-                
+
                 <div class="mb-6">
                     <div class="p-3 bg-slate-50 rounded-lg">
                         <div class="text-sm">
@@ -669,7 +674,7 @@
                     </div>
                     <p class="text-xs text-slate-500 mt-3">This action will be logged.</p>
                 </div>
-                
+
                 <div class="flex gap-3">
                     <button type="button" @click="hide()" class="flex-1 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500">
                         Cancel
@@ -777,7 +782,7 @@
             }`;
             notification.textContent = message;
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.remove();
             }, 3000);
@@ -790,7 +795,7 @@
             newDate: '',
             newTime: '',
             formToSubmit: null,
-            
+
             show(currentDate, newDate, newTime, formToSubmit) {
                 this.currentDate = currentDate;
                 this.newDate = newDate;
@@ -799,46 +804,46 @@
                 this.isOpen = true;
                 this.isLoading = false;
             },
-            
+
             hide() {
                 this.isOpen = false;
                 this.isLoading = false;
             },
-            
+
             confirmUpdate() {
                 if (this.formToSubmit) {
                     // Show loading state
                     this.isLoading = true;
 
                     fetch(this.formToSubmit.action, {
-                        method: 'POST',
-                        body: new FormData(this.formToSubmit),
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'Accept': 'application/json'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            // Show success message
-                            window.showNotification('Date updated successfully', 'success');
-                            // Keep loading state visible for a moment, then refresh page
-                            setTimeout(() => {
-                                window.location.reload();
-                            }, 1500);
-                        } else {
+                            method: 'POST',
+                            body: new FormData(this.formToSubmit),
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'Accept': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Show success message
+                                window.showNotification('Date updated successfully', 'success');
+                                // Keep loading state visible for a moment, then refresh page
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1500);
+                            } else {
+                                // Hide loading state and show error
+                                this.isLoading = false;
+                                window.showNotification('Failed to update date', 'error');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
                             // Hide loading state and show error
                             this.isLoading = false;
                             window.showNotification('Failed to update date', 'error');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Hide loading state and show error
-                        this.isLoading = false;
-                        window.showNotification('Failed to update date', 'error');
-                    });
+                        });
                 }
             }
         });
