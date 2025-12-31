@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+
 use App\Models\Location;
 use App\Models\TourImage;
 use App\Models\Booking;
@@ -16,6 +17,7 @@ use App\Models\TourCategory;
 use App\Models\TourItineraryItem;
 use App\Models\TourPricing;
 use App\Models\Testimonial;
+use App\Models\TourShare;
 
 class Tour extends Model
 {
@@ -77,10 +79,10 @@ class Tour extends Model
     {
         $location = Location::find($locationId);
         $locationCode = $location?->code ?? 'LOC';
-        
+
         $maxRetries = 5;
         $retryCount = 0;
-        
+
         while ($retryCount < $maxRetries) {
             try {
                 // Start a database transaction to prevent race conditions
@@ -92,7 +94,7 @@ class Tour extends Model
                         ->lockForUpdate() // Prevent other transactions from reading these rows
                         ->pluck('code')
                         ->toArray();
-                    
+
                     // Extract all numeric suffixes
                     $existingNumbers = [];
                     foreach ($existingCodes as $code) {
@@ -100,48 +102,47 @@ class Tour extends Model
                             $existingNumbers[] = (int) $matches[1];
                         }
                     }
-                    
+
                     // Start from 1 and find the first available number
                     $nextNumber = 1;
                     while (in_array($nextNumber, $existingNumbers)) {
                         $nextNumber++;
                     }
-                    
+
                     $newCode = $locationCode . '-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
-                    
+
                     // Final double-check to ensure uniqueness (including soft-deleted)
                     if (static::withTrashed()->where('code', $newCode)->exists()) {
                         throw new \Exception('Code still exists after generation');
                     }
-                    
+
                     // Log for debugging
                     Log::info("Generated tour code: {$newCode} for location {$locationId}. Existing codes: " . implode(', ', $existingCodes));
-                    
+
                     return $newCode;
                 });
-                
             } catch (\Exception $e) {
                 $retryCount++;
                 Log::warning("Tour code generation attempt {$retryCount} failed: " . $e->getMessage());
-                
+
                 if ($retryCount >= $maxRetries) {
                     // Fallback: use a timestamp-based approach
                     $timestamp = now()->format('His');
                     $fallbackCode = $locationCode . '-' . $timestamp;
-                    
+
                     if (!static::withTrashed()->where('code', $fallbackCode)->exists()) {
                         Log::info("Using fallback tour code: {$fallbackCode}");
                         return $fallbackCode;
                     }
-                    
+
                     throw new \Exception("Unable to generate unique tour code after {$maxRetries} attempts");
                 }
-                
+
                 // Wait a random amount of time before retrying (to avoid synchronized retries)
                 usleep(rand(100000, 500000)); // 100-500ms delay
             }
         }
-        
+
         throw new \Exception("Unable to generate unique tour code after {$maxRetries} attempts");
     }
 
@@ -174,6 +175,11 @@ class Tour extends Model
     public function pricings(): HasMany
     {
         return $this->hasMany(TourPricing::class);
+    }
+
+    public function shares(): HasMany
+    {
+        return $this->hasMany(TourShare::class);
     }
 
     public function testimonials(): HasMany
@@ -222,7 +228,7 @@ class Tour extends Model
                 ->sum('number_of_participants');
 
             $availableSpots = $this->no_of_people - $bookedParticipants;
-            
+
             $availableSlots[] = [
                 'time' => $time,
                 'time_display' => $time === '09:00' ? '9:00 AM' : '5:00 PM',
@@ -310,17 +316,6 @@ class Tour extends Model
     }
 
     /**
-     * Mark the tour as ready to share and generate a share token
-     */
-    public function markAsReadyToShare(): void
-    {
-        $this->share_token = $this->generateShareToken();
-        $this->share_status = 'ready';
-        $this->expires_at = now()->addDays(7); // Expires in 7 days
-        $this->save();
-    }
-
-    /**
      * Mark the tour as shared with a client
      */
     public function markAsShared(): void
@@ -331,29 +326,11 @@ class Tour extends Model
     }
 
     /**
-     * Check if the share link is valid
-     */
-    public function isShareLinkValid(): bool
-    {
-        return $this->share_token && 
-               in_array($this->share_status, ['ready', 'shared']) &&
-               (!$this->expires_at || $this->expires_at->isFuture());
-    }
-
-    /**
-     * Get the share URL for this tour
-     */
-    public function getShareUrlAttribute(): string
-    {
-        return $this->share_token ? route('share.tour', $this->share_token) : '';
-    }
-
-    /**
      * Get the correct admin show route based on tour type
      */
     public function getAdminShowRouteAttribute(): string
     {
-        return $this->tour_type === 'bespoke' 
+        return $this->tour_type === 'bespoke'
             ? route('console.tours.bespoke.show', $this)
             : route('console.tours.standard.show', $this);
     }
