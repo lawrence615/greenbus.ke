@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\Tour\ItineraryController as AdminItineraryControl
 use App\Http\Controllers\Admin\Tour\MultimediaController as AdminMultimediaController;
 use App\Http\Controllers\Admin\Tour\PricingController as AdminPricingController;
 use App\Http\Controllers\Admin\Tour\TrashController as AdminTrashController;
+use App\Http\Controllers\Admin\Tour\ShareController as AdminShareController;
 use App\Http\Controllers\Admin\TestimonialController as AdminTestimonialController;
 use App\Http\Controllers\Admin\FaqController as AdminFaqController;
 use App\Http\Controllers\ShareController;
@@ -37,17 +38,33 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::get('/invite/{token}', [InviteController::class, 'show'])->name('invite.accept');
 Route::post('/invite/{token}', [InviteController::class, 'accept'])->name('invite.accept.store');
 
-// Booking routes
-Route::get('/book/{location:slug}/{tour:slug}', [BookingController::class, 'create'])->name('bookings.create');
-Route::post('/book/{location:slug}/{tour:slug}', [BookingController::class, 'store'])->name('bookings.store');
-Route::post('/share/book', [BookingController::class, 'storeShare'])->name('bookings.store.share');
-Route::get('/booking/{booking}/success', [BookingController::class, 'success'])->name('bookings.success');
-Route::get('/booking/{booking}/cancelled', [BookingController::class, 'cancel'])->name('bookings.cancel');
-Route::get('/booking/{booking}/retry', [BookingController::class, 'retryPayment'])->name('bookings.retry');
+// // Booking routes
+// Route::get('/book/{location:slug}/{tour:slug}', [BookingController::class, 'create'])->name('bookings.create');
+// Route::post('/book/{location:slug}/{tour:slug}', [BookingController::class, 'store'])->name('bookings.store');
+// Route::get('/booking/{booking}/success', [BookingController::class, 'success'])->name('bookings.success');
+// Route::get('/booking/{booking}/cancelled', [BookingController::class, 'cancel'])->name('bookings.cancel');
+// Route::get('/booking/{booking}/retry', [BookingController::class, 'retryPayment'])->name('bookings.retry');
 
-// Share routes (for bespoke tours)
-Route::get('/share/{shareToken}', [ShareController::class, 'showTour'])->name('share.tour');
-Route::get('/share/{shareToken}/book', [ShareController::class, 'bookTour'])->name('share.book');
+// // Share routes (for bespoke tours)
+// Route::post('/share/book', [ShareController::class, 'store'])->name('bookings.store.share');
+// Route::get('/share/{shareToken}', [ShareController::class, 'tour'])->name('share.tour');
+// Route::get('/share/{shareToken}/book', [ShareController::class, 'book'])->name('share.book');
+
+// Booking routes
+Route::prefix('bookings')->name('bookings.')->group(function () {
+    // Share routes (for bespoke tours) - must come first to avoid conflicts
+    Route::prefix('share')->name('share.')->group(function () {
+        Route::get('/{shareToken}', [ShareController::class, 'tour'])->name('tour');
+        Route::post('/book', [ShareController::class, 'store'])->name('store');
+        Route::get('/{shareToken}/book', [ShareController::class, 'book'])->name('book');
+    });
+
+    Route::get('/{booking}/success', [BookingController::class, 'success'])->name('success');
+    Route::get('/{booking}/cancelled', [BookingController::class, 'cancel'])->name('cancel');
+    Route::get('/{booking}/retry', [BookingController::class, 'retryPayment'])->name('retry');
+    Route::get('/{location:slug}/{tour:slug}', [BookingController::class, 'create'])->name('create');
+    Route::post('/{location:slug}/{tour:slug}', [BookingController::class, 'store'])->name('store');
+});
 
 // Public FAQs
 Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
@@ -55,7 +72,7 @@ Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
 // Redirect old dashboard route
 Route::middleware('auth')->get('/dashboard', function () {
     $hasRole = auth()->user()->hasRole(['admin', 'manager']);
-    
+
     if ($hasRole) {
         return redirect()->route('console.dashboard');
     }
@@ -82,51 +99,58 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
     Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/{payment}', [AdminPaymentController::class, 'show'])->name('payments.show');
 
-    // Main tour routes
-    Route::get('/tours', [AdminMainController::class, 'index'])->name('tours.index');
-    Route::delete('/tours/{tour:slug}', [AdminMainController::class, 'destroy'])->name('tours.destroy');
-    Route::patch('/tours/{tour:slug}/toggle-status', [AdminMainController::class, 'toggleStatus'])->name('tours.toggle-status');
+    // Tours
+    Route::prefix('tours')->name('tours.')->group(function () {
+        // Main routes
+        Route::get('/', [AdminMainController::class, 'index'])->name('index');
+        Route::delete('/{tour:slug}', [AdminMainController::class, 'destroy'])->name('destroy');
+        Route::patch('/{tour:slug}/toggle-status', [AdminMainController::class, 'toggleStatus'])->name('toggle-status');
 
-    // Standard tour routes
-    Route::get('/tours/standard/create', [AdminStandardController::class, 'create'])->name('tours.standard.create');
-    Route::post('/tours/standard/store', [AdminStandardController::class, 'store'])->name('tours.standard.store');
-    Route::get('/tours/standard/{tour:slug}', [AdminStandardController::class, 'show'])->name('tours.standard.show');
-    Route::get('/tours/standard/{tour:slug}/edit', [AdminStandardController::class, 'edit'])->name('tours.standard.edit');
-    Route::put('/tours/standard/{tour:slug}', [AdminStandardController::class, 'update'])->name('tours.standard.update');
+        // Standard routes
+        Route::get('/standard/create', [AdminStandardController::class, 'create'])->name('standard.create');
+        Route::post('/standard/store', [AdminStandardController::class, 'store'])->name('standard.store');
+        Route::get('/standard/{tour:slug}', [AdminStandardController::class, 'show'])->name('standard.show');
+        Route::get('/standard/{tour:slug}/edit', [AdminStandardController::class, 'edit'])->name('standard.edit');
+        Route::put('/standard/{tour:slug}', [AdminStandardController::class, 'update'])->name('standard.update');
 
-    // Bespoke tour routes
-    Route::get('/tours/bespoke/create', [AdminBespokeController::class, 'create'])->name('tours.bespoke.create');
-    Route::post('/tours/bespoke/store', [AdminBespokeController::class, 'store'])->name('tours.bespoke.store');
-    Route::get('/tours/bespoke/{tour:slug}', [AdminBespokeController::class, 'show'])->name('tours.bespoke.show');
-    Route::get('/tours/bespoke/{tour:slug}/edit', [AdminBespokeController::class, 'edit'])->name('tours.bespoke.edit');
-    Route::put('/tours/bespoke/{tour:slug}', [AdminBespokeController::class, 'update'])->name('tours.bespoke.update');
-    Route::post('/tours/bespoke/{tour}/share', [AdminBespokeController::class, 'generateShareLink'])->name('tours.bespoke.share');
+        // Bespoke routes
+        Route::prefix('bespoke')->name('bespoke.')->group(function () {
+            Route::get('/create', [AdminBespokeController::class, 'create'])->name('create');
+            Route::post('/store', [AdminBespokeController::class, 'store'])->name('store');
+            Route::get('/{tour:slug}', [AdminBespokeController::class, 'show'])->name('show');
+            Route::get('/{tour:slug}/edit', [AdminBespokeController::class, 'edit'])->name('edit');
+            Route::put('/{tour:slug}', [AdminBespokeController::class, 'update'])->name('update');
 
-    // Tour itinerary management
-    Route::get('/tours/{tour:slug}/itinerary', [AdminItineraryController::class, 'index'])->name('tours.itinerary.index');
-    Route::get('/tours/{tour:slug}/itinerary/create', [AdminItineraryController::class, 'create'])->name('tours.itinerary.create');
-    Route::post('/tours/{tour:slug}/itinerary', [AdminItineraryController::class, 'store'])->name('tours.itinerary.store');
-    Route::get('/tours/{tour:slug}/itinerary/{itineraryItem}/edit', [AdminItineraryController::class, 'edit'])->name('tours.itinerary.edit');
-    Route::put('/tours/{tour:slug}/itinerary/{itineraryItem}', [AdminItineraryController::class, 'update'])->name('tours.itinerary.update');
-    Route::delete('/tours/{tour:slug}/itinerary/{itineraryItem}', [AdminItineraryController::class, 'destroy'])->name('tours.itinerary.destroy');
-    Route::post('/tours/{tour:slug}/itinerary/reorder', [AdminItineraryController::class, 'reorder'])->name('tours.itinerary.reorder');
+            // Share
+            Route::post('/{tour}/share', [AdminShareController::class, 'generateShareLink'])->name('share');
+        });
 
-    // Tour multimedia management
-    Route::get('/tours/{tour:slug}/multimedia', [AdminMultimediaController::class, 'index'])->name('tours.multimedia.index');
-    Route::post('/tours/{tour:slug}/multimedia/upload', [AdminMultimediaController::class, 'upload'])->name('tours.multimedia.upload');
-    Route::put('/tours/{tour:slug}/multimedia', [AdminMultimediaController::class, 'update'])->name('tours.multimedia.update');
-    Route::delete('/tours/{tour:slug}/multimedia', [AdminMultimediaController::class, 'destroy'])->name('tours.multimedia.destroy');
-    Route::post('/tours/{tour:slug}/multimedia/set-cover', [AdminMultimediaController::class, 'setCover'])->name('tours.multimedia.set-cover');
+        // Itinerary
+        Route::get('/{tour:slug}/itinerary', [AdminItineraryController::class, 'index'])->name('itinerary.index');
+        Route::get('/{tour:slug}/itinerary/create', [AdminItineraryController::class, 'create'])->name('itinerary.create');
+        Route::post('/{tour:slug}/itinerary', [AdminItineraryController::class, 'store'])->name('itinerary.store');
+        Route::get('/{tour:slug}/itinerary/{itineraryItem}/edit', [AdminItineraryController::class, 'edit'])->name('itinerary.edit');
+        Route::put('/{tour:slug}/itinerary/{itineraryItem}', [AdminItineraryController::class, 'update'])->name('itinerary.update');
+        Route::delete('/{tour:slug}/itinerary/{itineraryItem}', [AdminItineraryController::class, 'destroy'])->name('itinerary.destroy');
+        Route::post('/{tour:slug}/itinerary/reorder', [AdminItineraryController::class, 'reorder'])->name('itinerary.reorder');
 
-    // Tour pricing management
-    Route::get('/tours/{tour:slug}/pricing/create', [AdminPricingController::class, 'create'])->name('tours.pricing.create');
-    Route::post('/tours/{tour:slug}/pricing/store', [AdminPricingController::class, 'store'])->name('tours.pricing.store');
-    Route::delete('/tours/{tour:slug}/pricing/{tourPricing}', [AdminPricingController::class, 'destroy'])->name('tours.pricing.destroy');
+        // Multimedia
+        Route::get('/{tour:slug}/multimedia', [AdminMultimediaController::class, 'index'])->name('multimedia.index');
+        Route::post('/{tour:slug}/multimedia/upload', [AdminMultimediaController::class, 'upload'])->name('multimedia.upload');
+        Route::put('/{tour:slug}/multimedia', [AdminMultimediaController::class, 'update'])->name('multimedia.update');
+        Route::delete('/{tour:slug}/multimedia', [AdminMultimediaController::class, 'destroy'])->name('multimedia.destroy');
+        Route::post('/{tour:slug}/multimedia/set-cover', [AdminMultimediaController::class, 'setCover'])->name('multimedia.set-cover');
 
-    // Tour trash management
-    Route::get('/tours/trash', [AdminTrashController::class, 'index'])->name('tours.trash.index');
-    Route::post('/tours/trash/{tour}/restore', [AdminTrashController::class, 'restore'])->name('tours.trash.restore');
-    Route::delete('/tours/trash/{tour}', [AdminTrashController::class, 'destroy'])->name('tours.trash.destroy');
+        // Pricing
+        Route::get('/{tour:slug}/pricing/create', [AdminPricingController::class, 'create'])->name('pricing.create');
+        Route::post('/{tour:slug}/pricing/store', [AdminPricingController::class, 'store'])->name('pricing.store');
+        Route::delete('/{tour:slug}/pricing/{tourPricing}', [AdminPricingController::class, 'destroy'])->name('pricing.destroy');
+
+        // Trash
+        Route::get('/trash', [AdminTrashController::class, 'index'])->name('trash.index');
+        Route::post('/trash/{tour}/restore', [AdminTrashController::class, 'restore'])->name('trash.restore');
+        Route::delete('/trash/{tour}', [AdminTrashController::class, 'destroy'])->name('trash.destroy');
+    });
 
     // Testimonials management
     Route::get('/testimonials', [AdminTestimonialController::class, 'index'])->name('testimonials.index');
