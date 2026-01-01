@@ -43,6 +43,7 @@ class Tour extends Model
         'cut_off_time',
         'is_daily',
         'is_featured',
+        'is_the_bus_tour',
         'base_price_adult',
         'base_price_youth',
         'base_price_child',
@@ -60,6 +61,7 @@ class Tour extends Model
         'expires_at' => 'datetime',
         'is_daily' => 'boolean',
         'is_featured' => 'boolean',
+        'is_the_bus_tour' => 'boolean',
     ];
 
     protected static function booted(): void
