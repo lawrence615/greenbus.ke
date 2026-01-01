@@ -319,14 +319,18 @@ function formatDurationByCategory($tour) {
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @forelse($tours as $tour)
-                    <tr class="hover:bg-emerald-50/50 transition-colors duration-150 group">
+                    <tr class="hover:bg-emerald-50/50 transition-colors duration-150 group {{ $tour->is_the_bus_tour ? 'bg-gradient-to-r from-amber-50/80 to-orange-50/80 border-l-4 border-amber-400' : '' }}">
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
                                 @php
                                 $cover = $tour->images->firstWhere('is_cover', true) ?? $tour->images->first();
                                 @endphp
                                 <div class="shrink-0 hidden sm:block">
-                                    @if($cover)
+                                    @if($tour->is_the_bus_tour)
+                                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center ring-2 ring-amber-300 shadow-sm">
+                                        <span class="text-white text-lg">🚌</span>
+                                    </div>
+                                    @elseif($cover)
                                     <img src="{{ $cover->url }}" alt="{{ $tour->title }}" class="w-12 h-12 rounded-lg object-cover shadow-sm ring-1 ring-slate-200">
                                     @else
                                     <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center ring-1 ring-slate-200">
@@ -338,15 +342,22 @@ function formatDurationByCategory($tour) {
                                 </div>
                                 <div class="min-w-0">
                                     <!-- Tour Code Badge -->
-                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium bg-slate-100 text-slate-600 mb-1">
+                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-mono font-medium {{ $tour->is_the_bus_tour ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600' }} mb-1">
                                         {{ $tour->code }}
                                     </span>
                                     <!-- Clickable Tour Title -->
-                                    <a href="{{ ($tour->tour_type ?? 'standard') === 'bespoke' ? route('console.tours.bespoke.show', $tour) : route('console.tours.standard.show', $tour) }}" class="block font-semibold text-slate-900 hover:text-emerald-600 transition-colors truncate max-w-[200px] lg:max-w-[350px]" title="{{ $tour->title }}">
-                                        {{ $tour->title }}
-                                    </a>
+                                    <div class="flex items-center gap-2">
+                                        <a href="{{ ($tour->tour_type ?? 'standard') === 'bespoke' ? route('console.tours.bespoke.show', $tour) : route('console.tours.standard.show', $tour) }}" class="block font-semibold {{ $tour->is_the_bus_tour ? 'text-amber-900 hover:text-amber-700' : 'text-slate-900 hover:text-emerald-600' }} transition-colors truncate max-w-[200px] lg:max-w-[350px]" title="{{ $tour->title }}">
+                                            {{ $tour->title }}
+                                        </a>
+                                        @if($tour->is_the_bus_tour)
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-800 text-xs font-medium rounded-full border border-amber-200">
+                                            🚌 The Bus Tour
+                                        </span>
+                                        @endif
+                                    </div>
                                     <!-- Mobile: Show location & price inline -->
-                                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-500">
+                                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs {{ $tour->is_the_bus_tour ? 'text-amber-700' : 'text-slate-500' }}">
                                         <span class="flex items-center gap-1">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -359,8 +370,12 @@ function formatDurationByCategory($tour) {
                                             </svg>
                                             {{ $tour->location->name ?? 'N/A' }}
                                         </span>
-                                        <span class="xl:hidden font-medium text-emerald-600">
-                                            USD {{ number_format($tour->base_price_adult) }}
+                                        <span class="xl:hidden font-medium {{ $tour->is_the_bus_tour ? 'text-amber-700' : 'text-emerald-600' }}">
+                                            @php
+                                            $adultPricing = $tour->pricings->where('person_type', 'adult')->first();
+                                            $price = $adultPricing ? $adultPricing->price : ($tour->base_price_adult ?? 0);
+                                            @endphp
+                                            USD {{ number_format($price) }}
                                         </span>
                                     </div>
                                 </div>
@@ -368,32 +383,86 @@ function formatDurationByCategory($tour) {
                         </td>
                         <td class="px-4 py-3 hidden lg:table-cell">
                             <div class="flex flex-col gap-1">
-                                <span class="font-medium text-slate-700">{{ $tour->location->name ?? 'N/A' }}</span>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 text-slate-600 w-fit">
+                                <span class="font-medium {{ $tour->is_the_bus_tour ? 'text-amber-900' : 'text-slate-700' }}">{{ $tour->location->name ?? 'N/A' }}</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium {{ $tour->is_the_bus_tour ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600' }} w-fit">
                                     {{ $tour->category->name ?? 'Uncategorized' }}
                                 </span>
                             </div>
                         </td>
                         <td class="px-4 py-3 hidden lg:table-cell">
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ring-1 ring-inset
-                                {{ ($tour->tour_type ?? 'standard') === 'standard' ? 'bg-blue-50 text-blue-700 ring-blue-600/20' : '' }}
-                                {{ ($tour->tour_type ?? 'standard') === 'bespoke' ? 'bg-purple-50 text-purple-700 ring-purple-600/20' : '' }}
-                                {{ ($tour->tour_type ?? 'standard') === 'other' ? 'bg-slate-100 text-slate-700 ring-slate-600/20' : '' }}">
+                                {{ $tour->is_the_bus_tour 
+                                    ? 'bg-amber-100 text-amber-800 ring-amber-200' 
+                                    : ($tour->status === 'published' 
+                                        ? 'bg-emerald-100 text-emerald-800 ring-emerald-200' 
+                                        : 'bg-slate-100 text-slate-800 ring-slate-200') }}">
+                                @if($tour->is_the_bus_tour)
+                                🚌 Bus Tour
+                                @else
+                                {{ $tour->status === 'published' ? 'Published' : 'Draft' }}
+                                @endif
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 hidden lg:table-cell">
+                            <div class="flex items-center gap-2">
+                                <span class="font-semibold {{ $tour->is_the_bus_tour ? 'text-amber-900' : 'text-emerald-600' }}">
+                                    @php
+                                    $adultPricing = $tour->pricings->where('person_type', 'adult')->first();
+                                    $price = $adultPricing ? $adultPricing->price : ($tour->base_price_adult ?? 0);
+                                    @endphp
+                                    USD {{ number_format($price) }}
+                                </span>
+                                @if($tour->is_the_bus_tour)
+                                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-medium rounded border border-amber-200">
+                                    Special
+                                </span>
+                                @endif
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 hidden lg:table-cell">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold ring-1 ring-inset
+                                {{ $tour->is_the_bus_tour 
+                                    ? 'bg-amber-100 text-amber-800 ring-amber-200' 
+                                    : (($tour->tour_type ?? 'standard') === 'standard' 
+                                        ? 'bg-blue-50 text-blue-700 ring-blue-600/20' 
+                                        : (($tour->tour_type ?? 'standard') === 'bespoke' 
+                                            ? 'bg-purple-50 text-purple-700 ring-purple-600/20' 
+                                            : 'bg-slate-100 text-slate-700 ring-slate-600/20')) }}">
+                                @if($tour->is_the_bus_tour)
+                                🚌 Bus Tour
+                                @else
                                 {{ ucfirst($tour->tour_type ?? 'standard') }}
+                                @endif
                             </span>
                         </td>
                         <td class="px-4 py-3 hidden xl:table-cell">
                             <div class="flex flex-col">
-                                <span class="font-semibold text-slate-900">USD {{ number_format($tour->base_price_adult) }}</span>
-                                <span class="text-[10px] text-slate-500">per adult</span>
+                                <span class="font-semibold {{ $tour->is_the_bus_tour ? 'text-amber-900' : 'text-slate-900' }}">
+                                    @php
+                                    $adultPricing = $tour->pricings->where('person_type', 'adult')->first();
+                                    $price = $adultPricing ? $adultPricing->price : ($tour->base_price_adult ?? 0);
+                                    @endphp
+                                    USD {{ number_format($price) }}
+                                </span>
+                                <span class="text-[10px] {{ $tour->is_the_bus_tour ? 'text-amber-600' : 'text-slate-500' }}">per adult</span>
                             </div>
                         </td>
                         <td class="px-4 py-3">
-                            <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-semibold
-                                {{ $tour->status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-600' }}">
-                                <span class="w-1.5 h-1.5 rounded-full {{ $tour->status === 'published' ? 'bg-emerald-500' : 'bg-slate-400' }}"></span>
-                                {{ ucfirst($tour->status) }}
-                            </span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-semibold
+                                    {{ $tour->is_the_bus_tour 
+                                        ? 'bg-amber-100 text-amber-700' 
+                                        : ($tour->status === 'published' 
+                                            ? 'bg-emerald-100 text-emerald-700' 
+                                            : 'bg-slate-100 text-slate-600') }}">
+                                    <span class="w-1.5 h-1.5 rounded-full {{ $tour->is_the_bus_tour ? 'bg-amber-500' : ($tour->status === 'published' ? 'bg-emerald-500' : 'bg-slate-400') }}"></span>
+                                    @if($tour->is_the_bus_tour)
+                                    Special
+                                    @else
+                                    {{ ucfirst($tour->status) }}
+                                    @endif
+                                </span>
+                            </div>
                         </td>
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-0.5">
