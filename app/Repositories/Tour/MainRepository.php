@@ -56,6 +56,10 @@ class MainRepository implements MainRepositoryInterface
             $query->where('tour_category_id', $filters['category_id']);
         }
 
+        if (!empty($filters['is_the_bus_tour'])) {
+            $query->where('is_the_bus_tour', true);
+        }
+
         return $query->paginate($perPage)->withQueryString();
     }
 
