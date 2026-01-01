@@ -52,22 +52,15 @@ class StandardController extends Controller
             $validated = $request->validated();
 
             // Extract pricing data from validated data
-            $pricingData = [
-                'adult' => $validated['base_price_adult'] ?? null,
-                'senior' => $validated['base_price_senior'] ?? null,
-                'youth' => $validated['base_price_youth'] ?? null,
-                'child' => $validated['base_price_child'] ?? null,
-                'infant' => $validated['base_price_infant'] ?? null,
-            ];
+            $pricingData = [];
+            if (isset($validated['pricing']) && is_array($validated['pricing'])) {
+                foreach ($validated['pricing'] as $personType => $pricing) {
+                    $pricingData[$personType] = $pricing['price'] ?? null;
+                }
+            }
 
             // Remove pricing fields from tour data
-            $tourData = collect($validated)->except([
-                'base_price_adult',
-                'base_price_senior', 
-                'base_price_youth',
-                'base_price_child',
-                'base_price_infant'
-            ])->toArray();
+            $tourData = collect($validated)->except(['pricing'])->toArray();
 
             $tour = null;
             DB::transaction(function () use ($tourData, $pricingData, &$tour) {
@@ -78,9 +71,9 @@ class StandardController extends Controller
                     if ($price !== null && $price > 0) {
                         $tour->pricings()->create([
                             'person_type' => $personType,
-                            'price' => (int) $price,
+                            'price' => $price,
                             'discount' => 0,
-                            'discounted_price' => (int) $price,
+                            'discounted_price' => $price,
                         ]);
                     }
                 }
@@ -128,22 +121,15 @@ class StandardController extends Controller
             $validated = $request->validated();
 
             // Extract pricing data from validated data
-            $pricingData = [
-                'adult' => $validated['base_price_adult'] ?? null,
-                'senior' => $validated['base_price_senior'] ?? null,
-                'youth' => $validated['base_price_youth'] ?? null,
-                'child' => $validated['base_price_child'] ?? null,
-                'infant' => $validated['base_price_infant'] ?? null,
-            ];
+            $pricingData = [];
+            if (isset($validated['pricing']) && is_array($validated['pricing'])) {
+                foreach ($validated['pricing'] as $personType => $pricing) {
+                    $pricingData[$personType] = $pricing['price'] ?? null;
+                }
+            }
 
             // Remove pricing fields from tour data
-            $tourData = collect($validated)->except([
-                'base_price_adult',
-                'base_price_senior', 
-                'base_price_youth',
-                'base_price_child',
-                'base_price_infant'
-            ])->toArray();
+            $tourData = collect($validated)->except(['pricing'])->toArray();
 
             DB::transaction(function () use ($tourData, $pricingData, $tour) {
                 $this->standardRepository->update($tour, $tourData);
@@ -156,9 +142,9 @@ class StandardController extends Controller
                     if ($price !== null && $price > 0) {
                         $tour->pricings()->create([
                             'person_type' => $personType,
-                            'price' => (int) $price,
+                            'price' => $price,
                             'discount' => 0,
-                            'discounted_price' => (int) $price,
+                            'discounted_price' => $price,
                         ]);
                     }
                 }
