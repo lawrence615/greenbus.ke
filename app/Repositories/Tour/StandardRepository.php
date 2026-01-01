@@ -41,7 +41,7 @@ class StandardRepository implements StandardRepositoryInterface
 
     public function find(int $id): ?Tour
     {
-        return Tour::with(['location', 'category', 'images', 'itineraryItems'])
+        return Tour::with(['location', 'category', 'images', 'itineraryItems', 'pricings'])
             ->where('tour_type', 'standard')
             ->find($id);
     }
