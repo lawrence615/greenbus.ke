@@ -51,6 +51,17 @@ function formatDurationByCategory($tour) {
     selectedTour: null,
     selectedAction: '',
     showTourDropdown: false,
+    isBusTourFilterActive: {{ request('is_the_bus_tour') ? 'true' : 'false' }},
+    toggleBusTourFilter: function() {
+        this.isBusTourFilterActive = !this.isBusTourFilterActive;
+        const url = new URL(window.location);
+        if (this.isBusTourFilterActive) {
+            url.searchParams.set('is_the_bus_tour', '1');
+        } else {
+            url.searchParams.delete('is_the_bus_tour');
+        }
+        window.location.href = url.toString();
+    },
     openModal: function(tour, action) {
         this.selectedTour = tour;
         this.selectedAction = action;
@@ -114,6 +125,31 @@ function formatDurationByCategory($tour) {
                     </a>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Quick Filters -->
+    <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4 mb-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="flex items-center justify-center w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full shadow-sm">
+                    🚌
+                </div>
+                <div>
+                    <h2 class="text-lg font-semibold text-slate-900">Quick Filters</h2>
+                    <p class="text-sm text-slate-600">Instant access to special tours</p>
+                </div>
+            </div>
+            <button 
+                type="button"
+                @click="toggleBusTourFilter"
+                :class="isBusTourFilterActive ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white border-amber-500 shadow-md' : 'bg-white text-amber-700 border-amber-200 hover:bg-amber-50'"
+                class="inline-flex items-center gap-2 px-4 py-2.5 border rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                </svg>
+                <span x-text="isBusTourFilterActive ? 'Showing Bus Tour Only' : '🚌 The Bus Tour'" class="font-medium"></span>
+            </button>
         </div>
     </div>
 
@@ -192,13 +228,14 @@ function formatDurationByCategory($tour) {
 
             <!-- Action Buttons -->
             <div class="flex items-center gap-2 shrink-0">
-                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 shadow-sm cursor-pointer">
+                <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                     Filter
                 </button>
-                @if(request()->hasAny(['search', 'location_id', 'category_id', 'status']))
+                
+                @if(request()->hasAny(['search', 'location_id', 'category_id', 'status', 'is_the_bus_tour']))
                 <a href="{{ route('console.tours.index') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 border border-slate-300 cursor-pointer">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -209,6 +246,24 @@ function formatDurationByCategory($tour) {
             </div>
         </form>
     </div>
+
+    <!-- Bus Tour Filter Indicator -->
+    @if(request('is_the_bus_tour'))
+    <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
+        <div class="flex items-center gap-3">
+            <div class="flex items-center justify-center w-8 h-8 bg-amber-100 rounded-full">
+                🚌
+            </div>
+            <div>
+                <h3 class="font-medium text-amber-900">Showing "The Bus Tour" Only</h3>
+                <p class="text-sm text-amber-700">Displaying the tour marked as the official bus tour experience</p>
+            </div>
+            <a href="{{ route('console.tours.index') }}" class="ml-auto text-sm text-amber-600 hover:text-amber-800 font-medium">
+                Clear Filter →
+            </a>
+        </div>
+    </div>
+    @endif
 
     <!-- Tours Table -->
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
