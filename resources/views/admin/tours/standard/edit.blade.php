@@ -148,7 +148,7 @@
         </div>
     </div>
 
-    <form method="POST" action="{{ route('console.tours.update', $tour) }}" @submit="console.log('🔥 Form submit detected!'); handleFormSubmit($event)" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('console.tours.standard.update', $tour) }}" @submit="console.log('🔥 Form submit detected!'); handleFormSubmit($event)" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         
@@ -517,9 +517,19 @@
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @php
+                            // Get existing pricing data
+                            $pricings = $tour->pricings->keyBy('person_type');
+                            $adultPricing = $pricings->get('adult');
+                            $childPricing = $pricings->get('child');
+                            $seniorPricing = $pricings->get('senior');
+                            $youthPricing = $pricings->get('youth');
+                            $infantPricing = $pricings->get('infant');
+                        @endphp
+
                         <!-- Adult Price -->
                         <div class="space-y-2">
-                            <label for="base_price_adult" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <label for="pricing_adult" class="flex items-center gap-2 text-sm font-medium text-slate-700">
                                 <span class="flex items-center justify-center w-6 h-6 rounded-md bg-emerald-50 text-emerald-600">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -529,9 +539,10 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
-                                <input type="number" name="base_price_adult" id="base_price_adult" value="{{ old('base_price_adult', $tour->base_price_adult) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" required>
+                                <input type="number" name="pricing[adult][price]" id="pricing_adult" value="{{ old('pricing.adult.price', $adultPricing?->price ?? '') }}" min="0" step="0.01" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" required>
+                                <input type="hidden" name="pricing[adult][person_type]" value="adult">
                             </div>
-                            @error('base_price_adult')
+                            @error('pricing.adult.price')
                             <p class="text-sm text-red-600 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                 {{ $message }}
@@ -541,7 +552,7 @@
 
                         <!-- Child Price -->
                         <div class="space-y-2">
-                            <label for="base_price_child" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <label for="pricing_child" class="flex items-center gap-2 text-sm font-medium text-slate-700">
                                 <span class="flex items-center justify-center w-6 h-6 rounded-md bg-blue-50 text-blue-600">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m9 5.197v1"/>
@@ -551,9 +562,10 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
-                                <input type="number" name="base_price_child" id="base_price_child" value="{{ old('base_price_child', $tour->base_price_child ?? 0) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                <input type="number" name="pricing[child][price]" id="pricing_child" value="{{ old('pricing.child.price', $childPricing?->price ?? '0') }}" min="0" step="0.01" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                <input type="hidden" name="pricing[child][person_type]" value="child">
                             </div>
-                            @error('base_price_child')
+                            @error('pricing.child.price')
                             <p class="text-sm text-red-600 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                 {{ $message }}
@@ -563,7 +575,7 @@
 
                         <!-- Senior Price -->
                         <div class="space-y-2">
-                            <label for="base_price_senior" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <label for="pricing_senior" class="flex items-center gap-2 text-sm font-medium text-slate-700">
                                 <span class="flex items-center justify-center w-6 h-6 rounded-md bg-purple-50 text-purple-600">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -573,9 +585,10 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
-                                <input type="number" name="base_price_senior" id="base_price_senior" value="{{ old('base_price_senior', $tour->base_price_senior ?? 0) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                <input type="number" name="pricing[senior][price]" id="pricing_senior" value="{{ old('pricing.senior.price', $seniorPricing?->price ?? '0') }}" min="0" step="0.01" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                <input type="hidden" name="pricing[senior][person_type]" value="senior">
                             </div>
-                            @error('base_price_senior')
+                            @error('pricing.senior.price')
                             <p class="text-sm text-red-600 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                 {{ $message }}
@@ -585,7 +598,7 @@
 
                         <!-- Youth Price -->
                         <div class="space-y-2">
-                            <label for="base_price_youth" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <label for="pricing_youth" class="flex items-center gap-2 text-sm font-medium text-slate-700">
                                 <span class="flex items-center justify-center w-6 h-6 rounded-md bg-cyan-50 text-cyan-600">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -595,9 +608,10 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
-                                <input type="number" name="base_price_youth" id="base_price_youth" value="{{ old('base_price_youth', $tour->base_price_youth ?? 0) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                <input type="number" name="pricing[youth][price]" id="pricing_youth" value="{{ old('pricing.youth.price', $youthPricing?->price ?? '0') }}" min="0" step="0.01" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                <input type="hidden" name="pricing[youth][person_type]" value="youth">
                             </div>
-                            @error('base_price_youth')
+                            @error('pricing.youth.price')
                             <p class="text-sm text-red-600 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                 {{ $message }}
@@ -607,7 +621,7 @@
 
                         <!-- Infant Price -->
                         <div class="space-y-2">
-                            <label for="base_price_infant" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <label for="pricing_infant" class="flex items-center gap-2 text-sm font-medium text-slate-700">
                                 <span class="flex items-center justify-center w-6 h-6 rounded-md bg-pink-50 text-pink-600">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -617,10 +631,11 @@
                             </label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 text-sm font-medium">USD</span>
-                                <input type="number" name="base_price_infant" id="base_price_infant" value="{{ old('base_price_infant', $tour->base_price_infant ?? 0) }}" min="0" step="1" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                <input type="number" name="pricing[infant][price]" id="pricing_infant" value="{{ old('pricing.infant.price', $infantPricing?->price ?? '0') }}" min="0" step="0.01" class="w-full rounded-lg border border-slate-300 bg-white pl-12 pr-4 py-2.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                <input type="hidden" name="pricing[infant][person_type]" value="infant">
                             </div>
                             <p class="text-xs text-slate-500">Set to 0 for free</p>
-                            @error('base_price_infant')
+                            @error('pricing.infant.price')
                             <p class="text-sm text-red-600 flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
                                 {{ $message }}
@@ -1135,7 +1150,7 @@ function multiStepTourForm() {
                     alert('Please fill in all required fields in Basic Information.');
                 }
             } else if (this.currentStep === 3) {
-                const adultPrice = document.getElementById('base_price_adult').value;
+                const adultPrice = document.getElementById('pricing_adult').value;
                 
                 if (!adultPrice || adultPrice <= 0) {
                     isValid = false;
