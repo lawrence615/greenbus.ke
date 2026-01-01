@@ -48,4 +48,9 @@ interface MainRepositoryInterface
      * Toggle tour status
      */
     public function toggleStatus(Tour $tour): Tour;
+
+    /**
+     * Get the bus tour (tour marked as is_the_bus_tour)
+     */
+    public function getBusTour(): ?Tour;
 }

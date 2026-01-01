@@ -129,4 +129,15 @@ class MainRepository implements MainRepositoryInterface
         $tour->save();
         return $tour;
     }
+
+    /**
+     * Get the bus tour (tour marked as is_the_bus_tour)
+     */
+    public function getBusTour(): ?Tour
+    {
+        return Tour::where('is_the_bus_tour', true)
+            ->where('status', 'published')
+            // ->with(['images', 'category'])
+            ->first();
+    }
 }
