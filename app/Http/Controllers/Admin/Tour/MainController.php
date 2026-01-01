@@ -20,7 +20,7 @@ class MainController extends Controller
 
     public function index(Request $request)
     {
-        $filters = $request->only(['search', 'location_id', 'category_id', 'status']);
+        $filters = $request->only(['search', 'location_id', 'category_id', 'status', 'is_the_bus_tour']);
 
         $locations = $this->locationRepository->getAll();
         $categories = $this->categoryRepository->getAll();
