@@ -29,6 +29,7 @@ return new class extends Migration
             $table->unsignedInteger('cut_off_time')->default(15);
             $table->boolean('is_daily')->default(true);
             $table->boolean('is_featured')->default(false);
+            $table->boolean('is_the_bus_tour')->default(false);
             $table->decimal('base_price_adult', 10, 2)->default(0);
             $table->decimal('base_price_senior', 10, 2)->default(0);
             $table->decimal('base_price_youth', 10, 2)->nullable();
