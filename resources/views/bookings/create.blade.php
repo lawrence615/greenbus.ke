@@ -471,31 +471,13 @@
 <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@25.13.2/build/js/intlTelInput.min.js"></script>
 <script>
     // Pricing constants - eslint-disable no-undef
-    const PRICE_ADULT = {
-        {
-            $tour->base_price_adult ?? 0
-        }
-    };
-    const PRICE_CHILD = {
-        {
-            $tour->base_price_child ?? 0
-        }
-    };
-    const PRICE_INFANT = {
-        {
-            $tour->base_price_infant ?? 0
-        }
-    };
-    const PRICE_SENIOR = {
-        {
-            $tour->base_price_senior ?? $tour->base_price_adult ?? 0
-        }
-    };
-    const PRICE_YOUTH = {
-        {
-            $tour->base_price_youth ?? $tour->base_price_child ?? 0
-        }
-    };
+    /* eslint-disable */
+    const PRICE_ADULT = {{ $tour->base_price_adult ?? 0 }};
+    const PRICE_CHILD = {{ $tour->base_price_child ?? 0 }};
+    const PRICE_INFANT = {{ $tour->base_price_infant ?? 0 }};
+    const PRICE_SENIOR = {{ $tour->base_price_senior ?? $tour->base_price_adult ?? 0 }};
+    const PRICE_YOUTH = {{ $tour->base_price_youth ?? $tour->base_price_child ?? 0 }};
+    /* eslint-enable */
 
     function formatNumber(num) {
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -573,7 +555,7 @@
         updatePriceSummary();
 
         // Listen for manual input changes
-        ['adults', 'children', 'infants', 'seniors'].forEach(function(field) {
+        ['adults', 'children', 'infants', 'seniors', 'youth'].forEach(function(field) {
             const input = document.getElementById(field);
             if (input) {
                 input.addEventListener('change', updatePriceSummary);
@@ -630,18 +612,6 @@
                 });
             }
         }
-
-        // Initialize price summary
-        updatePriceSummary();
-
-        // Listen for manual input changes
-        ['adults', 'children', 'infants', 'seniors', 'youth'].forEach(function(field) {
-            const input = document.getElementById(field);
-            if (input) {
-                input.addEventListener('change', updatePriceSummary);
-                input.addEventListener('input', updatePriceSummary);
-            }
-        });
 
         // Form submit loading state
         const form = document.getElementById('booking-form');
