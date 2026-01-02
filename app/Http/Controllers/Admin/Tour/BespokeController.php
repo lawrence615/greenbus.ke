@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Interfaces\LocationRepositoryInterface;
 use App\Interfaces\Tour\BespokeRepositoryInterface;
+use App\Interfaces\Tour\ShareRepositoryInterface;
 use App\Http\Requests\Tour\Bespoke\StoreRequest;
 use App\Models\Tour;
 use App\Http\Requests\Tour\Bespoke\UpdateRequest;
@@ -18,6 +19,7 @@ class BespokeController extends Controller
     public function __construct(
         private readonly BespokeRepositoryInterface $bespokeRepository,
         private readonly LocationRepositoryInterface $locationRepository,
+        private readonly ShareRepositoryInterface $shareRepository,
     ) {}
 
     public function index(Request $request)
