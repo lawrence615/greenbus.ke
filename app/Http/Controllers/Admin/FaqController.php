@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\FaqRepositoryInterface;
-use App\Interfaces\Tour\CategoryRepositoryInterface as TourCategoryRepositoryInterface;
+use App\Interfaces\Tour\CategoryRepositoryInterface;
 use App\Http\Requests\Faq\StoreRequest;
 use App\Models\Faq;
 use App\Http\Requests\Faq\UpdateRequest;
@@ -15,7 +15,7 @@ class FaqController extends Controller
 {
     public function __construct(
         protected FaqRepositoryInterface $faqRepositoryInterface,
-        protected TourCategoryRepositoryInterface $tourCategoryRepository
+        protected CategoryRepositoryInterface $categoryRepositoryInterface
     ) {}
 
     public function index(Request $request)
@@ -30,7 +30,7 @@ class FaqController extends Controller
     public function create()
     {
         $categories = $this->faqRepositoryInterface->getCategories();
-        $tourCategories = $this->tourCategoryRepository->getAll();
+        $tourCategories = $this->categoryRepositoryInterface->getAll();
         return view('admin.faqs.create', compact('categories', 'tourCategories'));
     }
 
@@ -50,7 +50,7 @@ class FaqController extends Controller
     public function edit(Faq $faq)
     {
         $categories = $this->faqRepositoryInterface->getCategories();
-        $tourCategories = $this->tourCategoryRepository->getAll();
+        $tourCategories = $this->categoryRepositoryInterface->getAll();
         return view('admin.faqs.edit', compact('faq', 'categories', 'tourCategories'));
     }
 
