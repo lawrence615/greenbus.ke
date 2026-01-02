@@ -11,40 +11,6 @@
 </style>
 @endpush
 
-@php
-/**
- * Format duration text based on tour category
- */
-function formatDurationByCategory($tour) {
-    if (!$tour->duration_text) {
-        return 'N/A';
-    }
-    
-    switch($tour->tour_category_id) {
-        case 1: // Hourly Tours
-            // Convert "1" to "1 hour", "2" to "2 hours", etc.
-            $duration = $tour->duration_text;
-            if (is_numeric($duration)) {
-                return $duration == 1 ? '1 hour' : $duration . ' hours';
-            }
-            return $duration;
-            
-        case 2: // Half Day Tours
-            return '6 hours';
-            
-        case 3: // Full Day Tours
-            return 'Full day';
-            
-        case 4: // Multiple Day Tours
-            // Should already be in format "X days"
-            return $tour->duration_text;
-            
-        default:
-            return $tour->duration_text;
-    }
-}
-@endphp
-
 @section('content')
 <div x-data="{ 
     showConfirmModal: false,
@@ -362,7 +328,7 @@ function formatDurationByCategory($tour) {
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
-                                            {{ formatDurationByCategory($tour) }}
+                                            {{ $tour->formatted_duration }}
                                         </span>
                                         <span class="lg:hidden flex items-center gap-1">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
