@@ -30,11 +30,6 @@ return new class extends Migration
             $table->boolean('is_daily')->default(true);
             $table->boolean('is_featured')->default(false);
             $table->boolean('is_the_bus_tour')->default(false);
-            $table->decimal('base_price_adult', 10, 2)->default(0);
-            $table->decimal('base_price_senior', 10, 2)->default(0);
-            $table->decimal('base_price_youth', 10, 2)->nullable();
-            $table->decimal('base_price_child', 10, 2)->nullable();
-            $table->decimal('base_price_infant', 10, 2)->nullable();
             $table->string('status')->default('draft');
             $table->timestamps();
             $table->softDeletes();
