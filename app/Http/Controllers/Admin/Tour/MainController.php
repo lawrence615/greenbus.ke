@@ -53,4 +53,31 @@ class MainController extends Controller
             ->back()
             ->with('success', "Tour has been {$status}.");
     }
+
+    public function toggleBusTour(Request $request, Tour $tour)
+    {
+        $action = $request->input('action');
+        
+        if ($action === 'set_bus_tour') {
+            // Unset all other tours first
+            Tour::where('is_the_bus_tour', true)->update(['is_the_bus_tour' => false]);
+            // Set this tour as the bus tour
+            $tour->update(['is_the_bus_tour' => true]);
+            
+            return redirect()
+                ->back()
+                ->with('success', '🚌 Tour has been set as "The Bus Tour".');
+        } elseif ($action === 'unset_bus_tour') {
+            // Unset this tour as the bus tour
+            $tour->update(['is_the_bus_tour' => false]);
+            
+            return redirect()
+                ->back()
+                ->with('success', 'Tour has been removed from "The Bus Tour".');
+        }
+        
+        return redirect()
+            ->back()
+            ->with('error', 'Invalid action.');
+    }
 }
