@@ -71,13 +71,18 @@ Route::get('/faqs', [FaqController::class, 'index'])->name('faqs.index');
 
 // Redirect old dashboard route
 Route::middleware('auth')->get('/dashboard', function () {
-    $hasRole = auth()->user()->hasRole(['admin', 'manager']);
+    $user = auth()->user();
+    if (!$user) {
+        return redirect()->route('login');
+    }
+    
+    $hasRole = $user->hasRole(['admin', 'manager']);
 
     if ($hasRole) {
         return redirect()->route('console.dashboard');
     }
     return redirect()->route('customer.dashboard');
-})->name('dashboard');
+})->name('dashboard.redirect');
 
 // Customer routes
 Route::middleware(['auth', 'role:customer'])->prefix('account')->name('customer.')->group(function () {
@@ -105,6 +110,7 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
         Route::get('/', [AdminMainController::class, 'index'])->name('index');
         Route::delete('/{tour:slug}', [AdminMainController::class, 'destroy'])->name('destroy');
         Route::patch('/{tour:slug}/toggle-status', [AdminMainController::class, 'toggleStatus'])->name('toggle-status');
+        Route::patch('/{tour:slug}/toggle-bus-tour', [AdminMainController::class, 'toggleBusTour'])->name('toggle-bus-tour');
 
         // Standard routes
         Route::get('/standard/create', [AdminStandardController::class, 'create'])->name('standard.create');
