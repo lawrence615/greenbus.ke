@@ -32,5 +32,5 @@ interface CategoryRepositoryInterface
     /**
      * Get all tour categories without pagination
      */
-    public function getAll(): Collection;
+    public function getAll(string $orderBy = 'name'): Collection;
 }

@@ -53,10 +53,14 @@ class CategoryRepository implements CategoryRepositoryInterface
     }
 
     /**
-     * Get all tour categories without pagination
+     * Get all tour categories ordered by name or without order.
      */
-    public function getAll(): Collection
+    public function getAll(string $orderBy = 'name'): Collection
     {
+        if ($orderBy === 'name') {
+            return TourCategory::orderBy('name')->get();
+        }
+
         return TourCategory::all();
     }
 }
