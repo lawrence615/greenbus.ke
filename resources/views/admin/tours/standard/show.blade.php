@@ -16,6 +16,11 @@
     showConfirmModal: false,
     selectedTour: null,
     selectedAction: '',
+    isBusTour: {{ $tour->is_the_bus_tour ? 'true' : 'false' }},
+    toggleBusTour: function() {
+        const action = this.isBusTour ? 'unset_bus_tour' : 'set_bus_tour';
+        this.openModal({{ $tour->toJson() }}, action);
+    },
     openModal: function(tour, action) {
         this.selectedTour = tour;
         this.selectedAction = action;
@@ -62,6 +67,15 @@
                 </svg>
                 Manage Images
             </a>
+            <button 
+                @click="toggleBusTour"
+                :class="isBusTour ? 'bg-amber-500 text-white hover:bg-amber-600' : 'bg-amber-100 text-amber-700 hover:bg-amber-200'"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                </svg>
+                <span x-text="isBusTour ? '🚌 The Bus Tour' : '🚌 Set as Bus Tour'"></span>
+            </button>
         </div>
     </div>
 
@@ -87,13 +101,22 @@
                 <div class="p-6">
                     <div class="flex items-start justify-between">
                         <div>
-                            <h1 class="text-2xl font-bold text-slate-900">{{ $tour->title }}</h1>
-                            <p class="text-slate-500 mt-1">{{ $tour->location->name ?? 'N/A' }}</p>
+                            <div class="flex items-center gap-3 mb-2">
+                                <h1 class="text-2xl font-bold text-slate-900">{{ $tour->title }}</h1>
+                                @if($tour->is_the_bus_tour)
+                                <span class="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-800 text-sm font-medium rounded-full border border-amber-200">
+                                    🚌 The Bus Tour
+                                </span>
+                                @endif
+                            </div>
+                            <p class="text-slate-500">{{ $tour->location->name ?? 'N/A' }}</p>
                         </div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                            {{ $tour->status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }}">
-                            {{ ucfirst($tour->status) }}
-                        </span>
+                        <div class="flex flex-col gap-2">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                                {{ $tour->status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700' }}">
+                                {{ ucfirst($tour->status) }}
+                            </span>
+                        </div>
                     </div>
                     @if($tour->short_description)
                     <p class="mt-4 text-slate-600">{!! $tour->short_description !!}</p>
@@ -349,11 +372,16 @@
         <div class="fixed inset-0 bg-black/50" @click="closeModal()"></div>
         <div class="relative bg-white rounded-xl shadow-xl p-6 max-w-sm mx-4 z-10">
             <h3 class="text-lg text-center font-semibold text-slate-900 mb-2">
-                <span x-text="selectedAction === 'draft' ? 'Unpublish Tour?' : 'Publish Tour?'"></span>
+                <span x-show="selectedAction === 'draft'">Unpublish Tour?</span>
+                <span x-show="selectedAction === 'publish'">Publish Tour?</span>
+                <span x-show="selectedAction === 'set_bus_tour'">Set as "The Bus Tour"?</span>
+                <span x-show="selectedAction === 'unset_bus_tour'">Remove from "The Bus Tour"?</span>
             </h3>
             <p class="text-sm text-slate-600 mb-4">
                 <span x-show="selectedAction === 'draft'">This tour will no longer be visible to the public.</span>
                 <span x-show="selectedAction === 'publish'">This tour will become visible to the public.</span>
+                <span x-show="selectedAction === 'set_bus_tour'">This tour will be marked as "The Bus Tour" and will appear prominently in filters and listings. Only one tour can be "The Bus Tour" at a time.</span>
+                <span x-show="selectedAction === 'unset_bus_tour'">This tour will no longer be marked as "The Bus Tour" and will appear as a regular tour.</span>
             </p>
             <div class="flex justify-end gap-3">
                 <button
@@ -362,16 +390,20 @@
                     class="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 rounded-lg hover:bg-slate-200 cursor-pointer">
                     Cancel
                 </button>
-                <form method="POST" :action="selectedTour ? `/console/tours/${selectedTour.slug}/toggle-status` : '#'"
-                    @submit="$event.preventDefault(); window.showLoading('Toggling tour status...', 'Updating Tour'); $el.submit();">
+                <form method="POST" :action="selectedAction === 'set_bus_tour' || selectedAction === 'unset_bus_tour' ? (selectedTour ? `/console/tours/${selectedTour.slug}/toggle-bus-tour` : '#') : (selectedTour ? `/console/tours/${selectedTour.slug}/toggle-status` : '#')"
+                    @submit="$event.preventDefault(); window.showLoading('Updating tour...', 'Processing'); $el.submit();">
                     @csrf
                     @method('PATCH')
+                    <input type="hidden" name="action" :value="selectedAction">
                     <button
                         type="submit"
                         :disabled="!selectedTour"
-                        :class="selectedAction === 'draft' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-600 hover:bg-green-700'"
+                        :class="selectedAction === 'draft' ? 'bg-red-500 hover:bg-red-600' : (selectedAction === 'publish' ? 'bg-green-600 hover:bg-green-700' : 'bg-amber-500 hover:bg-amber-600')"
                         class="px-4 py-2 text-sm font-medium text-white rounded-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span x-text="selectedAction === 'draft' ? 'Unpublish' : 'Publish'"></span>
+                        <span x-show="selectedAction === 'draft'">Unpublish</span>
+                        <span x-show="selectedAction === 'publish'">Publish</span>
+                        <span x-show="selectedAction === 'set_bus_tour'">🚌 Set as Bus Tour</span>
+                        <span x-show="selectedAction === 'unset_bus_tour'">🚌 Remove Bus Tour</span>
                     </button>
                 </form>
             </div>
