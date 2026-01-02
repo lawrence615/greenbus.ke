@@ -113,7 +113,8 @@ class Tour extends Model
                     return $newCode;
                 });
             } catch (\Exception $e) {
-                $retryCount++;
+                // Increment retry counter
+                $retryCount = $retryCount + 1;
                 Log::warning("Tour code generation attempt {$retryCount} failed: " . $e->getMessage());
 
                 if ($retryCount >= $maxRetries) {
@@ -324,5 +325,38 @@ class Tour extends Model
         return $this->tour_type === 'bespoke'
             ? route('console.tours.bespoke.show', $this)
             : route('console.tours.standard.show', $this);
+    }
+
+    /**
+     * Format duration text based on tour category
+     */
+    public function getFormattedDurationAttribute(): string
+    {
+        if (!$this->duration_text) {
+            return 'N/A';
+        }
+        
+        switch($this->tour_category_id) {
+            case 1: // Hourly Tours
+                // Convert "1" to "1 hour", "2" to "2 hours", etc.
+                $duration = $this->duration_text;
+                if (is_numeric($duration)) {
+                    return $duration == 1 ? '1 hour' : $duration . ' hours';
+                }
+                return $duration;
+                
+            case 2: // Half Day Tours
+                return '6 hours';
+                
+            case 3: // Full Day Tours
+                return 'Full day';
+                
+            case 4: // Multiple Day Tours
+                // Should already be in format "X days"
+                return $this->duration_text;
+                
+            default:
+                return $this->duration_text;
+        }
     }
 }
