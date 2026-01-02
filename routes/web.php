@@ -131,6 +131,11 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
             Route::post('/{tour}/share', [AdminShareController::class, 'generateShareLink'])->name('share');
         });
 
+        // Trash
+        Route::get('/trash', [AdminTrashController::class, 'index'])->name('trash.index');
+        Route::post('/trash/{tour}/restore', [AdminTrashController::class, 'restore'])->name('trash.restore');
+        Route::delete('/trash/{tour}', [AdminTrashController::class, 'destroy'])->name('trash.destroy');
+
         // Itinerary
         Route::get('/{tour:slug}/itinerary', [AdminItineraryController::class, 'index'])->name('itinerary.index');
         Route::get('/{tour:slug}/itinerary/create', [AdminItineraryController::class, 'create'])->name('itinerary.create');
@@ -151,11 +156,6 @@ Route::middleware(['auth', 'role:admin|manager'])->prefix('console')->name('cons
         Route::get('/{tour:slug}/pricing/create', [AdminPricingController::class, 'create'])->name('pricing.create');
         Route::post('/{tour:slug}/pricing/store', [AdminPricingController::class, 'store'])->name('pricing.store');
         Route::delete('/{tour:slug}/pricing/{tourPricing}', [AdminPricingController::class, 'destroy'])->name('pricing.destroy');
-
-        // Trash
-        Route::get('/trash', [AdminTrashController::class, 'index'])->name('trash.index');
-        Route::post('/trash/{tour}/restore', [AdminTrashController::class, 'restore'])->name('trash.restore');
-        Route::delete('/trash/{tour}', [AdminTrashController::class, 'destroy'])->name('trash.destroy');
     });
 
     // Testimonials management
