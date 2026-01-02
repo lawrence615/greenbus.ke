@@ -48,4 +48,11 @@ class TourShare extends Model
                 ->orWhere('expires_at', '<', now());
         });
     }
+
+    public function isShareLinkValid(): bool
+    {
+        return $this->share_token && 
+               in_array($this->share_status, ['ready', 'shared']) &&
+               (!$this->expires_at || $this->expires_at->isFuture());
+    }
 }
