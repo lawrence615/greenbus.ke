@@ -12,13 +12,15 @@ use App\Repositories\Tour\MainRepository;
 use App\Interfaces\LocationRepositoryInterface;
 use App\Interfaces\Tour\CategoryRepositoryInterface;
 use App\Models\Tour;
+use App\Services\TourImageService;
 
 class TrashController extends Controller
 {
     public function __construct(
         private MainRepository $mainRepository,
         private LocationRepositoryInterface $locationRepository,
-        private CategoryRepositoryInterface $categoryRepository
+        private CategoryRepositoryInterface $categoryRepository,
+        private TourImageService $tourImageService
     ) {}
 
     /**
@@ -56,6 +58,11 @@ class TrashController extends Controller
     {
         $tourModel = Tour::withTrashed()->findOrFail($tour);
         Log::info('Permanently deleting tour: ' . $tourModel->slug);
+        
+        // Delete images from DigitalOcean before permanently deleting the tour
+        $this->tourImageService->deleteTourDirectory($tourModel->code);
+        Log::info('Deleted tour images from DigitalOcean for tour: ' . $tourModel->code);
+        
         $this->mainRepository->forceDelete($tourModel);
 
         return redirect()
