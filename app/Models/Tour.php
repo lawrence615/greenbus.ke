@@ -33,7 +33,7 @@ class Tour extends Model
         'description',
         'included',
         'excluded',
-        'important_information',
+        'additional_information',
         'cancellation_policy',
         'duration_text',
         'no_of_people',

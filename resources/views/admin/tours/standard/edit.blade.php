@@ -718,18 +718,18 @@
 
                     <!-- Important Information -->
                     <div class="space-y-2">
-                        <label for="important_information" class="flex items-center gap-2 text-sm font-medium text-slate-700">
+                        <label for="additional_information" class="flex items-center gap-2 text-sm font-medium text-slate-700">
                             <span class="flex items-center justify-center w-6 h-6 rounded-md bg-amber-50 text-amber-600">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                                 </svg>
                             </span>
-                            Important Information
+                            Additional Information
                         </label>
-                        <div id="important_information_editor" class="bg-white rounded-lg border border-slate-300"></div>
-                        <input type="hidden" name="important_information" id="important_information" value="{{ old('important_information', $tour->important_information) }}">
+                        <div id="additional_information_editor" class="bg-white rounded-lg border border-slate-300"></div>
+                        <input type="hidden" name="additional_information" id="additional_information" value="{{ old('additional_information', $tour->additional_information) }}">
                         <p class="text-xs text-slate-500">Health requirements, physical demands, weather considerations, and other essential details</p>
-                        @error('important_information')
+                        @error('additional_information')
                         <p class="text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -959,7 +959,7 @@ document.addEventListener('DOMContentLoaded', function() {
         placeholder: 'Clearly state what participants should expect to pay for separately...'
     });
 
-    importantInformationEditor = new Quill('#important_information_editor', {
+    importantInformationEditor = new Quill('#additional_information_editor', {
         ...quillConfig,
         placeholder: 'Health requirements, physical demands, weather considerations, and other essential details...'
     });
@@ -990,7 +990,7 @@ document.addEventListener('DOMContentLoaded', function() {
         excludedEditor.root.innerHTML = excludedContent;
     }
 
-    const importantInformationContent = document.getElementById('important_information').value;
+    const importantInformationContent = document.getElementById('additional_information').value;
     if (importantInformationContent) {
         importantInformationEditor.root.innerHTML = importantInformationContent;
     }
@@ -1177,7 +1177,7 @@ function multiStepTourForm() {
             document.getElementById('description').value = descriptionEditor.root.innerHTML;
             document.getElementById('included').value = includedEditor.root.innerHTML;
             document.getElementById('excluded').value = excludedEditor.root.innerHTML;
-            document.getElementById('important_information').value = importantInformationEditor.root.innerHTML;
+            document.getElementById('additional_information').value = importantInformationEditor.root.innerHTML;
             document.getElementById('cancellation_policy').value = cancellationPolicyEditor.root.innerHTML;
             
             // Validate short description length

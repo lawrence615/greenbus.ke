@@ -654,11 +654,11 @@
 
                     <!-- Important Information -->
                     <div class="space-y-2">
-                        <label class="block text-sm font-medium text-slate-700">Important Information</label>
-                        <div id="important_information_editor" class="bg-white rounded-lg border border-slate-300"></div>
-                        <input type="hidden" name="important_information" id="important_information" value="{{ old('important_information') }}">
+                        <label class="block text-sm font-medium text-slate-700">Additional Information</label>
+                        <div id="additional_information_editor" class="bg-white rounded-lg border border-slate-300"></div>
+                        <input type="hidden" name="additional_information" id="additional_information" value="{{ old('additional_information') }}">
                         <p class="text-xs text-slate-500">Special requirements, recommendations, etc.</p>
-                        @error('important_information')
+                        @error('additional_information')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -1373,7 +1373,7 @@ function multiStepTourForm() {
                 { id: 'description_editor', input: 'description' },
                 { id: 'includes_editor', input: 'included' },
                 { id: 'excluded_editor', input: 'excluded' },
-                { id: 'important_information_editor', input: 'important_information' },
+                { id: 'additional_information_editor', input: 'additional_information' },
                 { id: 'cancellation_policy_editor', input: 'cancellation_policy' }
             ];
             

@@ -21,7 +21,7 @@ class UpdateRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'included' => ['nullable', 'string'],
             'excluded' => ['nullable', 'string'],
-            'important_information' => ['nullable', 'string'],
+            'additional_information' => ['nullable', 'string'],
             'cancellation_policy' => ['nullable', 'string'],
             'duration_text' => ['required', 'string', 'max:100'],
             'duration_days' => ['nullable', 'integer', 'min:2', 'max:30'],

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->longText('included')->nullable();
             $table->longText('excluded')->nullable();
-            $table->longText('important_information')->nullable();
+            $table->longText('additional_information')->nullable();
             $table->longText('cancellation_policy')->nullable();
             $table->string('duration_text')->nullable();
             $table->integer('no_of_people')->nullable();

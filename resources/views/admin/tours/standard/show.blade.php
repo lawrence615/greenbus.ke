@@ -155,11 +155,11 @@
             @endif
 
             <!-- Important Information -->
-            @if($tour->important_information)
+            @if($tour->additional_information)
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
                 <h2 class="font-semibold text-slate-900 mb-4">Additional Information</h2>
                 <div class="prose prose-slate max-w-none">
-                    {!! $tour->important_information !!}
+                    {!! $tour->additional_information !!}
                 </div>
             </div>
             @endif

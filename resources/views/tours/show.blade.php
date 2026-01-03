@@ -266,9 +266,9 @@
 
         <section>
             <h2 class="text-base font-semibold mb-2">Important information</h2>
-            @if ($tour->important_information)
+            @if ($tour->additional_information)
             <div class="prose prose-sm max-w-none">
-                {!! $tour->important_information !!}
+                {!! $tour->additional_information !!}
             </div>
             @endif
         </section>
