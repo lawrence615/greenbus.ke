@@ -16,7 +16,6 @@ class TestimonialSeeder extends Seeder
 
         $testimonials = [
             [
-                'tour_id' => 1,
                 'author_name' => 'Татьяна',
                 'author_location' => 'Kenya',
                 'author_date' => '2025-12-03',
@@ -29,7 +28,6 @@ class TestimonialSeeder extends Seeder
                 'sort_order' => 0,
             ],
             [
-                'tour_id' => 1,
                 'author_name' => 'Jimrey',
                 'author_location' => 'Saudi Arabia',
                 'author_date' => '2025-12-02',
@@ -42,7 +40,6 @@ class TestimonialSeeder extends Seeder
                 'sort_order' => 0,
             ],
             [
-                'tour_id' => 1,
                 'author_name' => 'Sam',
                 'author_location' => '',
                 'author_date' => '2025-11-19',
@@ -55,7 +52,6 @@ class TestimonialSeeder extends Seeder
                 'sort_order' => 0,
             ],
             [
-                'tour_id' => 1,
                 'author_name' => 'SHAHROL',
                 'author_location' => '',
                 'author_date' => '2025-11-19',
@@ -68,7 +64,6 @@ class TestimonialSeeder extends Seeder
                 'sort_order' => 0,
             ],
             [
-                'tour_id' => 1,
                 'author_name' => 'Riley',
                 'author_location' => '',
                 'author_date' => '2025-11-14',
@@ -81,7 +76,6 @@ class TestimonialSeeder extends Seeder
                 'sort_order' => 0,
             ],
             [
-                'tour_id' => 1,
                 'author_name' => 'adrienne',
                 'author_location' => '',
                 'author_date' => '2025-11-10',
