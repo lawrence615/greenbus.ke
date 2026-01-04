@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 use App\Models\Location;
 
@@ -15,6 +16,7 @@ class LocationSeeder extends Seeder
         if (!$nairobi) {
             $nairobi = Location::create([
                 'name' => 'Nairobi',
+                'slug' => Str::slug('Nairobi'),
                 'code' => 'NRB',
                 'type' => 'location',
                 'country' => 'Kenya',
