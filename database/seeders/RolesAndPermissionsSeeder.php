@@ -78,6 +78,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'delete users',
             'manage users',
             'invite users',
+            'view customer dashboard',
+            'list customer bookings',
+            'view customer bookings',
         ];
 
         foreach ($permissions as $permission) {
@@ -112,6 +115,15 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Admin role - all permissions
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
-        $adminRole->syncPermissions($permissions);
+        $excludedFromAdmin = [
+            'view customer dashboard',
+            'list customer bookings',
+            'view customer bookings',
+        ];
+        $adminPermissions = collect($permissions)
+            ->filter(fn($permission) => !in_array($permission, $excludedFromAdmin))
+            ->values()
+            ->all();
+        $adminRole->syncPermissions($adminPermissions);
     }
 }
