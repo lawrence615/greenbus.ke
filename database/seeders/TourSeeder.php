@@ -25,20 +25,17 @@ class TourSeeder extends Seeder
                 'location_id' => $nairobi->id,
                 'tour_category_id' => $singleDay->id,
                 'code' => Tour::generateCode(1),
-                'title' => 'Nairobi: Historic and Modern Highlights Location Walking Tour',
-                'slug' => 'nairobi-historic-and-modern-highlights-location-walking-tour',
-                'short_description' => '<p>See the key sights of Nairobi in a comfortable coach with a local guide.</p>',
-                'description' => "<p><span style=\"background-color: rgb(255, 255, 255); color: rgb(56, 68, 58);\">Ideal as an introduction for first-time visitors to Nairobi (or anyone looking to enhance their understanding of the Kenyan capital), this tour ditches the dry historical information and gives travelers an insider’s view of the location. Highlights include Jamia Mosque, souvenir shopping at Location Market, and a location-wide panorama from KICC. Bottled water and door-to-door, air-conditioned vehicle transfers are provided.</span></p>",
+                'title' => 'Nairobi History and Modern Culture 3 Hours Tour',
+                'slug' => 'nairobi-history-and-modern-culture-3-hours-tour',
+                'short_description' => '<p>Ideal as an introduction for first-time visitors to Nairobi (or anyone looking to enhance their understanding of the Kenyan capital), this tour ditches the dry historical information and gives travelers an insider’s view of the city. </p>',
+                'description' => "<p>Ideal as an introduction for first-time visitors to Nairobi (or anyone looking to enhance their understanding of the Kenyan capital), this tour ditches the dry historical information and gives travelers an insider’s view of the city. Highlights include Jamia Mosque, souvenir shopping at City Market, and a city-wide panorama from KICC. Bottled water and door-to-door, air-conditioned vehicle transfers are provided.</p>",
                 'included' => "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Guided location tour with an English-speaking local guide.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Transport in a comfortable coach or minibus.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Short photo stops at key viewpoints. </li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Learn some popular Swahili words used by locals. </li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Buy souvenirs without negotiating at the cheapest fixed prices stores.</li></ol>",
                 'additional_information' => "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Hotel pickup is available from central Nairobi on request.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Please bring a passport/valid ID and your digital ticket.</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>Wear comfortable shoes and be prepared for changing weather.</li></ol>",
                 'duration_text' => '4 hours',
                 'meeting_point' => 'Pick up from central Nairobi hotels or Kenyatta Avenue meeting point',
-                'starts_at_time' => '10:00',
+                'starts_at_time' => '09:00',
                 'is_daily' => true,
                 'is_featured' => true,
-                'base_price_adult' => 4500,
-                'base_price_child' => 2500,
-                'base_price_infant' => 0,
                 'status' => 'published',
             ]);
 
@@ -52,6 +49,7 @@ class TourSeeder extends Seeder
             $museumMarket = Tour::create([
                 'location_id' => $nairobi->id,
                 'tour_category_id' => $singleDay->id,
+                'tour_type' => 'standard',
                 'code' => Tour::generateCode(1),
                 'title' => 'Nairobi: National Museum & Location Markets Tour',
                 'slug' => 'nairobi-national-museum-and-location-markets-tour',
@@ -71,12 +69,12 @@ class TourSeeder extends Seeder
             ]);
 
             $cityTourImages = [
-                ['tour_id' => $museumMarket->id,'path'=>'greenbus/images/NRB-001/nairobi-historic-and-modern-highlights-location-walking-tour-0WZHDvLy.jpg', 'is_cover' => false, 'sort_order' => 1],
-                ['tour_id' => $museumMarket->id,'path'=>'greenbus/images/NRB-001/nairobi-historic-and-modern-highlights-location-walking-tour-mLrZtq7e.jpg', 'is_cover' => false, 'sort_order' => 2],
-                ['tour_id' => $museumMarket->id,'path'=>'greenbus/images/NRB-001/nairobi-historic-and-modern-highlights-location-walking-tour-ArbtClKd.jpg', 'is_cover' => false, 'sort_order' => 3],
-                ['tour_id' => $museumMarket->id,'path'=>'greenbus/images/NRB-001/nairobi-historic-and-modern-highlights-location-walking-tour-IVG5NskM.jpg', 'is_cover' => false, 'sort_order' => 4],
-                ['tour_id' => $museumMarket->id,'path'=>'greenbus/images/NRB-001/nairobi-historic-and-modern-highlights-location-walking-tour-HLAhl0U5.jpg', 'is_cover' => false, 'sort_order' => 5],
-                ['tour_id' => $museumMarket->id,'path'=>'greenbus/images/NRB-001/nairobi-historic-and-modern-highlights-location-walking-tour-fbScbiiW.jpg', 'is_cover' => false, 'sort_order' => 6],
+                ['tour_id' => $museumMarket->id,'path'=>'/greenbus/images/STANDARD-TEST/nairobi-history-and-modern-culture-3-hours-tour-AhgNPQjN.jpg', 'is_cover' => false, 'sort_order' => 1],
+                ['tour_id' => $museumMarket->id,'path'=>'/greenbus/images/STANDARD-TEST/nairobi-history-and-modern-culture-3-hours-tour-EwGrYM81.jpg', 'is_cover' => false, 'sort_order' => 2],
+                ['tour_id' => $museumMarket->id,'path'=>'/greenbus/images/STANDARD-TEST/nairobi-history-and-modern-culture-3-hours-tour-Lrkuib3u.jpg', 'is_cover' => false, 'sort_order' => 3],
+                ['tour_id' => $museumMarket->id,'path'=>'/greenbus/images/STANDARD-TEST/nairobi-history-and-modern-culture-3-hours-tour-Z6eo0tHQ.jpg', 'is_cover' => false, 'sort_order' => 4],
+                ['tour_id' => $museumMarket->id,'path'=>'/greenbus/images/STANDARD-TEST/nairobi-history-and-modern-culture-3-hours-tour-njIDzGYY.jpg', 'is_cover' => false, 'sort_order' => 5],
+                ['tour_id' => $museumMarket->id,'path'=>'/greenbus/images/STANDARD-TEST/nairobi-history-and-modern-culture-3-hours-tour-yCu8srUc.jpg', 'is_cover' => false, 'sort_order' => 6],
             ];
 
             // TourImage::create([
