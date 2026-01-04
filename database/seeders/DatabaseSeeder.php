@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             LocationSeeder::class,
             TourCategorySeeder::class,
-            TourSeeder::class,
+            // TourSeeder::class,
             TestimonialSeeder::class,
             FaqSeeder::class,
         ]);
